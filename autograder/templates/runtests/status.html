@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />
+{% endblock stylesheet %}
+
+{% block title %}Submissions{% endblock title %}
+
+{% block content %}
+{% include "partials/particles.html" %}
+{% include "partials/header.html" %}
+<div class="main-block">
+    <div class="title">
+        Submissions {% if admin %} - Viewing as Admin{% endif %}
+    </div>
+</div>
+<div class="main-block" id="submissions">
+    <table>
+        <tr>
+            <th>Submission</th>
+            <th>User</th>
+            <th>Problem</th>
+            <th>Runtime</th>
+            <th>Verdict</th>
+        </tr>
+        {% for submission in submissions  %}
+        <tr>
+            <td>
+                <a href="{% url "runtests:submission" submission.id %}">
+                    View #{{submission.id}}
+                </a>
+            </td>
+                <td>
+                    <a href="{% url "index:user_profile" submission.usr.id %}">
+                        {{submission.usr.username}}
+                    </a>
+                </td>
+            <td>
+                <a href="{% url "problems:problem" submission.problem.id %}">
+                    {{submission.problem.name}}
+                </a>
+            </td>
+            <td>
+                {{submission.runtime}} ms
+            </td>
+            <td>
+                {{submission.verdict}}
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <div class="option-buttons">
+    {% if prevpage %}
+    <a href="{% url "runtests:status" mine=mine cid=cid page=prevpage %}">
+        <div class="button">Previous</div>
+    </a>
+    {% endif %}
+    {% if nextpage %}
+    <a href="{% url "runtests:status" mine=mine cid=cid page=nextpage %}">
+         <div class="button">Next</div>
+    </a>
+    {% endif %}
+</div>
+</div>
+{% endblock content %}

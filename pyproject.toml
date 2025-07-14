@@ -1,0 +1,22 @@
+[project]
+name = "autograder"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.10"
+dependencies = [
+    "aiohttp>=3.12.14",
+    "datetime>=5.5",
+    "django>=5.1.7",
+    "django-user-agents>=0.4.0",
+    "humanize>=4.12.2",
+    "logging>=0.4.9.6",
+    "psycopg>=3.2.9",
+    "python-decouple>=3.8",
+    "pyyaml>=6.0.2",
+    "ruff>=0.11.2",
+    "social-auth-app-django>=5.4.3",
+    "ua-parser>=1.0.1",
+    "user-agents>=2.2.0",
+    "uvicorn>=0.35.0",
+]

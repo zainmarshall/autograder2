@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+    <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />   
+{% endblock stylesheet %}
+
+{% block title %}Profile{% endblock title %}
+
+
+
+{% block content %}
+{% include "partials/header.html" %}
+{% include "partials/particles.html" %}
+ <div id="mainContent">
+            <div id="subContent">
+                <div class="info-block">
+                    <div class="title"><p>Profile</p></div>
+                    <div class="userinfo">Name: {{ user.display_name }}</div>
+                    <div class="userinfo">Username: {{ user.username }}</div>
+                        <form action="{% url 'index:update_stats' %}" method="POST">
+                            {% csrf_token %}
+                            <div class="statsInfo">
+                                <label for="usaco_div">USACO Division: </label>
+                                <select name="usaco_div">
+                                    <option value="none" {% if user.usaco_division == "Not Participated" %} selected {% endif %}>Not Participated</option>
+                                    <option value="bronze" {% if user.usaco_division == "Bronze" %} selected {% endif %}>Bronze</option>
+                                    <option value="silver" {% if user.usaco_division == "Silver" %} selected {% endif %}>Silver</option>
+                                    <option value="gold" {% if user.usaco_division == "Gold" %} selected {% endif %}>Gold</option>
+                                    <option value="plat" {% if user.usaco_division == "Platinum" %} selected {% endif %}>Platinum</option>
+                                </select>
+                            </div>
+                            <div class="statsInfo">
+                                <label for="cf_handle">Codeforces Handle: </label>
+                                <input name="cf_handle" value="{{ user.cf_handle }}">
+                                <br>(leave blank if you don't have one)
+                            </div>
+                            <div class="statsInfo">
+                                <input type="submit" value="Save">
+                            </div>
+                            Note: If the entered information is suspicious, it will be verified in-person.
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+{% endblock content %}

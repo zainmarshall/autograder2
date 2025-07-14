@@ -1,0 +1,54 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />
+{% endblock stylesheet %}
+
+{% block title %}Submissions{% endblock title %}
+
+
+{% block content %}
+{% include "partials/particles.html" %}
+{% include "partials/header.html" %}
+{% include "partials/contestNavbar.html" %}
+
+<div class='main-block' id="submissions">
+<table>
+    <tr>
+        <th>Submission</th>
+        <th>User</th>
+        <th>Problem</th>
+        <th>Runtime</th>
+        <th>Verdict</th>
+    </tr>
+    {% for sub in submissions  %}
+    <tr>
+        <td>
+            <a href="{% url "runtests:submission" sub.id %}">
+                #{{sub.id}}
+            </a>
+        </td>
+        <td>
+            <a href="{% url "index:user_profile" sub.usr.id %}">
+               {{sub.usr}}
+            </a>
+        </td>
+        <td>
+            <a href="{% url "problems:problem" sub.problem.id %}">
+                {{sub.problem.name}}
+            </a>
+        </td>
+        <td>
+            {{sub.runtime}}ms
+        </td>
+        <td>
+            {{sub.verdict}}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+</div>
+
+{% endblock content %}
