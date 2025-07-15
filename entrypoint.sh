@@ -9,10 +9,10 @@ done
 # Install dependencies
 uv sync
 
+uv run manage.py collectstatic --noinput
 # Run migrations
 uv run manage.py makemigrations --noinput
 uv run manage.py migrate
-
 # go create superuser amnually because the command is broken and I changed it like 5 times
 # Run server in a loop
 while true

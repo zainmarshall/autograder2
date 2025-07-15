@@ -16,6 +16,8 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 urlpatterns = [
     path('djangoadmin/', admin.site.urls),
@@ -28,4 +30,4 @@ urlpatterns = [
     path('rankings/', include('autograder.apps.rankings.urls', namespace='rankings')),
     path('tjioi/', include('autograder.apps.tjioi.urls', namespace='tjioi')),
     path('', include('social_django.urls', namespace='social')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

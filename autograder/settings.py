@@ -159,7 +159,15 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/5.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATICFILES_DIRS = [BASE_DIR / "autograder" / "static"]  # new
+STATICFILES_DIRS = [BASE_DIR / "autograder" / "static"]
+
+STATIC_ROOT = BASE_DIR / "collected_static"  # only needed for collectstatic in production
+
+STATICFILES_FINDERS = [
+    'django.contrib.staticfiles.finders.FileSystemFinder',  # For your STATICFILES_DIRS
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',  # For admin and other app static
+]
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/5.1/ref/settings/#default-auto-field
