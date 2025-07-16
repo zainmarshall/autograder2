@@ -16,7 +16,19 @@
         Submissions {% if admin %} - Viewing as Admin{% endif %}
     </div>
 </div>
+
 <div class="main-block" id="submissions">
+    <div class="option-buttons">
+    {% if mine %}
+    <a href="{% url "runtests:status" mine=False cid=cid page=1 %}">
+        <div class="button">View All</div>
+    </a>
+    {% else %}
+    <a href="{% url "runtests:status" mine=True cid=cid page=1 %}">
+        <div class="button">View Mine Only</div>
+    </a>
+    {% endif %}
+    </div>
     <table>
         <tr>
             <th>Submission</th>
@@ -52,13 +64,14 @@
         {% endfor %}
     </table>
     <div class="option-buttons">
-    {% if prevpage %}
-    <a href="{% url "runtests:status" mine=mine cid=cid page=prevpage %}">
+    {% if page_obj.has_previous %}
+    <a href="{% url "runtests:status" mine=mine cid=cid page=page_obj.previous_page_number %}">
         <div class="button">Previous</div>
     </a>
     {% endif %}
-    {% if nextpage %}
-    <a href="{% url "runtests:status" mine=mine cid=cid page=nextpage %}">
+     <div class="button">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
+    {% if page_obj.has_next %}
+    <a href="{% url "runtests:status" mine=mine cid=cid page=page_obj.next_page_number %}">
          <div class="button">Next</div>
     </a>
     {% endif %}

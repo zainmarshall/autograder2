@@ -69,22 +69,18 @@ def status_view(request, page, cid=None, mine=False):
     paginator = Paginator(submissions, 25)  # 25 per page
 
     try:
-        submissions_page = paginator.page(page)
+        submissions_page = paginator.get_page(page)
     except EmptyPage:
         return redirect("runtests:status", cid=cid, mine=mine, page=1)
 
     context = {
         "submissions": submissions_page.object_list,
+        "page_obj": submissions_page,
         "admin": request.user.is_staff,
         "page": page,
         "cid": cid,
         "mine": mine,
     }
-
-    if submissions_page.has_next():
-        context["nextpage"] = submissions_page.next_page_number()
-    if submissions_page.has_previous():
-        context["prevpage"] = submissions_page.previous_page_number()
 
     return render(request, "runtests/status.html", context)
 

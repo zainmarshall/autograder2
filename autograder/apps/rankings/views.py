@@ -2,7 +2,6 @@ from django.shortcuts import render, redirect
 from django.conf import settings
 from ..oauth.decorators import login_required
 from ..index.models import GraderUser
-from .utils import update_rankings
 
 
 # Create your views here.

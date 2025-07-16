@@ -1,8 +1,6 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from .models import GraderUser
-from django.forms import TextInput, Textarea
-from django import forms
 
 class GraderUserAdmin(UserAdmin):
     model = GraderUser

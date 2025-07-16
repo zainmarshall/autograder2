@@ -55,7 +55,7 @@
         <div class="button">Previous</div>
     </a>
     {% endif %}
-    <div class="button">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</div>
+    <div class="button">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</div>
     {% if page_obj.has_next %}
     <a href="{% url "contests:status" cid=cid mine_only=mine_only page=page_obj.next_page_number %}">
          <div class="button">Next</div>

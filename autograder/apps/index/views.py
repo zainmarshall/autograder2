@@ -5,7 +5,6 @@ from django.conf import settings
 from django_user_agents.utils import get_user_agent
 from .models import GraderUser
 from ..rankings.models import RatingChange
-from ..rankings.utils import get_codeforces_rating, update_rankings
 
 
 # Create your views here.
