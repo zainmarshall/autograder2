@@ -12,8 +12,8 @@ class ProblemAdminForm(forms.ModelForm):
 class ProblemAdmin(admin.ModelAdmin):
     form = ProblemAdminForm
 
-    list_display = ('name', 'contest', 'points', 'interactive', 'secret')
-    list_filter = ('interactive', 'secret')
+    list_display = ('id', 'name', 'contest', 'points', 'interactive', 'secret')
+    list_filter = ('interactive', 'secret', 'contest')
     search_fields = ('name',)
     ordering = ('-id',)
     readonly_fields = ('id',)

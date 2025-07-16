@@ -32,7 +32,7 @@
         </td>
         <td>
             <a href="{% url "index:user_profile" sub.usr.id %}">
-               {{sub.usr}}
+               {{sub.usr.display_name}}
             </a>
         </td>
         <td>
@@ -49,6 +49,19 @@
     </tr>
     {% endfor %}
 </table>
+    <div class="option-buttons">
+    {% if page_obj.has_previous %}
+    <a href="{% url "contests:status" cid=cid mine_only=mine_only page=page_obj.previous_page_number %}">
+        <div class="button">Previous</div>
+    </a>
+    {% endif %}
+    <div class="button">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.</div>
+    {% if page_obj.has_next %}
+    <a href="{% url "contests:status" cid=cid mine_only=mine_only page=page_obj.next_page_number %}">
+         <div class="button">Next</div>
+    </a>
+    {% endif %}
+</div>
 </div>
 
 {% endblock content %}

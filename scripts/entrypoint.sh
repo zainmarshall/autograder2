@@ -1,0 +1,37 @@
+#!/bin/bash
+set -e
+FIRST_RUN_LOG=.first_log
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/.." && pwd)"
+
+cd "$PROJECT_ROOT"
+
+uv sync
+uv run manage.py collectstatic --noinput
+
+until (PGPASSWORD=postgres psql -h "db" -U "postgres" -c '\q') 2> /dev/null; do
+  >&2 echo "waiting for postgres"
+  sleep 1
+done
+
+uv run manage.py makemigrations --noinput
+uv run manage.py migrate
+
+cp scripts/filler_data.py .
+
+if [ ! -f "$FIRST_RUN_LOG" ]; then
+    echo "Creating filler data..."
+    uv run filler_data.py
+    DJANGO_SUPERUSER_PASSWORD=123 uv run manage.py createsuperuser --noinput --username=admin --email=admin@admin.com
+    touch "$FIRST_RUN_LOG"
+fi
+
+rm -rf filler_data.py
+
+
+while true
+do
+    uv run uvicorn autograder.asgi:application --reload --host 0.0.0.0 --port 3000
+    sleep 1
+done

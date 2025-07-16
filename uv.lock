@@ -149,6 +149,7 @@ dependencies = [
     { name = "datetime" },
     { name = "django" },
     { name = "django-user-agents" },
+    { name = "faker" },
     { name = "humanize" },
     { name = "logging" },
     { name = "psycopg" },
@@ -167,6 +168,7 @@ requires-dist = [
     { name = "datetime", specifier = ">=5.5" },
     { name = "django", specifier = ">=5.1.7" },
     { name = "django-user-agents", specifier = ">=0.4.0" },
+    { name = "faker", specifier = ">=37.4.0" },
     { name = "humanize", specifier = ">=4.12.2" },
     { name = "logging", specifier = ">=0.4.9.6" },
     { name = "psycopg", specifier = ">=3.2.9" },
@@ -419,6 +421,18 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/37/f2/dd96cc880d7549cc9f67c8b1ad8e6695f9731658fdf8aa476f0bcb9c89c7/django-user_agents-0.4.0.tar.gz", hash = "sha256:cda8ae2146cee30e6867a07943f56ecc570b4391d725ab5309901a8b3e4a3514", size = 8501, upload-time = "2019-06-22T13:33:50.372Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/6c/a3/31b2728702f13328cc65d6c8ed652ad8125a9a71489e445c11f188b39f79/django_user_agents-0.4.0-py3-none-any.whl", hash = "sha256:cd9d9f7158b23c5237b2dacb0bc4fffdf77fefe1d2633b5814d3874288ebdb5d", size = 8616, upload-time = "2019-06-22T13:33:48.259Z" },
+]
+
+[[package]]
+name = "faker"
+version = "37.4.0"
+source = { registry = "https://pypi.org/simple" }
+dependencies = [
+    { name = "tzdata" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/65/f9/66af4019ee952fc84b8fe5b523fceb7f9e631ed8484417b6f1e3092f8290/faker-37.4.0.tar.gz", hash = "sha256:7f69d579588c23d5ce671f3fa872654ede0e67047820255f43a4aa1925b89780", size = 1901976, upload-time = "2025-06-11T17:59:30.818Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/78/5e/c8c3c5ea0896ab747db2e2889bf5a6f618ed291606de6513df56ad8670a8/faker-37.4.0-py3-none-any.whl", hash = "sha256:cb81c09ebe06c32a10971d1bbdb264bb0e22b59af59548f011ac4809556ce533", size = 1942992, upload-time = "2025-06-11T17:59:28.698Z" },
 ]
 
 [[package]]

@@ -4,10 +4,10 @@ from .models import Submission
 @admin.register(Submission)
 class SubmissionAdmin(admin.ModelAdmin):
     list_display = (
-        'id', 'usr', 'contest', 'language',
+        'id', 'usr', 'contest', 'problem', 'language',
         'verdict', 'runtime', 'memory', 'timestamp'
     )
-    list_filter = ('verdict', 'language', 'contest', 'usr')
+    list_filter = ('verdict', 'language', 'problem', 'usr', 'contest')
     search_fields = ('usr__username', 'problem', 'verdict')
     ordering = ('-timestamp',)
     readonly_fields = ('timestamp',)
@@ -15,7 +15,7 @@ class SubmissionAdmin(admin.ModelAdmin):
     fieldsets = (
         (None, {
             'fields': (
-                'usr', 'problem', 'contest', 'language', 'code'
+                'usr', 'contest', 'problem', 'language', 'code'
             )
         }),
         ('Result Info', {

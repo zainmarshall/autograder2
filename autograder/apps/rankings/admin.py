@@ -3,7 +3,7 @@ from .models import RatingChange
 
 @admin.register(RatingChange)
 class RatingChangeAdmin(admin.ModelAdmin):
-    list_display = ('id', 'userid', 'rating', 'time')
+    list_display = ('id', 'user', 'rating', 'time')
     list_filter = ('time',)
-    search_fields = ('userid__username',)
+    search_fields = ('user__username',)
     ordering = ('-time',)

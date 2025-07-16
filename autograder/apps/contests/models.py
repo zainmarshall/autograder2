@@ -8,7 +8,7 @@ class Contest(models.Model):
     tjioi = models.BooleanField(default=False)
     start = models.DateTimeField()
     end = models.DateTimeField()
-    editorial = models.TextField(null=True, blank=True)
+    editorial = models.URLField(null=True, blank=True)
 
     def __str__(self):
         return self.name

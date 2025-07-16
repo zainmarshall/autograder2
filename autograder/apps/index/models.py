@@ -1,5 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, PermissionsMixin
 from django.db import models
+from django.contrib.postgres.fields import ArrayField
 
 class GraderUserManager(BaseUserManager):
     def create_user(self, email, password=None, **extra_fields):
@@ -38,11 +39,20 @@ class GraderUser(AbstractBaseUser, PermissionsMixin):
     is_active = models.BooleanField(default=True)
     is_staff = models.BooleanField(default=False)
     usaco_division = models.CharField(max_length=20, choices=USACO_DIVISIONS, default=BRONZE)
+    usaco_rating = models.IntegerField(default=800)
     cf_handle = models.CharField(max_length=30, blank=True, null=True)
     cf_rating = models.IntegerField(blank=True, null=True, default=0)
     grade = models.CharField(max_length=10, default="N/A")
     first_time = models.BooleanField(default=True)
     is_tjioi = models.BooleanField(default=False)
+    author_drops = models.IntegerField(default=0)
+
+    inhouses = ArrayField(
+        models.DecimalField(max_digits=10, decimal_places=3),
+        default=list
+    )
+    inhouse = models.DecimalField(max_digits=10, decimal_places=3, default=0)
+    index = models.DecimalField(max_digits=10, decimal_places=3, default=0)
 
     objects = GraderUserManager()
 

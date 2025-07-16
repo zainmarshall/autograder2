@@ -1,4 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
+from django.core.paginator import Paginator
 from django.conf import settings
 from django.utils import timezone
 from ..oauth.decorators import login_required
@@ -75,7 +76,6 @@ def contest_view(request, cid):
             ordered[pind]["solves"] += 1
             ordered[pind]["users"].append(ind)
 
-    ordered.sort(key=lambda a: (a["points"], a["pid"]))
 
     if ordered:
         context = {
@@ -113,8 +113,7 @@ def contest_standings_view(request, cid):
 
 
 @login_required
-def contest_status_view(request, cid, mine_only):
-
+def contest_status_view(request, cid, mine_only, page):
     contest = get_object_or_404(Contest, id=cid)
     subs = Submission.objects.filter(contest=contest)
 
@@ -126,11 +125,18 @@ def contest_status_view(request, cid, mine_only):
 
     subs = subs.order_by('-timestamp')
 
+    # Pagination
+    paginator = Paginator(subs, 25)  # Show 25 submissions per page
+    page_number = page
+    page_obj = paginator.get_page(page_number)
+
     context = {
         'title': contest.name,
         'user_id': request.user.id,
         'cid': cid,
-        'submissions': subs,
-        "contest_over": timezone.now() > contest.end
+        'page_obj': page_obj,
+        'submissions': page_obj.object_list,
+        'contest_over': timezone.now() > contest.end,
+        'mine_only': mine_only
     }
     return render(request, 'contest/status.html', context)

@@ -28,7 +28,6 @@ def get_standings(cid):
             .filter(contest=contest, timestamp__range=(start, end))
             .order_by('timestamp')
             .select_related('usr'))
-    
 
     for s in subs:
         user_data = stats.get(s.usr_id)

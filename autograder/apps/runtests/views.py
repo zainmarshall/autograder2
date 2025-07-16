@@ -1,4 +1,5 @@
-from django.shortcuts import render, get_object_or_404, aget_object_or_404, redirect
+from django.shortcuts import render, get_object_or_404, redirect
+from django.core.paginator import Paginator, EmptyPage
 from django.http import HttpResponse
 from django.views.decorators.http import require_POST
 from django.conf import settings
@@ -10,7 +11,6 @@ from ..contests.models import Contest
 from .models import Submission
 from .utils import submission_queue
 from asgiref.sync import sync_to_async
-import datetime
 import logging
 
 logger = logging.getLogger(__name__)
@@ -18,67 +18,42 @@ logger = logging.getLogger(__name__)
 def get_last_sub_lang(user):
     try:
         return Submission.objects.filter(usr=user).latest().language
-    except:
+    except Exception:
         return "cpp"
 
-# Create your views here.
 @login_required
-def submit_view(request):
-    context = {
-        "last_sub_lang": get_last_sub_lang(request.user)
-    }
-    
-    problems = Problem.objects.filter(contest__tjioi=settings.TJIOI_MODE)
-    if not request.user.is_staff:
-        problems = problems.filter(secret=False)
-
-    problems = problems.order_by('id')
-
-    context["problems"] = problems
-    return render(request, "runtests/submit.html", context)
-
-
-@login_required
-def submit_contest_view(request, cid):
-
+def submit_view(request, cid=None, pid=None):
     context = {
         "last_sub_lang": get_last_sub_lang(request.user)
     }
 
-    contest = get_object_or_404(Contest, id=cid)
-    problems = Problem.objects.filter(contest__id=cid, contest__tjioi=settings.TJIOI_MODE)
-    if not request.user.is_staff:
-        problems = problems.filter(secret=False)
+    if pid is not None:
+        problem = get_object_or_404(Problem, id=pid)
 
-    problems = problems.order_by('id')
+        if (not request.user.is_staff and problem.secret) or not (settings.TJIOI_MODE == problem.contest.tjioi):
+            return redirect("runtests:submit")
 
-    context["contest"] = contest
-    context["problems"] = problems
+        context["problem"] = problem
+
+    elif cid is not None:
+        contest = get_object_or_404(Contest, id=cid)
+        problems = Problem.objects.filter(contest__id=cid, contest__tjioi=settings.TJIOI_MODE)
+        if not request.user.is_staff:
+            problems = problems.filter(secret=False)
+
+        problems = problems.order_by('id')
+        context["contest"] = contest
+        context["problems"] = problems
+
+    else:
+        problems = Problem.objects.filter(contest__tjioi=settings.TJIOI_MODE)
+        if not request.user.is_staff:
+            problems = problems.filter(secret=False)
+
+        problems = problems.order_by('id')
+        context["problems"] = problems
 
     return render(request, "runtests/submit.html", context)
-
-@login_required
-def submit_problem_view(request, pid):
-    context = {
-        "last_sub_lang": get_last_sub_lang(request.user)
-    }
-
-    problem = get_object_or_404(Problem, id=pid)
-
-    if not request.user.is_staff and problem.secret or not (settings.TJIOI_MODE == problem.contest.tjioi):
-        return redirect("runtests:submit")
-    
-    context["problem"] = problem
-    
-    return render(request, "runtests/submit.html", context)
-
-def get_pages(page, sub_count, per_page):
-    start = max(0, sub_count - page * per_page)
-    end = sub_count - (page - 1) * per_page
-
-    if start < 0 or end < 0 or start > sub_count or end > sub_count:
-        return None
-    return start, end
 
 @login_required
 def status_view(request, page, cid=None, mine=False):
@@ -89,28 +64,27 @@ def status_view(request, page, cid=None, mine=False):
 
     if mine:
         submissions = submissions.filter(usr=request.user)
-    
-    total = submissions.count()
+
+    submissions = submissions.order_by("-timestamp")
+    paginator = Paginator(submissions, 25)  # 25 per page
 
     try:
-        start, end = get_pages(page, total, 25)
-    except TypeError:
+        submissions_page = paginator.page(page)
+    except EmptyPage:
         return redirect("runtests:status", cid=cid, mine=mine, page=1)
 
-    submissions = submissions.order_by('timestamp')[start:end][::-1]
-
     context = {
-        "submissions": submissions,
+        "submissions": submissions_page.object_list,
         "admin": request.user.is_staff,
         "page": page,
         "cid": cid,
-        "mine": mine
+        "mine": mine,
     }
 
-    if get_pages(page + 1, total, 25) is not None:
-        context["nextpage"] = page + 1
-    if get_pages(page - 1, total, 25) is not None:
-        context["prevpage"] = page - 1
+    if submissions_page.has_next():
+        context["nextpage"] = submissions_page.next_page_number()
+    if submissions_page.has_previous():
+        context["prevpage"] = submissions_page.previous_page_number()
 
     return render(request, "runtests/status.html", context)
 
@@ -124,8 +98,10 @@ def submission_view(request, id):
             "submission": submission,
             "insight": submission.insight
         }
-        if not request.user.is_staff or submission.insight.startswith("Viewing as admin"):
+        if not request.user.is_staff or (submission.insight and submission.insight.startswith("Viewing as admin")):
             context["insight"] = "You cannot view feedback (not a sample test)"
+
+        
         return render(request, "runtests/submission.html", context)
 
     context = {
@@ -165,12 +141,12 @@ async def submit_post(request):
     last_sub_time = None
     try:
         last_sub_time = Submission.objects.filter(usr=request.user).latest().timestamp
-    except:
+    except Exception:
         pass
 
     if last_sub_time is None or await sync_to_async(timezone.now)() - last_sub_time > timedelta(seconds=30) or request.user.is_staff or settings.DEBUG:
         new_sub = await sync_to_async(Submission.objects.create)(
-            usr=request.user, # This is now safe as it's run in a separate thread
+            usr=request.user,
             code=code,
             problem=problem,
             language=lang,

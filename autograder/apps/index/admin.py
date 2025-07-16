@@ -6,7 +6,7 @@ from django import forms
 
 class GraderUserAdmin(UserAdmin):
     model = GraderUser
-    list_display = ("id", "email", "display_name", "username", "usaco_division", "is_staff", "is_active", "is_tjioi", "cf_handle", "cf_rating", "grade", "personal_email")
+    list_display = ("id", "display_name", "username", "is_staff", "is_tjioi", "grade", "cf_handle", "usaco_division", "cf_rating", "inhouse", "index")
     list_filter = ("is_staff", "is_superuser", "is_active", "is_tjioi")
     search_fields = ("id",)
     ordering = ("id",)

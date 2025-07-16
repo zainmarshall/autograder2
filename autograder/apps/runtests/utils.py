@@ -3,6 +3,7 @@ import aiohttp
 import logging
 from typing import Dict, Any
 from urllib.parse import urlencode
+from asgiref.sync import sync_to_async
 
 from django.conf import settings
 from django.db import transaction
@@ -40,7 +41,6 @@ class SubmissionQueue:
         """The main loop that processes submissions from the queue."""
         while not self._paused:
             try:
-                # Wait for the next submission indefinitely until the queue is paused
                 submission_id = await self._tasks.get()
                 self._currently_processing = submission_id
                 
@@ -106,14 +106,16 @@ class SubmissionQueue:
             await self._mark_submission_as_error(submission_id, f"An unexpected grading server error occurred: {e}")
             
     @staticmethod
-    @transaction.atomic
-    async def update_submission_from_result(submission: Submission, result_data: Dict[str, Any]):
-        """Atomically updates submission fields from coderunner result."""
-        submission.verdict = result_data.get("verdict", "ER") # ER for "Error"
-        submission.runtime = result_data.get("runtime", -1)
-        submission.memory = result_data.get("memory", -1)
-        submission.insight = result_data.get("output", "")
-        await submission.asave()
+    @sync_to_async
+    def update_submission_from_result(submission: Submission, result_data: Dict[str, Any]):
+        with transaction.atomic():
+            submission.verdict = result_data.get("verdict", "ER")
+            submission.runtime = result_data.get("runtime", -1)
+            submission.memory = result_data.get("memory", -1)
+            submission.insight = result_data.get("output", "")
+            submission.save()
+
+
 
     async def _mark_submission_as_error(self, submission_id: int, error_message: str):
         """Marks a submission with a system error verdict."""

@@ -176,6 +176,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 TJIOI_MODE = False
 
+CURRENT_SEASON = 2025
+
 CODERUNNER_URL = "http://coderunner:8080/run" if DEBUG else "http://10.150.0.7:8080/run"
 
 AUTHENTICATION_BACKENDS = ['django.contrib.auth.backends.ModelBackend']

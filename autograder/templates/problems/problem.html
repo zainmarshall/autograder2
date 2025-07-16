@@ -63,7 +63,7 @@
     </div>
 </div>
 <div class="option-buttons">
-    <a href="<%= '/grade/submit?problem=' + locals.pid + '&contest=' + locals.cid %>">
+    <a href="{% url "runtests:submitproblem" pid=problem.id %}">
         <div class="button">Submit</div>
     </a>
     <a href="{% url "contests:contest" cid=problem.contest.id %}">

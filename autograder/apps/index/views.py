@@ -5,6 +5,7 @@ from django.conf import settings
 from django_user_agents.utils import get_user_agent
 from .models import GraderUser
 from ..rankings.models import RatingChange
+from ..rankings.utils import get_codeforces_rating, update_rankings
 
 
 # Create your views here.
@@ -75,6 +76,7 @@ def update_stats(request):
 
     if cf:
         request.user.cf_handle = cf
+        request.user.save()
 
     request.user.save()
     return redirect("index:profile")
@@ -94,7 +96,7 @@ def user_profile_view(request, id):
     if settings.TJIOI_MODE and not request.user.is_staff:
         return redirect("index:profile")
 
-    rating_changes = RatingChange.objects.filter(userid=id).order_by("time").values("id", "rating", "time")
+    rating_changes = RatingChange.objects.filter(user=user).order_by("time").values("id", "rating", "time")
 
     context = {
         "name": user.display_name,
