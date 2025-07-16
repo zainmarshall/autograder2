@@ -15,9 +15,7 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def contests_view(request):
-    contests = Contest.objects.filter(tjioi=settings.TJIOI_MODE).order_by(
-        "-id"
-    )
+    contests = Contest.objects.filter(tjioi=settings.TJIOI_MODE).order_by("-id")
     context = {"active": "contests", "contests": contests}
     return render(request, "contest/contests.html", context)
 
@@ -76,7 +74,6 @@ def contest_view(request, cid):
             ordered[pind]["solves"] += 1
             ordered[pind]["users"].append(ind)
 
-
     if ordered:
         context = {
             "title": contest.name,
@@ -86,7 +83,7 @@ def contest_view(request, cid):
             "timeStatus": time_message,
             "timeType": time_type,
             "editorial": getattr(contest, "editorial", None),
-            "contest_over": timezone.now() > contest.end
+            "contest_over": timezone.now() > contest.end,
         }
         return render(request, "contest/contest.html", context)
     else:
@@ -106,7 +103,7 @@ def contest_standings_view(request, cid):
         "pnum": standings["pnum"],
         "load": standings["load"],
         "problems": problems,
-        "contest_over": timezone.now() > contest.end
+        "contest_over": timezone.now() > contest.end,
     }
 
     return render(request, "contest/standings.html", context)
@@ -117,13 +114,15 @@ def contest_status_view(request, cid, mine_only, page):
     contest = get_object_or_404(Contest, id=cid)
     subs = Submission.objects.filter(contest=contest)
 
-    if mine_only == "mine" or (timezone.now() < contest.end and not request.user.is_staff):
+    if mine_only == "mine" or (
+        timezone.now() < contest.end and not request.user.is_staff
+    ):
         subs = subs.filter(usr=request.user)
 
     if not request.user.is_staff:
         subs = subs.filter(timestamp__gte=contest.start)
 
-    subs = subs.order_by('-timestamp')
+    subs = subs.order_by("-timestamp")
 
     # Pagination
     paginator = Paginator(subs, 25)  # Show 25 submissions per page
@@ -131,12 +130,12 @@ def contest_status_view(request, cid, mine_only, page):
     page_obj = paginator.get_page(page_number)
 
     context = {
-        'title': contest.name,
-        'user_id': request.user.id,
-        'cid': cid,
-        'page_obj': page_obj,
-        'submissions': page_obj.object_list,
-        'contest_over': timezone.now() > contest.end,
-        'mine_only': mine_only
+        "title": contest.name,
+        "user_id": request.user.id,
+        "cid": cid,
+        "page_obj": page_obj,
+        "submissions": page_obj.object_list,
+        "contest_over": timezone.now() > contest.end,
+        "mine_only": mine_only,
     }
-    return render(request, 'contest/status.html', context)
+    return render(request, "contest/status.html", context)

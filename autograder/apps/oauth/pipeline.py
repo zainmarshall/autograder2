@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def save_ion_profile_data(backend, user, details, *args, **kwargs):
     """
     Save extra fields from Ion (via 'details') to the custom user model.

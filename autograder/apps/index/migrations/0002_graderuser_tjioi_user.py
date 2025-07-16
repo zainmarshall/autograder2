@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('index', '0001_initial'),
+        ("index", "0001_initial"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='graderuser',
-            name='tjioi_user',
+            model_name="graderuser",
+            name="tjioi_user",
             field=models.BooleanField(default=False),
         ),
     ]

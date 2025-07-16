@@ -16,14 +16,12 @@ def problemset_view(request):
     if not request.user.is_staff:
         problems = problems.filter(secret=False)
 
-    problems = problems.order_by('-id')
+    problems = problems.order_by("-id")
 
-    context = {
-        "problems": problems,
-        "active": "problemset"
-    }
+    context = {"problems": problems, "active": "problemset"}
 
     return render(request, "problems/problemset.html", context)
+
 
 @login_required
 def problem_view(request, pid):
@@ -31,22 +29,26 @@ def problem_view(request, pid):
     contest = problem.contest
 
     if not request.user.is_staff and (timezone.now() < contest.start or problem.secret):
-        logger.info(f"User {request.user} tried to access problem {problem.name} before contest start")
-        messages.error(request, "You cannot access this problem before the contest starts.")
+        logger.info(
+            f"User {request.user} tried to access problem {problem.name} before contest start"
+        )
+        messages.error(
+            request, "You cannot access this problem before the contest starts."
+        )
         return redirect("contests:contest", cid=contest.id)
-    
+
     def format_text(text):
-        return text.replace('\n', '<br>') if text else ''
+        return text.replace("\n", "<br>") if text else ""
 
     context = {
         "problem": problem,
         "tl_cpp": problem.tl / 1000,
         "tl_java": problem.tl / 1000 * 2,
         "tl_python": problem.tl / 1000 * 3,
-        'statement': format_text(problem.statement),
-        'inputtxt': format_text(problem.inputtxt),
-        'outputtxt': format_text(problem.outputtxt),
-        'samples': format_text(problem.samples),
+        "statement": format_text(problem.statement),
+        "inputtxt": format_text(problem.inputtxt),
+        "outputtxt": format_text(problem.outputtxt),
+        "samples": format_text(problem.samples),
     }
 
     return render(request, "problems/problem.html", context)

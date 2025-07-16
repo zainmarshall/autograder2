@@ -5,24 +5,27 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('problems', '0001_initial'),
-        ('runtests', '0003_alter_submission_contest'),
+        ("problems", "0001_initial"),
+        ("runtests", "0003_alter_submission_contest"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='submission',
-            name='problemid',
+            model_name="submission",
+            name="problemid",
         ),
         migrations.RemoveField(
-            model_name='submission',
-            name='problemname',
+            model_name="submission",
+            name="problemname",
         ),
         migrations.AddField(
-            model_name='submission',
-            name='problem',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to='problems.problem'),
+            model_name="submission",
+            name="problem",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to="problems.problem",
+            ),
         ),
     ]

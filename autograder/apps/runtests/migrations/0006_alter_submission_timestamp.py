@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('runtests', '0005_alter_submission_problem'),
+        ("runtests", "0005_alter_submission_problem"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='submission',
-            name='timestamp',
+            model_name="submission",
+            name="timestamp",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

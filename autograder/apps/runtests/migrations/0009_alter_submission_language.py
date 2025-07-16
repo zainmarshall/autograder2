@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('runtests', '0008_alter_submission_timestamp'),
+        ("runtests", "0008_alter_submission_timestamp"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='submission',
-            name='language',
+            model_name="submission",
+            name="language",
             field=models.CharField(max_length=10),
         ),
     ]

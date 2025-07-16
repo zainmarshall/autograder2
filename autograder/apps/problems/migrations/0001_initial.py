@@ -6,31 +6,41 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
-        ('contests', '0001_initial'),
+        ("contests", "0001_initial"),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Problem',
+            name="Problem",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255)),
-                ('points', models.IntegerField()),
-                ('statement', models.TextField()),
-                ('solution', models.TextField()),
-                ('inputtxt', models.TextField()),
-                ('outputtxt', models.TextField()),
-                ('samples', django.contrib.postgres.fields.ArrayField(base_field=models.TextField(), default=list, size=None)),
-                ('tl', models.IntegerField(blank=True, null=True)),
-                ('ml', models.IntegerField(blank=True, null=True)),
-                ('pid', models.IntegerField(blank=True, null=True, unique=True)),
-                ('interactive', models.BooleanField(default=False)),
-                ('secret', models.BooleanField(default=False)),
-                ('contest', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contests.contest')),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=255)),
+                ("points", models.IntegerField()),
+                ("statement", models.TextField()),
+                ("solution", models.TextField()),
+                ("inputtxt", models.TextField()),
+                ("outputtxt", models.TextField()),
+                (
+                    "samples",
+                    django.contrib.postgres.fields.ArrayField(
+                        base_field=models.TextField(), default=list, size=None
+                    ),
+                ),
+                ("tl", models.IntegerField(blank=True, null=True)),
+                ("ml", models.IntegerField(blank=True, null=True)),
+                ("pid", models.IntegerField(blank=True, null=True, unique=True)),
+                ("interactive", models.BooleanField(default=False)),
+                ("secret", models.BooleanField(default=False)),
+                (
+                    "contest",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to="contests.contest",
+                    ),
+                ),
             ],
         ),
     ]

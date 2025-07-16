@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,12 +14,19 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='RatingChange',
+            name="RatingChange",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('rating', models.IntegerField(blank=True, null=True)),
-                ('time', models.DateTimeField(blank=True, null=True)),
-                ('userid', models.ForeignKey(db_column='username', on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("rating", models.IntegerField(blank=True, null=True)),
+                ("time", models.DateTimeField(blank=True, null=True)),
+                (
+                    "userid",
+                    models.ForeignKey(
+                        db_column="username",
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

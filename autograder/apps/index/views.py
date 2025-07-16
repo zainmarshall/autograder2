@@ -9,32 +9,34 @@ from ..rankings.models import RatingChange
 
 # Create your views here.
 
+
 def mobile_home(request):
     user_agent = get_user_agent(request)
-    
+
     if not user_agent.is_mobile:
-        return redirect('/')
-    return render(request, 'index/mobile.html')
+        return redirect("/")
+    return render(request, "index/mobile.html")
+
 
 def index_view(request):
     if request.user.is_authenticated:
         return redirect("index:profile")
-    
-    context = {
-        "tjioi": settings.TJIOI_MODE
-    }
+
+    context = {"tjioi": settings.TJIOI_MODE}
     return render(request, "index/index.html", context)
+
 
 @login_required
 def first_time_view(request):
     if not request.user.first_time:
         return redirect("index:profile")
-    
+
     context = {
         "user": request.user,
         "active": "profile",
     }
     return render(request, "index/start.html", context)
+
 
 @login_required
 @require_POST
@@ -45,11 +47,12 @@ def update_first_time(request):
     request.user.save()
     return redirect("index:profile")
 
+
 @login_required
 def profile_view(request):
     if request.user.first_time:
         return redirect("index:first_time")
-    
+
     context = {
         "user": request.user,
         "active": "profile",
@@ -68,7 +71,7 @@ def update_stats(request):
             "bronze": "Bronze",
             "silver": "Silver",
             "gold": "Gold",
-            "plat": "Platinum"
+            "plat": "Platinum",
         }.get(usaco, "Not Participated")
     else:
         request.user.usaco_division = "Not Participated"
@@ -80,13 +83,12 @@ def update_stats(request):
     request.user.save()
     return redirect("index:profile")
 
+
 @login_required
 def info_view(request):
-    context = {
-        "active": "info",
-        "tjioi": settings.TJIOI_MODE
-    }
+    context = {"active": "info", "tjioi": settings.TJIOI_MODE}
     return render(request, "index/info.html", context=context)
+
 
 @login_required
 def user_profile_view(request, id):
@@ -95,7 +97,11 @@ def user_profile_view(request, id):
     if settings.TJIOI_MODE and not request.user.is_staff:
         return redirect("index:profile")
 
-    rating_changes = RatingChange.objects.filter(user=user).order_by("time").values("id", "rating", "time")
+    rating_changes = (
+        RatingChange.objects.filter(user=user)
+        .order_by("time")
+        .values("id", "rating", "time")
+    )
 
     context = {
         "name": user.display_name,

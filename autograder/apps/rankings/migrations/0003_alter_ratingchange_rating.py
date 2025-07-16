@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rankings', '0002_remove_ratingchange_userid_ratingchange_user_and_more'),
+        ("rankings", "0002_remove_ratingchange_userid_ratingchange_user_and_more"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='ratingchange',
-            name='rating',
+            model_name="ratingchange",
+            name="rating",
             field=models.DecimalField(decimal_places=3, default=0, max_digits=10),
         ),
     ]

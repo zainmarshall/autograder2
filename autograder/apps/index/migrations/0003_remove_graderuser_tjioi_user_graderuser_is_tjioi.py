@@ -4,19 +4,18 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('index', '0002_graderuser_tjioi_user'),
+        ("index", "0002_graderuser_tjioi_user"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='graderuser',
-            name='tjioi_user',
+            model_name="graderuser",
+            name="tjioi_user",
         ),
         migrations.AddField(
-            model_name='graderuser',
-            name='is_tjioi',
+            model_name="graderuser",
+            name="is_tjioi",
             field=models.BooleanField(default=False),
         ),
     ]

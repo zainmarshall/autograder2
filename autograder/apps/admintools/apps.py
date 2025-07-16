@@ -2,5 +2,5 @@ from django.apps import AppConfig
 
 
 class AdmintoolsConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'autograder.apps.admintools'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "autograder.apps.admintools"

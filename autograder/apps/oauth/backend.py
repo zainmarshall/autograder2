@@ -1,6 +1,7 @@
 from typing import Any, Dict, List
 from social_core.backends.oauth import BaseOAuth2
 
+
 class IonOauth2(BaseOAuth2):  # pylint: disable=abstract-method
     name = "ion"
     AUTHORIZATION_URL = "https://ion.tjhsst.edu/oauth/authorize"
@@ -13,7 +14,8 @@ class IonOauth2(BaseOAuth2):  # pylint: disable=abstract-method
 
     def get_user_details(self, response: Dict[str, Any]) -> Dict[str, Any]:
         profile = self.get_json(
-            "https://ion.tjhsst.edu/api/profile", params={"access_token": response["access_token"]}
+            "https://ion.tjhsst.edu/api/profile",
+            params={"access_token": response["access_token"]},
         )
         # fields used to populate/update User model
         data = {

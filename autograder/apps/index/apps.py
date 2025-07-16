@@ -2,8 +2,8 @@ from django.apps import AppConfig
 
 
 class IndexConfig(AppConfig):
-    default_auto_field = 'django.db.models.BigAutoField'
-    name = 'autograder.apps.index'
+    default_auto_field = "django.db.models.BigAutoField"
+    name = "autograder.apps.index"
 
     def ready(self):
         pass

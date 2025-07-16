@@ -5,16 +5,17 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('contests', '0001_initial'),
-        ('runtests', '0002_alter_submission_contest'),
+        ("contests", "0001_initial"),
+        ("runtests", "0002_alter_submission_contest"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='submission',
-            name='contest',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='contests.contest'),
+            model_name="submission",
+            name="contest",
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to="contests.contest"
+            ),
         ),
     ]

@@ -7,16 +7,17 @@ from faker import Faker
 from django.utils import timezone
 
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'autograder.settings')
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "autograder.settings")
 django.setup()
 
 from autograder.apps.index.models import GraderUser  # noqa: E402
 from autograder.apps.contests.models import Contest  # noqa: E402
 from autograder.apps.problems.models import Problem  # noqa: E402
-from autograder.apps.runtests.models import Submission # noqa: E402
+from autograder.apps.runtests.models import Submission  # noqa: E402
 
 
 fake = Faker()
+
 
 def create_users():
     users = []
@@ -26,8 +27,8 @@ def create_users():
             password="password123",
             username=f"user{i}",
             display_name="User User",
-            cf_handle=random.choice(['tourist', 'jiangly', 'orzdevinwang', 'ksun48']),
-            grade=random.choice(['9', '10', '11', '12']),
+            cf_handle=random.choice(["tourist", "jiangly", "orzdevinwang", "ksun48"]),
+            grade=random.choice(["9", "10", "11", "12"]),
             usaco_division=random.choice(list(GraderUser.USACO_DIVISIONS.keys())),
         )
         users.append(user)
@@ -38,13 +39,14 @@ def create_users():
             password="adminpass",
             username=f"admin{i}",
             display_name="Admin Admin",
-            cf_handle=random.choice(['tourist', 'jiangly', 'orzdevinwang', 'ksun48']),
-            grade=random.choice(['9', '10', '11', '12']),
+            cf_handle=random.choice(["tourist", "jiangly", "orzdevinwang", "ksun48"]),
+            grade=random.choice(["9", "10", "11", "12"]),
             usaco_division=random.choice(list(GraderUser.USACO_DIVISIONS.keys())),
         )
         users.append(admin)
 
     return users
+
 
 def create_contests():
     contests = []
@@ -59,10 +61,11 @@ def create_contests():
             tjioi=(False if i < 4 else True),
             start=start_time,
             end=end_time,
-            editorial=fake.text(max_nb_chars=15)
+            editorial=fake.text(max_nb_chars=15),
         )
         contests.append(contest)
     return contests
+
 
 def create_problems_and_submissions(users, contests):
     problems = []
@@ -73,7 +76,7 @@ def create_problems_and_submissions(users, contests):
             problem = Problem.objects.create(
                 name=f"Problem {chr(65 + i)}",
                 contest=contest,
-                points=(i + 1)*100,
+                points=(i + 1) * 100,
                 statement="statement here",
                 solution="solution here",
                 inputtxt="input.txt content",

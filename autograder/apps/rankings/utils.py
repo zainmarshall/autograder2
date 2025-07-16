@@ -82,7 +82,11 @@ def update_rankings():
     for r in range(len(rankings)):
         rankings[r]["inhouses"].sort()
 
-        drops = max(0, min(2, contests.count() - 2) + get_object_or_404(GraderUser, id=rankings[r]["id"]).author_drops)
+        drops = max(
+            0,
+            min(2, contests.count() - 2)
+            + get_object_or_404(GraderUser, id=rankings[r]["id"]).author_drops,
+        )
 
         overall = 0
         for j in range(drops, contests.count()):
@@ -98,9 +102,9 @@ def update_rankings():
 
         rankings[r]["index"] = 0.2 * vals[0] + 0.35 * vals[1] + 0.45 * vals[2]
 
-    
     rankings = [
-        elem for elem in rankings
+        elem
+        for elem in rankings
         if elem["usaco"] > 800 or elem["cf"] > 0 or elem["inhouse"] > 0
     ]
 

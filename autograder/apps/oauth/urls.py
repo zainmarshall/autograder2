@@ -4,6 +4,4 @@ from . import views
 
 app_name = "oauth"
 
-urlpatterns = [
-    path('logout/', views.logout_view, name="logout")
-]
+urlpatterns = [path("logout/", views.logout_view, name="logout")]

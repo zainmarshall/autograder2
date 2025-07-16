@@ -6,7 +6,6 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -15,20 +14,29 @@ class Migration(migrations.Migration):
 
     operations = [
         migrations.CreateModel(
-            name='Submission',
+            name="Submission",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('language', models.TextField()),
-                ('code', models.TextField()),
-                ('verdict', models.TextField(default='Running')),
-                ('runtime', models.IntegerField(default=-1)),
-                ('memory', models.IntegerField(default=-1)),
-                ('contest', models.IntegerField(blank=True, null=True)),
-                ('problemid', models.IntegerField()),
-                ('problemname', models.CharField(blank=True, max_length=255, null=True)),
-                ('insight', models.TextField(blank=True, null=True)),
-                ('timestamp', models.DateTimeField()),
-                ('usr', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("language", models.TextField()),
+                ("code", models.TextField()),
+                ("verdict", models.TextField(default="Running")),
+                ("runtime", models.IntegerField(default=-1)),
+                ("memory", models.IntegerField(default=-1)),
+                ("contest", models.IntegerField(blank=True, null=True)),
+                ("problemid", models.IntegerField()),
+                (
+                    "problemname",
+                    models.CharField(blank=True, max_length=255, null=True),
+                ),
+                ("insight", models.TextField(blank=True, null=True)),
+                ("timestamp", models.DateTimeField()),
+                (
+                    "usr",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
         ),
     ]

@@ -5,25 +5,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('index', '0005_graderuser_author_drops'),
+        ("index", "0005_graderuser_author_drops"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='graderuser',
-            name='index',
+            model_name="graderuser",
+            name="index",
             field=models.DecimalField(decimal_places=3, default=0, max_digits=10),
         ),
         migrations.AddField(
-            model_name='graderuser',
-            name='inhouse',
+            model_name="graderuser",
+            name="inhouse",
             field=models.DecimalField(decimal_places=3, default=0, max_digits=10),
         ),
         migrations.AddField(
-            model_name='graderuser',
-            name='inhouses',
-            field=django.contrib.postgres.fields.ArrayField(base_field=models.DecimalField(decimal_places=3, max_digits=10), default=list, size=None),
+            model_name="graderuser",
+            name="inhouses",
+            field=django.contrib.postgres.fields.ArrayField(
+                base_field=models.DecimalField(decimal_places=3, max_digits=10),
+                default=list,
+                size=None,
+            ),
         ),
     ]

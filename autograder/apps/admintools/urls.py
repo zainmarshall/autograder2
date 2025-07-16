@@ -1,7 +1,3 @@
-
-
 app_name = "problems"
 
-urlpatterns = [
-    
-]
+urlpatterns = []

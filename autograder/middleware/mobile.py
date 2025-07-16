@@ -1,6 +1,7 @@
 from django.shortcuts import redirect
 
-EXCLUDED_PATHS = ['/mobile/', '/djangoadmin/', '/static/']  # Add more if needed
+EXCLUDED_PATHS = ["/mobile/", "/djangoadmin/", "/static/"]  # Add more if needed
+
 
 class MobileRedirectMiddleware:
     def __init__(self, get_response):
@@ -12,7 +13,7 @@ class MobileRedirectMiddleware:
             return self.get_response(request)
 
         # Use django-user-agents detection
-        if hasattr(request, 'user_agent') and request.user_agent.is_mobile:
-            return redirect('/mobile/')  # Redirect mobile users
+        if hasattr(request, "user_agent") and request.user_agent.is_mobile:
+            return redirect("/mobile/")  # Redirect mobile users
 
         return self.get_response(request)

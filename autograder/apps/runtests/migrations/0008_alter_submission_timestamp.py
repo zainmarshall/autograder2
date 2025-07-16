@@ -5,15 +5,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('runtests', '0007_alter_submission_options'),
+        ("runtests", "0007_alter_submission_options"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='submission',
-            name='timestamp',
+            model_name="submission",
+            name="timestamp",
             field=models.DateTimeField(default=django.utils.timezone.now),
         ),
     ]

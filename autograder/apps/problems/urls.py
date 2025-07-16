@@ -6,5 +6,5 @@ app_name = "problems"
 
 urlpatterns = [
     path("problemset/", views.problemset_view, name="problemset"),
-    path("problem/<int:pid>/", views.problem_view, name="problem")
+    path("problem/<int:pid>/", views.problem_view, name="problem"),
 ]

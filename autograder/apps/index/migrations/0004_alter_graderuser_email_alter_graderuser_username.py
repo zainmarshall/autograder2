@@ -4,20 +4,19 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('index', '0003_remove_graderuser_tjioi_user_graderuser_is_tjioi'),
+        ("index", "0003_remove_graderuser_tjioi_user_graderuser_is_tjioi"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='graderuser',
-            name='email',
+            model_name="graderuser",
+            name="email",
             field=models.EmailField(max_length=254),
         ),
         migrations.AlterField(
-            model_name='graderuser',
-            name='username',
+            model_name="graderuser",
+            name="username",
             field=models.CharField(max_length=30, unique=True),
         ),
     ]

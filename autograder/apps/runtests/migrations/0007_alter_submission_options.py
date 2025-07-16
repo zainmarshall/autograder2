@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('runtests', '0006_alter_submission_timestamp'),
+        ("runtests", "0006_alter_submission_timestamp"),
     ]
 
     operations = [
         migrations.AlterModelOptions(
-            name='submission',
-            options={'get_latest_by': 'timestamp'},
+            name="submission",
+            options={"get_latest_by": "timestamp"},
         ),
     ]

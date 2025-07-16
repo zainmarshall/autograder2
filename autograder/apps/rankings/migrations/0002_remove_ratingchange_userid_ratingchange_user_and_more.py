@@ -6,25 +6,28 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('rankings', '0001_initial'),
+        ("rankings", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='ratingchange',
-            name='userid',
+            model_name="ratingchange",
+            name="userid",
         ),
         migrations.AddField(
-            model_name='ratingchange',
-            name='user',
-            field=models.ForeignKey(default=1, on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL),
+            model_name="ratingchange",
+            name="user",
+            field=models.ForeignKey(
+                default=1,
+                on_delete=django.db.models.deletion.CASCADE,
+                to=settings.AUTH_USER_MODEL,
+            ),
         ),
         migrations.AlterField(
-            model_name='ratingchange',
-            name='time',
+            model_name="ratingchange",
+            name="time",
             field=models.DateTimeField(auto_now_add=True),
         ),
     ]

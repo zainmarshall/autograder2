@@ -4,24 +4,22 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
-    dependencies = [
-    ]
+    dependencies = []
 
     operations = [
         migrations.CreateModel(
-            name='Contest',
+            name="Contest",
             fields=[
-                ('id', models.AutoField(primary_key=True, serialize=False)),
-                ('name', models.CharField(max_length=255)),
-                ('rated', models.BooleanField(default=False)),
-                ('season', models.IntegerField()),
-                ('tjioi', models.BooleanField(default=False)),
-                ('start', models.DateTimeField()),
-                ('end', models.DateTimeField()),
-                ('editorial', models.TextField(blank=True, null=True)),
+                ("id", models.AutoField(primary_key=True, serialize=False)),
+                ("name", models.CharField(max_length=255)),
+                ("rated", models.BooleanField(default=False)),
+                ("season", models.IntegerField()),
+                ("tjioi", models.BooleanField(default=False)),
+                ("start", models.DateTimeField()),
+                ("end", models.DateTimeField()),
+                ("editorial", models.TextField(blank=True, null=True)),
             ],
         ),
     ]

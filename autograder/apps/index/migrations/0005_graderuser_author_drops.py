@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('index', '0004_alter_graderuser_email_alter_graderuser_username'),
+        ("index", "0004_alter_graderuser_email_alter_graderuser_username"),
     ]
 
     operations = [
         migrations.AddField(
-            model_name='graderuser',
-            name='author_drops',
+            model_name="graderuser",
+            name="author_drops",
             field=models.IntegerField(default=0),
         ),
     ]

@@ -6,12 +6,13 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # Create your views here.
 @require_http_methods(["GET", "POST"])
 def tjioi_login_view(request):
     if request.user.is_authenticated:
         return redirect("index:profile")
-    
+
     context = {}
 
     if request.method == "POST":
@@ -29,8 +30,9 @@ def tjioi_login_view(request):
             elif not user.is_tjioi:
                 logger.info(f"Non-tjioi user {username} tried to log in using tjioi")
             elif not settings.TJIOI_MODE:
-                logger.info(f"TJIOI user {username} tried to log without tjioi mode. Try turning on tjioi mode in settings")
+                logger.info(
+                    f"TJIOI user {username} tried to log without tjioi mode. Try turning on tjioi mode in settings"
+                )
             context["error"] = "Login failed"
-
 
     return render(request, "tjioi/login.html", context)

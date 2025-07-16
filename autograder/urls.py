@@ -14,20 +14,21 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+
 from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('djangoadmin/', admin.site.urls),
-    path('', include('autograder.apps.index.urls', namespace='index')),
-    path('', include('autograder.apps.oauth.urls', namespace='oauth')),
-    path('contests/', include('autograder.apps.contests.urls', namespace='contests')),
-    path('problems/', include('autograder.apps.problems.urls', namespace='problems')),
-    path('', include('autograder.apps.runtests.urls', namespace='runtests')),
-    path('admin/', include('autograder.apps.admintools.urls', namespace='admintools')),
-    path('', include('autograder.apps.rankings.urls', namespace='rankings')),
-    path('tjioi/', include('autograder.apps.tjioi.urls', namespace='tjioi')),
-    path('', include('social_django.urls', namespace='social')),
+    path("djangoadmin/", admin.site.urls),
+    path("", include("autograder.apps.index.urls", namespace="index")),
+    path("", include("autograder.apps.oauth.urls", namespace="oauth")),
+    path("contests/", include("autograder.apps.contests.urls", namespace="contests")),
+    path("problems/", include("autograder.apps.problems.urls", namespace="problems")),
+    path("", include("autograder.apps.runtests.urls", namespace="runtests")),
+    path("admin/", include("autograder.apps.admintools.urls", namespace="admintools")),
+    path("", include("autograder.apps.rankings.urls", namespace="rankings")),
+    path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
+    path("", include("social_django.urls", namespace="social")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
