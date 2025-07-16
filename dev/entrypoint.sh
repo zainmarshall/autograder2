@@ -18,7 +18,7 @@ done
 uv run manage.py makemigrations --noinput
 uv run manage.py migrate
 
-cp scripts/filler_data.py .
+cp dev/filler_data.py .
 
 if [ ! -f "$FIRST_RUN_LOG" ]; then
     echo "Creating filler data..."
