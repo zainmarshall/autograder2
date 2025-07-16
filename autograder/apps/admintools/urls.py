@@ -1,3 +1,9 @@
-app_name = "problems"
+from django.urls import path
 
-urlpatterns = []
+from . import views
+
+app_name = "admintools"
+
+urlpatterns = [
+    path('', views.admin_index_view, name="index")
+]

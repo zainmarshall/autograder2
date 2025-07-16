@@ -18,7 +18,7 @@ def problemset_view(request):
 
     problems = problems.order_by("-id")
 
-    context = {"problems": problems, "active": "problemset"}
+    context = {"problems": problems}
 
     return render(request, "problems/problemset.html", context)
 

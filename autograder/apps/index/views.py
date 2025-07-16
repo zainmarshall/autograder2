@@ -30,12 +30,8 @@ def index_view(request):
 def first_time_view(request):
     if not request.user.first_time:
         return redirect("index:profile")
-
-    context = {
-        "user": request.user,
-        "active": "profile",
-    }
-    return render(request, "index/start.html", context)
+    
+    return render(request, "index/start.html")
 
 
 @login_required
@@ -53,11 +49,7 @@ def profile_view(request):
     if request.user.first_time:
         return redirect("index:first_time")
 
-    context = {
-        "user": request.user,
-        "active": "profile",
-    }
-    return render(request, "index/profile.html", context)
+    return render(request, "index/profile.html")
 
 
 @login_required

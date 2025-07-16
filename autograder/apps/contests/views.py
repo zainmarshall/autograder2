@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 @login_required
 def contests_view(request):
     contests = Contest.objects.filter(tjioi=settings.TJIOI_MODE).order_by("-id")
-    context = {"active": "contests", "contests": contests}
+    context = {"contests": contests}
     return render(request, "contest/contests.html", context)
 
 
@@ -98,7 +98,6 @@ def contest_standings_view(request, cid):
 
     context = {
         "title": standings["title"],
-        "user": request.user,
         "cid": cid,
         "pnum": standings["pnum"],
         "load": standings["load"],

@@ -23,12 +23,12 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("djangoadmin/", admin.site.urls),
     path("", include("autograder.apps.index.urls", namespace="index")),
-    path("", include("autograder.apps.oauth.urls", namespace="oauth")),
+    path("oauth/", include("autograder.apps.oauth.urls", namespace="oauth")),
     path("contests/", include("autograder.apps.contests.urls", namespace="contests")),
     path("problems/", include("autograder.apps.problems.urls", namespace="problems")),
-    path("", include("autograder.apps.runtests.urls", namespace="runtests")),
-    path("admin/", include("autograder.apps.admintools.urls", namespace="admintools")),
-    path("", include("autograder.apps.rankings.urls", namespace="rankings")),
+    path("status/", include("autograder.apps.runtests.urls", namespace="runtests")),
+    path("admintools/", include("autograder.apps.admintools.urls", namespace="admintools")),
+    path("rankings/", include("autograder.apps.rankings.urls", namespace="rankings")),
     path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
     path("", include("social_django.urls", namespace="social")),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

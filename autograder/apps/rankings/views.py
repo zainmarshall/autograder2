@@ -28,6 +28,6 @@ def rankings_view(request, season):
     for i in range(len(rankings)):
         rankings[i]["rank"] = i + 1
 
-    context = {"rankings": rankings, "user": request.user}
+    context = {"rankings": rankings}
 
     return render(request, "rankings/rankings.html", context)
