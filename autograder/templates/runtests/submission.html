@@ -28,7 +28,7 @@ onload="auto_grow()"
 
 
 {% block content %}
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 {% include "partials/header.html" %}
 
 <div class="main-block">

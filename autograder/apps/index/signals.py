@@ -3,14 +3,17 @@ from django.dispatch import receiver
 from .models import GraderUser
 from decimal import Decimal
 from ..rankings.utils import get_codeforces_rating
+import threading
 import logging
 
 logger = logging.getLogger(__name__)
-
+_signal_lock = threading.local()
 
 @receiver(post_save, sender=GraderUser)
 def update_rating(sender, instance, created, **kwargs):
-    logger.info("I got called")
+    if getattr(_signal_lock, 'in_signal', False):
+        return
+
     usaco_map = {
         "Not Participated": 800,
         "Bronze": 800,
@@ -41,4 +44,8 @@ def update_rating(sender, instance, created, **kwargs):
         fields_to_update.append("index")
 
     if fields_to_update:
-        instance.save(update_fields=fields_to_update)
+        try:
+            _signal_lock.in_signal = True
+            instance.save(update_fields=fields_to_update)
+        finally:
+            _signal_lock.in_signal = False

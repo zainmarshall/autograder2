@@ -13,4 +13,5 @@ urlpatterns = [
     path("update_stats/", views.update_stats, name="update_stats"),
     path("info/", views.info_view, name="info"),
     path("mobile/", views.mobile_home, name="mobile"),
+    path("toggle_particles/", views.toggle_particles, name="toggle_particles")
 ]

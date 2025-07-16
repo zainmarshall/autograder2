@@ -18,5 +18,10 @@
                 <button class="logoutbtn" type="button">Log Out</button>
             </a>
         </li>
+        <li class="nb topnav-right">
+            <a href="{% url 'index:toggle_particles' %}?next={{ request.get_full_path|urlencode }}">
+                Toggle Particles
+            </a>
+        </li>
     </ul>
 </div>

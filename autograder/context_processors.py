@@ -18,7 +18,6 @@ def active_nav_item(request):
     elif path.startswith("/rankings/"):
         active = "rankings"
     elif path == "/profile/":
-        logger.info(path)
         active = "profile"
     elif path.startswith("/info/"):
         active = "info"

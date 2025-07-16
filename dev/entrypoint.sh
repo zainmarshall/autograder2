@@ -18,17 +18,15 @@ done
 uv run manage.py makemigrations --noinput
 uv run manage.py migrate
 
-cp dev/filler_data.py .
+cp "$SCRIPT_DIR/filler_data.py" $PROJECT_ROOT
 
-if [ ! -f "$FIRST_RUN_LOG" ]; then
+if [ ! -f "$SCRIPT_DIR/$FIRST_RUN_LOG" ]; then
     echo "Creating filler data..."
     uv run filler_data.py
+    rm -rf filler_data.py
     DJANGO_SUPERUSER_PASSWORD=123 uv run manage.py createsuperuser --noinput --username=admin --email=admin@admin.com
-    touch "$FIRST_RUN_LOG"
+    touch "$SCRIPT_DIR/$FIRST_RUN_LOG"
 fi
-
-rm -rf filler_data.py
-
 
 while true
 do

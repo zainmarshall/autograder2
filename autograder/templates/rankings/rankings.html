@@ -15,7 +15,7 @@
 
 {% block content %}
 {% include "partials/header.html" %}
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 
 <div class="main-block">
     <div class="title">Rankings</div>
@@ -29,19 +29,19 @@
         <tr data-sort-method="none">
             <th>#</th>
             <th>Name</th>
-            <th>Index</th>
             <th>USACO</th>
             <th>Codeforces</th>
             <th>In-Houses</th>
+            <th>Index</th>
         </tr>
         {% for ranking in rankings %}
             <tr class="{% if ranking.id == id %}row-highlight{% endif %}">
             <td class="centertext">{{ ranking.rank }}</td>
             <td class="centertext"><a href="{% url "index:user_profile" ranking.id %}">{{ ranking.name }}</a></td>
-            <td class="centertext">{{ ranking.index|floatformat:3 }}</td>
             <td class="centertext">{{ ranking.usaco }}</td>
-            <td class="centertext">{{ ranking.cf|floatformat:3 }}</td>
+            <td class="centertext">{{ ranking.cf }}</td>
             <td class="centertext">{{ ranking.inhouse|floatformat:3 }}</td>
+            <td class="centertext">{{ ranking.index|floatformat:3 }}</td>
             </tr>
         {% endfor %}
     </table>

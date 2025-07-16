@@ -19,7 +19,7 @@ class GraderUserAdmin(UserAdmin):
         "index",
     )
     list_filter = ("is_staff", "is_superuser", "is_active", "is_tjioi")
-    search_fields = ("id",)
+    search_fields = ("id","username", "display_name")
     ordering = ("id",)
 
     fieldsets = (
@@ -36,6 +36,7 @@ class GraderUserAdmin(UserAdmin):
                     "grade",
                     "personal_email",
                     "is_tjioi",
+                    "particles_enabled",
                 )
             },
         ),

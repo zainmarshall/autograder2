@@ -12,7 +12,7 @@
 
 {% block content %}
 {% include "partials/header.html" %}
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
  <div id="mainContent">
             <div id="subContent">
                 <div class="info-block">
@@ -24,7 +24,7 @@
                             <div class="statsInfo">
                                 <label for="usaco_div">USACO Division: </label>
                                 <select name="usaco_div">
-                                    <option value="none" {% if user.usaco_division == "Not Participated" %} selected {% endif %}>Not Participated</option>
+                                    <option value="" {% if user.usaco_division == "Not Participated" %} selected {% endif %}>Not Participated</option>
                                     <option value="bronze" {% if user.usaco_division == "Bronze" %} selected {% endif %}>Bronze</option>
                                     <option value="silver" {% if user.usaco_division == "Silver" %} selected {% endif %}>Silver</option>
                                     <option value="gold" {% if user.usaco_division == "Gold" %} selected {% endif %}>Gold</option>

@@ -10,7 +10,7 @@
 
 {% block content %} 
 {% include "partials/header.html" %} 
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 
 <div class="main-block">
   <div class="title">Contests</div>

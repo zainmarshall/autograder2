@@ -25,7 +25,7 @@
 {% endblock head %}
 
 {% block content %}
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 {% include "partials/header.html" %}
 
 

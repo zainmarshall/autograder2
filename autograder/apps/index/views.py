@@ -109,3 +109,11 @@ def user_profile_view(request, id):
         context["no_rating_history"] = "true"
 
     return render(request, "index/user_profile.html", context)
+
+@login_required
+def toggle_particles(request):
+    user = request.user
+    user.particles_enabled = not user.particles_enabled
+    user.save()
+    next_url = request.GET.get('next', '/')
+    return redirect(next_url)

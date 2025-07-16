@@ -60,6 +60,8 @@ class GraderUser(AbstractBaseUser, PermissionsMixin):
     inhouse = models.DecimalField(max_digits=10, decimal_places=3, default=0)
     index = models.DecimalField(max_digits=10, decimal_places=3, default=0)
 
+    particles_enabled = models.BooleanField(default=True)
+
     objects = GraderUserManager()
 
     USERNAME_FIELD = "username"

@@ -12,7 +12,7 @@
 
 {% block content %}
 {% include "partials/header.html" %}
-{% include "partials/particles.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 {% include "partials/contestNavbar.html" %}
 
 

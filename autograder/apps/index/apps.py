@@ -6,4 +6,4 @@ class IndexConfig(AppConfig):
     name = "autograder.apps.index"
 
     def ready(self):
-        pass
+        import autograder.apps.index.signals  # noqa: F401
