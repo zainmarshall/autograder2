@@ -98,8 +98,6 @@ td {
     font-weight: bold;
 }
 
-
-
 .subtitle {
     margin: 0em;
     text-align: center;
@@ -223,8 +221,7 @@ li.nb a {
     border-width: 4px;
     border-radius: 0.75vw;
 
-    max-width: 1200px;
-    min-width: 920px;
+    width: 90%;
     margin: 2em auto 2em auto;
     padding: 2.5em;
 
@@ -333,13 +330,13 @@ li.slg {
 }
 
 .option-buttons {
-    max-width: 1200px;
-    min-width: 920px;
+    /* width: 100%; */
     display: flex;
     justify-content: flex-start;
     gap: 4vw;
     padding: .5%;
-    margin: 0 auto;
+    padding-left: 2%;
+    margin: 1%;
     font-size: 1em;
 }
 .option-buttons a .button {
@@ -391,8 +388,7 @@ input[type="file"] {
 }
 .cnav {
     background-color: rgb(0, 0, 0, 0.6);
-    max-width: 1200px;
-    min-width: 920px;
+    width: 90%;
     padding-left: 2%;
     padding-right: 2%;
     margin-left: auto;
