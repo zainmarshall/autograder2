@@ -1,0 +1,51 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />
+{% endblock stylesheet %}
+
+{% block title %}Admin{% endblock title %}
+
+{% block content %}
+{% include "partials/header.html" %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
+
+<br>
+<div class='main-block'>
+    <div class="title">Admin Panel - Queue Manager</div>
+</div>
+<div class='main-block' id="problems">
+<table>
+    <tr>
+        <th>Press to go to submission</th>
+        <th>Press to skip submission</th>
+    </tr>
+
+    {% for submission in submissions  %}
+        <tr>
+            <td class="centertext">
+                <a href="{% url "runtests:submission" id=submission %}">
+                    <div class="problem-text">Submission ID {{submission}}</div>
+                </a>
+            </td>
+            <td class="centertext">
+                <a href="{% url "admintools:skip" sid=submission %}">
+                    <div class="problem-text">Skip</div>
+                </a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>
+</div>
+<div class="option-buttons">
+<div class="problem-text">Queue is currently {{is_paused}}</div>
+    <button class="button">
+        <a href="{% url "admintools:togglepause" paused=is_paused %}">
+            <div class="problem-text">Pause / Unpause Queue</div>
+        </a>
+    </button>
+</div>
+
+{% endblock content %}

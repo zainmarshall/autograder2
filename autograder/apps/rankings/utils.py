@@ -12,9 +12,13 @@ logger = logging.getLogger(__name__)
 
 
 def get_codeforces_rating(user):
+    if user.cf_handle is None:
+        return 0
     handle = str(user.cf_handle)
     if not handle.isalnum():
         return 0
+    
+
     url = f"https://codeforces.com/api/user.info?handles={handle}"
     response = requests.get(url)
 

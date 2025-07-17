@@ -23,6 +23,7 @@ class SubmissionQueue:
         self._runner_task: asyncio.Task | None = None
         self._paused: bool = False
         self._currently_processing: int | None = None
+        self._skipped = set()
 
     def _start_runner_if_needed(self):
         """Starts the runner task if it's not already running."""
@@ -77,6 +78,18 @@ class SubmissionQueue:
             problem = submission.problem
         except Submission.DoesNotExist:
             logger.error(f"Submission {submission_id} not found for grading.")
+            return
+        
+        if submission_id in self._skipped:
+            logger.info(f"Skipping submission {submission_id}")
+            self._skipped.remove(submission_id)
+            data = {
+                "verdict": "Skipped",
+                "runtime": "-1",
+                "memory": "-1",
+                "output": "Your submission was manually skipped by an admin"
+            }
+            await self.update_submission_from_result(submission, data)
             return
 
         coderunner_url = (
@@ -187,36 +200,9 @@ class SubmissionQueue:
             pass  # The loop in _run() will naturally exit on the next iteration check
 
     async def skip_submission(self, submission_id: int):
-        """Removes a submission from the queue and marks it as skipped."""
-        # This is a simplified way to "remove" from asyncio.Queue.
-        # A more robust implementation might require a different data structure
-        # if frequent removal from the middle of the queue is needed.
-        new_queue = asyncio.Queue()
-        found = False
-        while not self._tasks.empty():
-            item = await self._tasks.get()
-            if item == submission_id:
-                found = True
-                continue
-            await new_queue.put(item)
-
-        self._tasks = new_queue
-
-        if found:
-            try:
-                async with transaction.atomic():
-                    submission = await Submission.objects.aget(id=submission_id)
-                    submission.verdict = "SKIPPED"
-                    submission.insight = (
-                        "This submission was manually skipped by an admin."
-                    )
-                    await submission.asave()
-                logger.info(f"Submission {submission_id} was skipped by an admin.")
-            except Submission.DoesNotExist:
-                logger.error(
-                    f"Attempted to skip non-existent submission {submission_id}"
-                )
-        return found
+        """Marks a submission from the queue as skipped."""
+        logger.info(f"Marked submission {submission_id} as skipped.")
+        self._skipped.add(submission_id)
 
 
 # --- Singleton Instance ---
