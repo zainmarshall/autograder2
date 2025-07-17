@@ -17,6 +17,9 @@
             <div id="subContent">
                 <div class="info-block">
                     <div class="title"><p>Profile</p></div>
+                    {% if user.is_staff %}
+                        <a href="{% url "admintools:index" %}">Go to admin panel</a>
+                    {% endif %}
                     <div class="userinfo">Name: {{ user.display_name }}</div>
                     <div class="userinfo">Username: {{ user.username }}</div>
                         <form action="{% url 'index:update_stats' %}" method="POST">

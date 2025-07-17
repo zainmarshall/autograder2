@@ -5,7 +5,7 @@ from . import views
 app_name = "contests"
 
 urlpatterns = [
-    path("contests/", views.contests_view, name="contests"),
+    path("", views.contests_view, name="contests"),
     path("contest/<int:cid>/", views.contest_view, name="contest"),
     path(
         "contest/<int:cid>/standings/", views.contest_standings_view, name="standings"
