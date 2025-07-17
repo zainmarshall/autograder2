@@ -30,6 +30,6 @@ fi
 
 while true
 do
-    uv run uvicorn autograder.asgi:application --reload --host 0.0.0.0 --port 3000
+    uv run manage.py runserver 0.0.0.0:3000
     sleep 1
 done
