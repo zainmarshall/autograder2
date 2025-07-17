@@ -94,7 +94,7 @@ td {
     margin: auto;
     text-align: center;
     font-size: 3em;
-    font-family: monospace;
+    font-family: 'IBM Plex Sans';
     font-weight: bold;
 }
 
@@ -104,7 +104,7 @@ td {
     margin: 0em;
     text-align: center;
     font-size: 1em;
-    font-family: monospace;
+    font-family: 'IBM Plex Sans';
     font-weight: bold;
     line-height: 1.5em;
 }
