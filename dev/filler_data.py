@@ -24,7 +24,7 @@ def create_users():
             username=f"user{i}",
             display_name="User User",
             cf_handle=random.choice(["tourist", "jiangly", "orzdevinwang", "ksun48"]),
-            grade=random.choice(["9", "10", "11", "12"]),
+            grade=random.choice(["freshman", "sophomore", "junior", "senior"]),
             usaco_division=random.choice(list(GraderUser.USACO_DIVISIONS.keys())),
         )
         user.save()
