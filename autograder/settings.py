@@ -117,7 +117,7 @@ DATABASES = {
         "NAME": "autograder",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": "postgres",
+        "HOST": "postgres" if DEBUG else "localhost",
         "PORT": "5432",
     }
 }
