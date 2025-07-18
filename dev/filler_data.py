@@ -3,7 +3,6 @@ import django
 import random
 import datetime
 from datetime import timedelta
-from faker import Faker
 from django.utils import timezone
 
 
@@ -16,12 +15,9 @@ from autograder.apps.problems.models import Problem  # noqa: E402
 from autograder.apps.runtests.models import Submission  # noqa: E402
 
 
-fake = Faker()
-
-
 def create_users():
     users = []
-    for i in range(20):
+    for i in range(10):
         user = GraderUser(
             email="example@example.com",
             password="password123",
@@ -33,37 +29,23 @@ def create_users():
         )
         user.save()
         users.append(user)
-
-    for i in range(20, 25):
-        admin = GraderUser(
-            email="example@example.com",
-            password="adminpass",
-            username=f"admin{i}",
-            display_name="Admin Admin",
-            cf_handle=random.choice(["tourist", "jiangly", "orzdevinwang", "ksun48"]),
-            grade=random.choice(["9", "10", "11", "12"]),
-            usaco_division=random.choice(list(GraderUser.USACO_DIVISIONS.keys())),
-        )
-        admin.save()
-        users.append(admin)
-
     return users
 
 
 def create_contests():
     contests = []
     now = timezone.now()
-    for i in range(5):
+    for i in range(1, 6):
         start_time = now - timedelta(days=random.randint(30, 365))
         end_time = start_time + timedelta(hours=2)
         contest = Contest(
             name=f"Contest {i}",
             rated=True,
             season=2025,
-            tjioi=(False if i < 4 else True),
+            tjioi=(False if i < 5 else True),
             start=start_time,
             end=end_time,
-            editorial=fake.text(max_nb_chars=15),
+            editorial="editorial goes here"
         )
         contest.save()
         contests.append(contest)
@@ -107,7 +89,7 @@ def create_problems_and_submissions(users, contests):
 
                     sub = Submission(
                         language=random.choice(["Python", "C++", "Java"]),
-                        code=fake.text(max_nb_chars=200),
+                        code="code goes here",
                         usr=user,
                         verdict=random.choice(["AC", "Wrong Answer"]),
                         runtime=random.randint(10, 2000),
