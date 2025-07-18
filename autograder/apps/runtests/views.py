@@ -9,8 +9,7 @@ from ..oauth.decorators import login_required
 from ..problems.models import Problem
 from ..contests.models import Contest
 from .models import Submission
-from .utils import submission_queue
-from asgiref.sync import sync_to_async
+from .tasks import grade_submission_task
 import logging
 
 logger = logging.getLogger(__name__)
@@ -111,7 +110,7 @@ def submission_view(request, id):
 
 @login_required
 @require_POST
-async def submit_post(request):
+def submit_post(request):
     pid = request.POST.get("problemid")
     lang = request.POST.get("lang")
     code = request.POST.get("code")
@@ -121,7 +120,7 @@ async def submit_post(request):
         logger.info(f"user {request.user} tried to use invalid lang")
         return HttpResponse(status=500)
 
-    problem = await Problem.objects.select_related("contest").aget(id=pid)
+    problem = Problem.objects.select_related("contest").get(id=pid)
 
     if len(code) > 60000:
         return HttpResponse(status=413)
@@ -135,10 +134,7 @@ async def submit_post(request):
         lang = {"py": "python", "cpp": "cpp", "java": "java"}[ext]
         code = uploaded_file.read().decode("utf-8")
 
-    if (
-        not await sync_to_async(lambda: request.user.is_staff)()
-        and await sync_to_async(timezone.now)() < problem.contest.start
-    ):
+    if not request.user.is_staff and timezone.now() < problem.contest.start:
         return HttpResponse("Contest has not started yet", status=403)
 
     last_sub_time = None
@@ -149,20 +145,20 @@ async def submit_post(request):
 
     if (
         last_sub_time is None
-        or await sync_to_async(timezone.now)() - last_sub_time > timedelta(seconds=30)
+        or timezone.now() - last_sub_time > timedelta(seconds=30)
         or request.user.is_staff
         or settings.DEBUG
     ):
-        new_sub = await sync_to_async(Submission.objects.create)(
+        new_sub = Submission.objects.create(
             usr=request.user,
             code=code,
             problem=problem,
             language=lang,
             contest=problem.contest,
         )
-        new_sub.asave()
+        new_sub.save()
 
-        await submission_queue.add_to_queue(new_sub.id)
+        grade_submission_task.delay(new_sub.id)
         return redirect("runtests:status", page=1)
     else:
         return HttpResponse(

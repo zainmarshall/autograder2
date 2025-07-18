@@ -20,15 +20,24 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
-    path("djangoadmin/", admin.site.urls),
-    path("", include("autograder.apps.index.urls", namespace="index")),
-    path("oauth/", include("autograder.apps.oauth.urls", namespace="oauth")),
-    path("contests/", include("autograder.apps.contests.urls", namespace="contests")),
-    path("problems/", include("autograder.apps.problems.urls", namespace="problems")),
-    path("status/", include("autograder.apps.runtests.urls", namespace="runtests")),
-    path("admintools/", include("autograder.apps.admintools.urls", namespace="admintools")),
-    path("rankings/", include("autograder.apps.rankings.urls", namespace="rankings")),
-    path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
-    path("", include("social_django.urls", namespace="social")),
-] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+urlpatterns = (
+    [
+        path("djangoadmin/", admin.site.urls),
+        path("", include("autograder.apps.index.urls", namespace="index")),
+        path("oauth/", include("autograder.apps.oauth.urls", namespace="oauth")),
+        path(
+            "contests/", include("autograder.apps.contests.urls", namespace="contests")
+        ),
+        path(
+            "problems/", include("autograder.apps.problems.urls", namespace="problems")
+        ),
+        path("status/", include("autograder.apps.runtests.urls", namespace="runtests")),
+        path(
+            "rankings/", include("autograder.apps.rankings.urls", namespace="rankings")
+        ),
+        path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
+        path("", include("social_django.urls", namespace="social")),
+    ]
+    + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+    + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+)

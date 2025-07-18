@@ -9,9 +9,10 @@ import logging
 logger = logging.getLogger(__name__)
 _signal_lock = threading.local()
 
+
 @receiver(post_save, sender=GraderUser)
 def update_rating(sender, instance, created, **kwargs):
-    if getattr(_signal_lock, 'in_signal', False):
+    if getattr(_signal_lock, "in_signal", False):
         return
 
     usaco_map = {

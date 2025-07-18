@@ -30,7 +30,7 @@ def index_view(request):
 def first_time_view(request):
     if not request.user.first_time:
         return redirect("index:profile")
-    
+
     return render(request, "index/start.html")
 
 
@@ -110,10 +110,11 @@ def user_profile_view(request, id):
 
     return render(request, "index/user_profile.html", context)
 
+
 @login_required
 def toggle_particles(request):
     user = request.user
     user.particles_enabled = not user.particles_enabled
     user.save()
-    next_url = request.GET.get('next', '/')
+    next_url = request.GET.get("next", "/")
     return redirect(next_url)

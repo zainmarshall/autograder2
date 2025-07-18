@@ -10,7 +10,7 @@ cd "$PROJECT_ROOT"
 uv sync
 uv run manage.py collectstatic --noinput
 
-until (PGPASSWORD=postgres psql -h "db" -U "postgres" -c '\q') 2> /dev/null; do
+until (PGPASSWORD=postgres psql -h "postgres" -U "postgres" -c '\q') 2> /dev/null; do
   >&2 echo "waiting for postgres"
   sleep 1
 done
@@ -22,6 +22,8 @@ cp "$SCRIPT_DIR/filler_data.py" $PROJECT_ROOT
 
 if [ ! -f "$SCRIPT_DIR/$FIRST_RUN_LOG" ]; then
     echo "Creating filler data..."
+    mkdir -p /home/tjctgrader/autograder/media/problem_testcases
+    cp /home/tjctgrader/autograder/dev/example_testcases.zip /home/tjctgrader/autograder/media/problem_testcases
     uv run filler_data.py
     rm -rf filler_data.py
     DJANGO_SUPERUSER_PASSWORD=123 uv run manage.py createsuperuser --noinput --username=admin --email=admin@admin.com

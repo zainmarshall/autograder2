@@ -22,6 +22,7 @@
         <th>Problem</th>
         <th>Runtime</th>
         <th>Verdict</th>
+        {% if user.is_staff %}<th>Skip</th>{% endif %}
     </tr>
     {% for sub in submissions  %}
     <tr>
@@ -46,6 +47,16 @@
         <td>
             {{sub.verdict}}
         </td>
+        {% if user.is_staff %}
+        <td>
+            {% if sub.verdict == 'Skipped' %}
+            Already Skipped
+            {% else %}
+                <a href="{% url 'contests:skip' sid=sub.id cid=cid mine_only=mine_only page=page|default:1 %}"
+                onclick="return confirm('Are you sure you want to skip this submission?');">Skip</a>
+            {% endif %}
+        </td>
+        {% endif %}
     </tr>
     {% endfor %}
 </table>

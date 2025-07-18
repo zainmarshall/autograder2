@@ -70,7 +70,6 @@ def create_contests():
     return contests
 
 
-
 def create_problems_and_submissions(users, contests):
     problem_id = 1
     problems = []
@@ -91,6 +90,7 @@ def create_problems_and_submissions(users, contests):
                 ml=256,
                 interactive=False,
                 secret=False,
+                testcases_zip="problem_testcases/example_testcases.zip",
             )
             problem.save()
             problems.append(problem)

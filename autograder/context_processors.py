@@ -2,6 +2,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def active_nav_item(request):
     path = request.path
 
@@ -13,8 +14,6 @@ def active_nav_item(request):
         active = "submit"
     elif path.startswith("/status/"):
         active = "status"
-    elif path.startswith("/admintools/"):
-        active = "admintools"
     elif path.startswith("/rankings/"):
         active = "rankings"
     elif path == "/profile/":

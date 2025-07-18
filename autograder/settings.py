@@ -46,7 +46,6 @@ INSTALLED_APPS = [
     "autograder.apps.contests",
     "autograder.apps.problems",
     "autograder.apps.runtests",
-    "autograder.apps.admintools",
     "autograder.apps.rankings",
     "autograder.apps.tjioi",
     "social_django",
@@ -118,7 +117,7 @@ DATABASES = {
         "NAME": "autograder",
         "USER": "postgres",
         "PASSWORD": "postgres",
-        "HOST": "db",
+        "HOST": "postgres",
         "PORT": "5432",
     }
 }
@@ -143,9 +142,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = "index.GraderUser"
-
-MEDIA_URL = "/media/"
-MEDIA_ROOT = BASE_DIR / "media"
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.1/topics/i18n/
@@ -184,7 +180,10 @@ TJIOI_MODE = False
 
 CURRENT_SEASON = 2025
 
-CODERUNNER_URL = "http://coderunner:8080/run" if DEBUG else "http://10.150.0.7:8080/run"
+CODERUNNER_URL = "http://coderunner:8080/" if DEBUG else "http://10.150.0.7:8080/"
+
+MEDIA_URL = "/media/"
+MEDIA_ROOT = BASE_DIR / "media"
 
 AUTHENTICATION_BACKENDS = ["django.contrib.auth.backends.ModelBackend"]
 
@@ -215,3 +214,10 @@ SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.load_extra_data",
     "social_core.pipeline.user.user_details",
 )
+
+
+CELERY_TIMEZONE = "America/New_York"
+CELERY_BROKER_URL = "redis://redis:6379/0"
+
+CELERY_ACCEPT_CONTENT = ["json", "pickle"]
+CELERY_TASK_SERIALIZER = "pickle"

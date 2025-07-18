@@ -27,4 +27,5 @@ class ProblemAdmin(admin.ModelAdmin):
             "Text Fields",
             {"fields": ("statement", "solution", "inputtxt", "outputtxt", "samples")},
         ),
+        ("Testcases zip", {"fields": ("testcases_zip",)}),
     )

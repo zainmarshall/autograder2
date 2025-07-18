@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.core.paginator import Paginator
 from django.conf import settings
 from django.utils import timezone
-from ..oauth.decorators import login_required
+from ..oauth.decorators import login_required, admin_required
 from .models import Contest
 from ..problems.models import Problem
 from ..index.models import GraderUser
@@ -138,3 +138,14 @@ def contest_status_view(request, cid, mine_only, page):
         "mine_only": mine_only,
     }
     return render(request, "contest/status.html", context)
+
+
+@login_required
+@admin_required
+def contest_skip_view(request, sid, cid, mine_only, page):
+    sub = get_object_or_404(Submission, id=sid)
+    sub.verdict = "Skipped"
+    sub.insight = "Your submission was manually skipped by an admin"
+    sub.save()
+
+    return redirect("contests:status", cid=cid, mine_only=mine_only, page=page)

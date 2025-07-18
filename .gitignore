@@ -4,3 +4,4 @@ __pycache__
 .env
 .first_log
 collected_static
+media

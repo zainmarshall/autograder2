@@ -19,7 +19,7 @@ class GraderUserAdmin(UserAdmin):
         "index",
     )
     list_filter = ("is_staff", "is_superuser", "is_active", "is_tjioi")
-    search_fields = ("id","username", "display_name")
+    search_fields = ("id", "username", "display_name")
     ordering = ("id",)
 
     fieldsets = (

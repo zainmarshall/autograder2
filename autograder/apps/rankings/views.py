@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 # Create your views here.
 @login_required
 def rankings_view(request, season):
@@ -29,8 +30,7 @@ def rankings_view(request, season):
     ]
 
     rankings = [
-        r for r in rankings
-        if r["usaco"] > 800 or r["cf"] > 0 or r["inhouse"] > 0
+        r for r in rankings if r["usaco"] > 800 or r["cf"] > 0 or r["inhouse"] > 0
     ]
 
     rankings.sort(key=lambda x: x["index"], reverse=True)

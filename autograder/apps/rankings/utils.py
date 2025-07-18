@@ -17,7 +17,6 @@ def get_codeforces_rating(user):
     handle = str(user.cf_handle)
     if not handle.isalnum():
         return 0
-    
 
     url = f"https://codeforces.com/api/user.info?handles={handle}"
     response = requests.get(url)
