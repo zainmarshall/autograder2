@@ -116,7 +116,7 @@ DATABASES = {
         "ENGINE": "django.db.backends.postgresql",
         "NAME": "autograder",
         "USER": "postgres",
-        "PASSWORD": "postgres",
+        "PASSWORD": "postgres" if DEBUG else config("PGPASSWORD"),
         "HOST": "postgres" if DEBUG else "localhost",
         "PORT": "5432",
     }
