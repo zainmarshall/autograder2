@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = bool(config("DEBUG"))
+DEBUG = config("DEBUG") == 'True'
 
 ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1"]
 
