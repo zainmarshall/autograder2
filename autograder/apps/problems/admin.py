@@ -25,7 +25,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ("Flags", {"fields": ("interactive", "secret")}),
         (
             "Text Fields",
-            {"fields": ("statement", "solution", "inputtxt", "outputtxt", "samples")},
+            {"fields": ("statement", "inputtxt", "outputtxt", "samples")},
         ),
         ("Testcases zip", {"fields": ("testcases_zip",)}),
     )

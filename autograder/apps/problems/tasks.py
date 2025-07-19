@@ -39,7 +39,7 @@ def add_tests_to_coderunner_task(self, problem_id: int):
     try:
         problem = Problem.objects.get(id=problem_id)
         if not problem.testcases_zip or not hasattr(problem.testcases_zip, "path"):
-            logger.error(f"No zip file found for problem {problem_id}.")
+            logger.warning(f"No zip file found for problem {problem_id}.")
             return
 
         with tempfile.TemporaryDirectory() as tmpdir:

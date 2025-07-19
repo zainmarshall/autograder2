@@ -18,7 +18,7 @@ class Problem(models.Model):
     interactive = models.BooleanField(default=False)
     secret = models.BooleanField(default=False)
 
-    testcases_zip = models.FileField(upload_to="problem_testcases/")
+    testcases_zip = models.FileField(upload_to="problem_testcases/", blank=True)
 
     def __str__(self):
         return self.name
