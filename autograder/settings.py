@@ -222,9 +222,4 @@ CELERY_BROKER_URL = "redis://redis:6379/0" if DEBUG else "redis://127.0.0.1:6379
 CELERY_ACCEPT_CONTENT = ["json", "pickle"]
 CELERY_TASK_SERIALIZER = "pickle"
 
-CELERY_TASK_TRACK_STARTED = True
 CELERY_TASK_TIME_LIMIT = 30 * 60
-CELERY_RESULT_EXTENDED = True
-CELERY_worker_state_db = True
-CELERY_result_persistent = True
-CELERY_RESULT_BACKEND = 'django-db'
