@@ -13,6 +13,11 @@ app = Celery("proj")
 #   should have a `CELERY_` prefix.
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
+app.conf.update(
+    task_concurrency=4,  # Use 4 threads for concurrency
+    worker_prefetch_multiplier=1  # Prefetch one task at a time
+)
+
 # Load task modules from all registered Django apps.
 app.autodiscover_tasks()
 
