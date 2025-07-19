@@ -217,7 +217,7 @@ SOCIAL_AUTH_PIPELINE = (
 
 
 CELERY_TIMEZONE = "America/New_York"
-CELERY_BROKER_URL = "redis://redis:6379/0"
+CELERY_BROKER_URL = "redis://redis:6379/0" if DEBUG else "redis://localhost:6379/0"
 
 CELERY_ACCEPT_CONTENT = ["json", "pickle"]
 CELERY_TASK_SERIALIZER = "pickle"
