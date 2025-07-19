@@ -8,7 +8,6 @@ class Problem(models.Model):
     points = models.IntegerField()
 
     statement = models.TextField()
-    solution = models.TextField()
     inputtxt = models.TextField()
     outputtxt = models.TextField()
     samples = models.TextField()
