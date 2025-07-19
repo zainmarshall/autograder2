@@ -35,8 +35,6 @@ def _mark_submission_as_error(submission_id: int, error_message: str):
 
 @shared_task(bind=True, max_retries=3, default_retry_delay=60)
 def grade_submission_task(self, submission_id: int):
-    logger.info(f"Celery task started for submission ID: {submission_id}")
-
     try:
         submission = Submission.objects.select_related("problem").get(id=submission_id)
         if submission.verdict == "Skipped":
