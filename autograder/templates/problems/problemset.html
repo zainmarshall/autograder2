@@ -20,7 +20,7 @@
         {% for problem in problems  %}
             <li class="sl">
                 <a href="{% url "problems:problem" pid=problem.id %}">
-                    <div class="problem-text">{{ problem.name }}</div>
+                    <div class="problem-text">{{problem.id}} - {{ problem.name }}</div>
                 </a>
             </li>
         {% endfor %}
