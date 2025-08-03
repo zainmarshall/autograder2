@@ -13,6 +13,9 @@ def tjioi_login_view(request):
     if request.user.is_authenticated:
         return redirect("index:profile")
 
+    if not settings.TJIOI_MODE:
+        return redirect("index:index")
+
     context = {}
 
     if request.method == "POST":
