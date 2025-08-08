@@ -180,7 +180,7 @@ TJIOI_MODE = False
 
 CURRENT_SEASON = 2025
 
-CODERUNNER_URL = "http://coderunner:8080/" if DEBUG else "http://10.150.0.9:8080/"
+CODERUNNER_URL = "http://coderunner:8080/" if DEBUG else "http://10.150.0.9/"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
