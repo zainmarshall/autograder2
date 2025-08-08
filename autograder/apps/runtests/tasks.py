@@ -26,7 +26,7 @@ def _update_submission_from_result(submission_id: int, result_data: Dict[str, An
 def _mark_submission_as_error(submission_id: int, error_message: str):
     try:
         submission = Submission.objects.select_for_update().get(id=submission_id)
-        submission.verdict = "ERROR"
+        submission.verdict = "Internal Server Error"
         submission.insight = error_message
         submission.save()
     except Submission.DoesNotExist:
@@ -51,9 +51,9 @@ def grade_submission_task(self, submission_id: int):
     payload = {
         "lang": submission.language,
         "problemid": str(submission.problem.id),
+        "tl_string": str(submission.problem.tl),
+        "ml_string": str(submission.problem.ml),
         "code": submission.code,
-        "tl": submission.problem.tl,
-        "ml": submission.problem.ml,
     }
 
     try:
@@ -68,12 +68,18 @@ def grade_submission_task(self, submission_id: int):
         logger.info(f"Successfully graded submission {submission_id}.")
 
     except requests.exceptions.RequestException as exc:
-        logger.warning(
-            f"Network error for submission {submission_id}: {exc}. Retrying..."
-        )
-        _mark_submission_as_error(
-            submission_id, "Could not connect to the grading service."
-        )
+        if response is not None and response.status_code == 400:
+            try:
+                error_message = response.json().get("error", response.text)
+            except Exception:
+                error_message = response.text
+            logger.warning(
+            f"Bad request for submission {submission_id}: {error_message}"
+            )
+            _mark_submission_as_error(submission_id, error_message)
+        else:
+            logger.warning(f"Network error for submission {submission_id}: {exc}. Retrying...")
+            _mark_submission_as_error(submission_id, "Could not connect to the grading service.")
         raise self.retry(exc=exc)
 
     except Exception as exc:

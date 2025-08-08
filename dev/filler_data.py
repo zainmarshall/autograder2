@@ -63,11 +63,10 @@ def create_problems_and_submissions(users, contests):
                 name=f"Problem {problem_id}",
                 contest=contest,
                 points=(i + 1) * 100,
-                statement="statement here",
-                solution="solution here",
-                inputtxt="input.txt content",
-                outputtxt="output.txt content",
-                samples="Sample input/output",
+                statement="Statement",
+                inputtxt="Input Format",
+                outputtxt="Output Format",
+                samples="Samples",
                 tl=1000,
                 ml=256,
                 interactive=False,
@@ -88,7 +87,7 @@ def create_problems_and_submissions(users, contests):
                     timestamp = start + datetime.timedelta(seconds=random_seconds)
 
                     sub = Submission(
-                        language=random.choice(["Python", "C++", "Java"]),
+                        language=random.choice(["python", "cpp", "java"]),
                         code="code goes here",
                         usr=user,
                         verdict=random.choice(["AC", "Wrong Answer"]),

@@ -9,7 +9,6 @@ class Submission(models.Model):
     usr = models.ForeignKey("index.GraderUser", on_delete=models.CASCADE)
     verdict = models.TextField(default="Running")
     runtime = models.IntegerField(default=-1)
-    memory = models.IntegerField(default=-1)
     contest = models.ForeignKey("contests.Contest", on_delete=models.CASCADE)
     problem = models.ForeignKey("problems.Problem", on_delete=models.CASCADE)
     insight = models.TextField(null=True, blank=True)

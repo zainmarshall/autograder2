@@ -12,7 +12,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         "language",
         "verdict",
         "runtime",
-        "memory",
         "timestamp",
     )
     list_filter = ("verdict", "language", "problem", "usr", "contest")
@@ -24,6 +23,6 @@ class SubmissionAdmin(admin.ModelAdmin):
         (None, {"fields": ("usr", "contest", "problem", "language", "code")}),
         (
             "Result Info",
-            {"fields": ("verdict", "runtime", "memory", "timestamp", "insight")},
+            {"fields": ("verdict", "runtime", "timestamp", "insight")},
         ),
     )
