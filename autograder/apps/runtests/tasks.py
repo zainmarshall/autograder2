@@ -49,6 +49,7 @@ def grade_submission_task(self, submission_id: int):
 
     coderunner_url = settings.CODERUNNER_URL + "run"
     payload = {
+        "subid": str(submission.id),
         "lang": submission.language,
         "problemid": str(submission.problem.id),
         "tl_string": str(submission.problem.tl),
