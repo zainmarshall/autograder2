@@ -62,6 +62,8 @@ def submit_view(request, cid=None, pid=None):
 @login_required
 def status_view(request, page, cid=None, mine=False):
     submissions = Submission.objects.filter(contest__tjioi=settings.TJIOI_MODE)
+    if not request.user.is_staff:
+        submissions = submissions.filter(usr__is_staff=False)
 
     if cid is not None:
         submissions = submissions.filter(contest=cid)

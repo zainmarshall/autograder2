@@ -112,6 +112,8 @@ def contest_standings_view(request, cid):
 def contest_status_view(request, cid, mine_only, page):
     contest = get_object_or_404(Contest, id=cid)
     subs = Submission.objects.filter(contest=contest)
+    if not request.user.is_staff:
+        subs = subs.filter(usr__is_staff=False)
 
     if mine_only == "mine" or (
         timezone.now() < contest.end and not request.user.is_staff
