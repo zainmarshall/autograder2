@@ -1,5 +1,6 @@
 import requests
 import logging
+import string
 from decimal import Decimal
 from django.conf import settings
 from django.shortcuts import get_object_or_404
@@ -15,7 +16,7 @@ def get_codeforces_rating(user):
     if user.cf_handle is None:
         return 0
     handle = str(user.cf_handle)
-    if not handle.isalnum():
+    if not all([c in string.ascii_letters + string.digits + "_" for c in handle]):
         return 0
 
     url = f"https://codeforces.com/api/user.info?handles={handle}"
