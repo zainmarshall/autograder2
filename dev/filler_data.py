@@ -92,7 +92,6 @@ def create_problems_and_submissions(users, contests):
                         usr=user,
                         verdict=random.choice(["AC", "Wrong Answer"]),
                         runtime=random.randint(10, 2000),
-                        memory=random.randint(10000, 100000),
                         contest=contest,
                         problem=problem,
                         insight="insight here",

@@ -3,17 +3,17 @@ from bs4 import BeautifulSoup
 
 LOGIN_URL = "http://127.0.0.1:3000/djangoadmin/login/"
 TARGET_URL = "http://127.0.0.1:3000/status/process_submit/"
-REQUESTS_TO_SEND = 100
+REQUESTS_TO_SEND = 25
 
 USERNAME = "admin"
 PASSWORD = "123"
 
-with open("example_sol.py", "r") as f:
+with open("example_sol.java", "r") as f:
     code_contents = f.read()
 
 post_data = {
     "problemid": "1",
-    "lang": "python",
+    "lang": "java",
     "code": code_contents
 }
 

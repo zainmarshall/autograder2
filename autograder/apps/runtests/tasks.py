@@ -33,7 +33,7 @@ def _mark_submission_as_error(submission_id: int, error_message: str):
         logger.error(f"Could not find submission {submission_id} to mark as an error.")
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60)
+@shared_task(bind=True, max_retries=3, default_retry_delay=60, queue='coderunner_queue')
 def grade_submission_task(self, submission_id: int):
     try:
         submission = Submission.objects.select_related("problem").get(id=submission_id)
@@ -57,6 +57,7 @@ def grade_submission_task(self, submission_id: int):
         "code": submission.code,
     }
 
+    response = None
     try:
         response = requests.post(
             coderunner_url,
@@ -66,7 +67,6 @@ def grade_submission_task(self, submission_id: int):
         response.raise_for_status()
 
         _update_submission_from_result(submission_id, response.json())
-        logger.info(f"Successfully graded submission {submission_id}.")
 
     except requests.exceptions.RequestException as exc:
         if response is not None and response.status_code == 400:

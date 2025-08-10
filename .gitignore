@@ -5,3 +5,4 @@ __pycache__
 .first_log
 collected_static
 media
+./filler_data.py

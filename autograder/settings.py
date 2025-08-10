@@ -29,7 +29,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG") == 'True'
 
-ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1", "34.21.63.244"]
+ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -223,6 +223,16 @@ CELERY_ACCEPT_CONTENT = ["json", "pickle"]
 CELERY_TASK_SERIALIZER = "pickle"
 
 CELERY_TASK_TIME_LIMIT = 30 * 60
+
+CELERY_QUEUES = {
+    'default': {},
+    'coderunner_queue': {
+        'exchange': 'coderunner',
+        'routing_key': 'coderunner'
+    },
+}
+
+CELERY_TASK_DEFAULT_QUEUE = 'default'
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
