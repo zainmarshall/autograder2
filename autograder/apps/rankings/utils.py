@@ -28,7 +28,7 @@ def get_codeforces_rating(user):
 
     data = response.json()
     if data["status"] == "OK":
-        res = data["result"][0]["maxRating"]
+        res = data["result"][0].get("maxRating", 0)
         logger.info(
             f"Fetched cf rating of {res} from handle {handle} of user {user.username}"
         )
