@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 
 
 def get_codeforces_rating(user):
-    if user.cf_handle is None:
+    if user.cf_handle is None or len(user.cf_handle) == 0:
         return 0
     handle = str(user.cf_handle)
     if not all([c in string.ascii_letters + string.digits + "_" for c in handle]):

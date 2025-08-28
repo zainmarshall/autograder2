@@ -6,7 +6,9 @@ from django_user_agents.utils import get_user_agent
 from .models import GraderUser
 from ..rankings.models import RatingChange
 
+import logging
 
+logger = logging.getLogger(__name__)
 # Create your views here.
 
 
@@ -49,7 +51,12 @@ def profile_view(request):
     if request.user.first_time:
         return redirect("index:first_time")
 
-    return render(request, "index/profile.html")
+    cfh = request.user.cf_handle
+
+    context = {
+        "cf_handle": cfh if cfh and len(cfh) > 0 else ""
+    }
+    return render(request, "index/profile.html", context=context)
 
 
 @login_required
@@ -68,9 +75,8 @@ def update_stats(request):
     else:
         request.user.usaco_division = "Not Participated"
 
-    if cf:
+    if cf is not None:
         request.user.cf_handle = cf
-        request.user.save()
 
     request.user.save()
     return redirect("index:profile")
