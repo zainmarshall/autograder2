@@ -1,12 +1,13 @@
+
 from django.shortcuts import render, redirect
 from django.conf import settings
+from django.http import JsonResponse
 from ..oauth.decorators import login_required
 from ..index.models import GraderUser
 
 import logging
 
 logger = logging.getLogger(__name__)
-
 
 # Create your views here.
 @login_required
@@ -40,3 +41,38 @@ def rankings_view(request, season):
     context = {"rankings": rankings}
 
     return render(request, "rankings/rankings.html", context)
+
+
+# API endpoint for rankings as JSON
+from django.views.decorators.http import require_GET
+
+@login_required
+@require_GET
+def rankings_api(request, season):
+    if settings.TJIOI_MODE:
+        return JsonResponse({"error": "TJIOI mode enabled."}, status=403)
+
+    if season != settings.CURRENT_SEASON:
+        return JsonResponse({"error": "Invalid season."}, status=400)
+
+    rankings = [
+        {
+            "id": user.id,
+            "name": user.display_name,
+            "index": user.index,
+            "usaco": user.usaco_rating,
+            "cf": user.cf_rating,
+            "inhouse": user.inhouse,
+        }
+        for user in GraderUser.objects.filter(is_tjioi=False, is_staff=False)
+    ]
+
+    rankings = [
+        r for r in rankings if r["usaco"] > 800 or r["cf"] > 0 or r["inhouse"] > 0
+    ]
+
+    rankings.sort(key=lambda x: x["index"], reverse=True)
+    for i in range(len(rankings)):
+        rankings[i]["rank"] = i + 1
+
+    return JsonResponse({"rankings": rankings})
