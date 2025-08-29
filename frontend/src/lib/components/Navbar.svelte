@@ -1,6 +1,6 @@
 <script lang="ts">
 	import NavLink from './NavLink.svelte';
-	import { userStore } from '$lib';
+	import { userStore, isAuthenticated } from '$lib';
 
 	export let active: string = '';
 </script>
@@ -20,7 +20,7 @@
 			<NavLink href="/rankings" active={active === 'rankings'}>Rankings</NavLink>
 		</div>
 		<div class="flex items-center space-x-2">
-			{#if userStore.isAuthenticated}
+			{#if $isAuthenticated}
 				<button onclick={() => userStore.logout()} class="text-slate-400 hover:text-red-400 font-medium transition">Log Out</button>
 			{/if}
 		</div>

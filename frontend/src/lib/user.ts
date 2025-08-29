@@ -1,3 +1,5 @@
+import { writable, derived } from 'svelte/store';
+
 export interface User {
 	id: number;
 	username: string;
@@ -8,59 +10,46 @@ export interface User {
 	particles_enabled: boolean;
 }
 
-export class UserStore {
-	user = $state<User | null>(null);
-	isAuthenticated = $derived(this.user !== null);
+const user = writable<User | null>(null);
 
-	setUser(user: User | null) {
-		this.user = user;
-	}
+export const isAuthenticated = derived(user, $user => $user !== null);
 
-	updateUser(updates: Partial<User>) {
-		if (this.user) {
-			this.user = { ...this.user, ...updates };
-		}
-	}
-
-	clearUser() {
-		this.user = null;
-	}
-
-	async fetchUser() {
+export const userStore = {
+	setUser: (userData: User | null) => user.set(userData),
+	updateUser: (updates: Partial<User>) => user.update($user => $user ? { ...$user, ...updates } : null),
+	clearUser: () => user.set(null),
+	fetchUser: async () => {
 		try {
 			const response = await fetch('/api/user/', {
 				credentials: 'include'
 			});
 			if (response.ok) {
-				const user = await response.json();
-				this.setUser(user);
+				const userData = await response.json();
+				user.set(userData);
 			} else {
-				this.clearUser();
+				user.set(null);
 			}
 		} catch (error) {
 			console.error('Failed to fetch user:', error);
-			this.clearUser();
+			user.set(null);
 		}
-	}
-
-	async login() {
-		window.location.href = '/social/login/ion/';
-	}
-
-	async logout() {
+	},
+	 login: () => {
+	 	window.location.href = '/login/ion/';
+	},
+	logout: async () => {
 		try {
 			const response = await fetch('/oauth/logout/', {
 				method: 'POST',
 				credentials: 'include'
 			});
-			this.clearUser();
+			user.set(null);
 			window.location.href = '/';
 		} catch (error) {
 			console.error('Failed to logout:', error);
 		}
-	}
-
-	async updateStats(data: { usaco_division: string; cf_handle: string }) {
+	},
+	updateStats: async (data: { usaco_division: string; cf_handle: string }) => {
 		try {
 			const response = await fetch('/update_stats/', {
 				method: 'POST',
@@ -74,13 +63,12 @@ export class UserStore {
 				}),
 			});
 			if (response.ok) {
-				// Refresh user data after update
-				await this.fetchUser();
+				await userStore.fetchUser();
 			}
 		} catch (error) {
 			console.error('Failed to update stats:', error);
 		}
-	}
-}
+	},
+};
 
-export const userStore = new UserStore();
+export { user };

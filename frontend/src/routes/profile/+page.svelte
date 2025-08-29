@@ -1,7 +1,6 @@
 <script lang="ts">
-	import { userStore } from '$lib';
+	import { userStore, user, isAuthenticated } from '$lib';
 	import { onMount } from 'svelte';
-	import Button from '$lib/components/Button.svelte';
 
 	let usacoDivision = $state('');
 	let cfHandle = $state('');
@@ -13,7 +12,7 @@
 
 	// Update form values when user data loads
 	$effect(() => {
-		if (userStore.user) {
+		if ($user) {
 			// Map display values back to form values
 			const divisionMap: Record<string, string> = {
 				'Bronze': 'bronze',
@@ -22,14 +21,14 @@
 				'Platinum': 'plat',
 				'Not Participated': ''
 			};
-			usacoDivision = divisionMap[userStore.user.usaco_division] || '';
-			cfHandle = userStore.user.cf_handle || '';
+			usacoDivision = divisionMap[$user.usaco_division] || '';
+			cfHandle = $user.cf_handle || '';
 		}
 	});
 
 	async function handleSubmit(event: Event) {
 		event.preventDefault();
-		if (!userStore.user) return;
+		if (!$user) return;
 
 		isSubmitting = true;
 		try {
@@ -47,59 +46,23 @@
 	}
 </script>
 
-{#if !userStore.isAuthenticated}
+{#if !$isAuthenticated}
 	<div class="min-h-screen flex items-center justify-center">
-		<div class="text-white">Loading...</div>
+		<div class="text-white">Loading... Who made such a terrible frontend? Such a terrible programmer... If you see this message ask for a cookie </div>
 	</div>
 {:else}
-	<!-- Navigation Header -->
-	<header class="bg-slate-800 border-b border-slate-700">
-		<nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-			<div class="flex justify-between items-center h-16">
-				<div class="flex items-center space-x-8">
-					<h1 class="text-xl font-semibold text-white">TJCT Grader</h1>
-					<div class="hidden md:flex space-x-4">
-						<a href="/profile" class="text-blue-400 hover:text-blue-300">Home</a>
-						<a href="/submissions" class="text-gray-300 hover:text-white">Submissions</a>
-						<a href="/contests" class="text-gray-300 hover:text-white">Contests</a>
-						<a href="/problems" class="text-gray-300 hover:text-white">Problemset</a>
-						<a href="/submit" class="text-gray-300 hover:text-white">Submit</a>
-						<a href="/rankings" class="text-gray-300 hover:text-white">Rankings</a>
-					</div>
-				</div>
-				<div class="flex items-center space-x-4">
-					<button
-						onclick={handleLogout}
-						class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded transition-colors"
-					>
-						Log Out
-					</button>
-				</div>
-			</div>
-		</nav>
-	</header>
 
 	<main class="max-w-4xl mx-auto p-6">
 		<div class="bg-white/5 backdrop-blur-sm rounded-lg p-6">
 			<h2 class="text-2xl font-bold text-white mb-6">Profile</h2>
 
-			{#if userStore.user?.is_staff}
-				<div class="mb-4">
-					<a
-						href="/admin"
-						class="text-blue-400 hover:text-blue-300 underline"
-					>
-						Django Admin
-					</a>
-				</div>
-			{/if}
 
 			<div class="space-y-4">
 				<div class="text-white">
-					<strong>Name:</strong> {userStore.user?.display_name}
+					<strong>Name:</strong> {$user?.display_name}
 				</div>
 				<div class="text-white">
-					<strong>Username:</strong> {userStore.user?.username}
+					<strong>Username:</strong> {$user?.username}
 				</div>
 			</div>
 

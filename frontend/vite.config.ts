@@ -6,10 +6,10 @@ export default defineConfig({
 	plugins: [tailwindcss(), sveltekit()],
 	server: {
 		proxy: {
-			'/api': 'http://localhost:8000',
-			'/oauth': 'http://localhost:8000',
-			'/social': 'http://localhost:8000',
-			'/update_stats': 'http://localhost:8000',
+			'/api': 'http://localhost:3000',
+			'/oauth': 'http://localhost:3000',
+			'/social': 'http://localhost:3000',
+			'/update_stats': 'http://localhost:3000',
 		}
 	}
 });
