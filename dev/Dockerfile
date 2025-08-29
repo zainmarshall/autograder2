@@ -8,4 +8,4 @@ ENV UV_LINK_MODE=copy
 RUN apt update && \
     apt install -y bash git postgresql-server-dev-all gcc python3-dev postgresql-client libc6-dev
 
-WORKDIR /home/tjctgrader/autograder
+WORKDIR /home/tjctgrader/autograder2
