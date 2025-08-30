@@ -32,7 +32,7 @@
       {#if authed}
         <button
           on:click={() => userStore.logout()}
-          class="text-slate-400 hover:text-red-400 font-medium transition"
+          class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 text-slate-100 hover:text-indigo-400 hover:bg-slate-800"
         >
           Log Out
         </button>

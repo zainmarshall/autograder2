@@ -14,13 +14,17 @@
 </script>
 
 <svelte:head>
+	<!-- Tab name and Icon-->
 	<link rel="icon" href={favicon} />
 	<title>TJ Computer Team Grader</title>
 </svelte:head>
 
 <div class="min-h-screen bg-black">
+	<!-- Render the navbar on not the enter page-->
 	{#if $page.url.pathname !== '/'}
 		<Navbar />
 	{/if}
+
+	<!-- Render the page itself-->
 	<main>{@render children?.()}</main>
 </div>
