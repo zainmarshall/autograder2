@@ -1,90 +1,78 @@
 <script lang="ts">
-  // Hardcoded season for now
-  const season = 2025;
+	import { api } from '$lib/api';
+	import type { Ranking } from '$lib/api.ts';
 
-  // SvelteKit load function to fetch rankings
-  export async function load() {
-    const res = await fetch(`/rankings/api/${season}/`, { credentials: 'include' });
-    if (!res.ok) throw new Error('Failed to fetch rankings');
-    const data = await res.json();
-    // Parse string values to numbers for sorting
-    const parsedRankings = data.rankings.map((r: any) => ({
-      ...r,
-      index: parseFloat(r.index),
-      inhouse: parseFloat(r.inhouse),
-    }));
-    return { rankings: parsedRankings };
-  }
+	// rankings state
+	let rankings = $state<Ranking[]>([]);
+	let error = $state<string | null>(null);
+	let loading = $state(true);
 
-  // Props from load
-  export let rankings: any[] = [];
+	// load rankings once on mount
+	$effect(() => {
+		(async () => {
+			try {
+				const data = await api.fetchRankings();
+				console.log('Fetched:', data);
+				rankings = data;
+			} catch (err) {
+				console.error('Error fetching rankings:', err);
+				error = String(err);
+			} finally {
+				loading = false;
+			}
+		})();
+	});
 
-  // Sorting state
-  let sortKey = 'rank';
-  let sortAsc = true;
-
-  // Function to handle sorting
-  function sortTable(key: string) {
-    if (sortKey === key) {
-      sortAsc = !sortAsc;
-    } else {
-      sortKey = key;
-      sortAsc = true;
-    }
-  }
-
-  // Reactive sorted rankings
-  $: sortedRankings = [...rankings].sort((a, b) => {
-    if (a[sortKey] < b[sortKey]) return sortAsc ? -1 : 1;
-    if (a[sortKey] > b[sortKey]) return sortAsc ? 1 : -1;
-    return 0;
-  });
+    const rankToMedal = (rank: number) => {
+        if (rank === 1) return '🥇';
+        if (rank === 2) return '🥈';
+        if (rank === 3) return '🥉';
+        return '';
+    };
 </script>
 
-<div class="my-8 p-8 bg-white rounded-xl shadow-md">
-  <div class="text-3xl font-bold mb-2">Rankings</div>
-  <div class="text-base text-gray-500 mb-6">
-    <a class="underline hover:text-blue-600" href="https://docs.google.com/document/d/14CBtom9g0AKZkmncUQQJwV-dIwG54Arr26FnWfUcdvI/edit?usp=sharing" target="_blank">
-      Learn about how rankings are formulated
-    </a>
-  </div>
+<div class="my- rounded-xl p-4 md:p-8 shadow-lg">
+	<div class="mb-2 text-3xl font-bold text-zinc-100">Rankings</div>
+	<div class="mb-6 text-base text-zinc-400">
+		<a
+			class="underline hover:text-blue-400"
+			href="https://docs.google.com/document/d/14CBtom9g0AKZkmncUQQJwV-dIwG54Arr26FnWfUcdvI/edit?usp=sharing"
+			target="_blank"
+		>
+			Learn about how rankings are formulated
+		</a>
+	</div>
 
-  <div class="overflow-x-auto">
-    <table class="w-full bg-gray-50 rounded-lg overflow-hidden">
-      <thead>
-        <tr>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('rank')}>
-            # {#if sortKey==='rank'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('name')}>
-            Name {#if sortKey==='name'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('usaco')}>
-            USACO {#if sortKey==='usaco'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('cf')}>
-            Codeforces {#if sortKey==='cf'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('inhouse')}>
-            In-Houses {#if sortKey==='inhouse'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-          <th class="py-3 px-4 bg-gray-100 font-semibold text-center cursor-pointer select-none border-b border-gray-200" on:click={() => sortTable('index')}>
-            Index {#if sortKey==='index'}<span class="ml-1 text-xs">{sortAsc ? '▲' : '▼'}</span>{/if}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        {#each sortedRankings as ranking}
-          <tr class="transition hover:bg-blue-50">
-            <td class="py-2 px-4 text-center">{ranking.rank}</td>
-            <td class="py-2 px-4 text-center"><a class="text-blue-600 hover:underline" href={"/profile/" + ranking.id}>{ranking.name}</a></td>
-            <td class="py-2 px-4 text-center">{ranking.usaco}</td>
-            <td class="py-2 px-4 text-center">{ranking.cf}</td>
-            <td class="py-2 px-4 text-center">{ranking.inhouse?.toFixed(3)}</td>
-            <td class="py-2 px-4 text-center">{ranking.index?.toFixed(3)}</td>
-          </tr>
-        {/each}
-      </tbody>
-    </table>
-  </div>
+	<div class="overflow-x-auto">
+		<table class="w-full min-w-[600px] bg-zinc-950 rounded-lg overflow-hidden text-zinc-100">
+			<thead>
+				<tr>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">#</th>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Name</th>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">USACO</th>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Codeforces</th>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">In-Houses</th>
+					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Index</th>
+				</tr>
+			</thead>
+			<tbody>
+				{#each rankings as ranking, i}
+					<tr class="transition hover:bg-zinc-800/80 border-b border-zinc-800 last:border-none {i % 2 === 1 ? 'bg-zinc-900/80' : ''}">
+						{#if ranking.rank == 1 || ranking.rank == 2 || ranking.rank == 3}
+							<td class="py-2 px-4 text-center font-bold text-blue-400">{rankToMedal(ranking.rank)}</td>
+                            {:else}
+						    <td class="py-2 px-4 text-center">{ranking.rank}</td>
+						{/if}
+
+                        
+						<td class="py-2 px-4 text-center"><a class="text-blue-400 hover:underline" href={'/profile/' + ranking.id}>{ranking.name}</a></td>
+						<td class="py-2 px-4 text-center">{ranking.usaco}</td>
+						<td class="py-2 px-4 text-center">{ranking.cf}</td>
+						<td class="py-2 px-4 text-center">{Number(ranking.inhouse).toFixed(3)}</td>
+						<td class="py-2 px-4 text-center">{Number(ranking.index).toFixed(3)}</td>
+					</tr>
+				{/each}
+			</tbody>
+		</table>
+	</div>
 </div>
