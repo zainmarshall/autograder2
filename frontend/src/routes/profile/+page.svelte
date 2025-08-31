@@ -1,5 +1,40 @@
 <script lang="ts">
-    import { userStore, user, isAuthenticated } from '$lib';
+    import { api } from '$lib/api';
+	import type { User } from '$lib/api.ts';
+    import Table from '$lib/components/Table.svelte';
+
+	// user state
+	let user = $state<User | null>(null);
+	let error = $state<string | null>(null);
+	let loading = $state(true);
+
+	// load user once on mount
+	$effect(() => {
+		(async () => {
+			try {
+				const data = await api.fetchUser();
+				console.log('Fetched:', data);
+				user = data;
+
+                const divisionMap: Record<string, string> = {
+                    'Bronze': 'bronze',
+                    'Silver': 'silver',
+                    'Gold': 'gold',
+                    'Platinum': 'plat',
+                    'Not Participated': ''
+                };
+                usacoDivision = divisionMap[data.usaco_division] || '';
+                cfHandle = data.cf_handle || '';
+			} catch (err) {
+				console.error('Error fetching user:', err);
+				error = String(err);
+			} finally {
+				loading = false;
+			}
+		})();
+	});
+
+    import { userStore, isAuthenticated } from '$lib';
     import { onMount } from 'svelte';
     let usacoDivision = $state('');
     let cfHandle = $state('');
@@ -10,30 +45,24 @@
         userStore.fetchUser();
     });
 
-    $effect(() => {
-        if ($user) {
-            const divisionMap: Record<string, string> = {
-                'Bronze': 'bronze',
-                'Silver': 'silver',
-                'Gold': 'gold',
-                'Platinum': 'plat',
-                'Not Participated': ''
-            };
-            usacoDivision = divisionMap[$user.usaco_division] || '';
-            cfHandle = $user.cf_handle || '';
-        }
-    });
-
     async function handleSubmit(event: Event) {
         event.preventDefault();
-        if (!$user) return;
+        if (!user) return;
         isSubmitting = true;
         try {
-            await userStore.updateStats({
-                usaco_division: usacoDivision,
-                cf_handle: cfHandle,
-            });
+            // Only send fields that have changed or are present
+            const update: Record<string, any> = {};
+            if (usacoDivision !== (user.usaco_division || '')) update.usaco_division = usacoDivision;
+            if (cfHandle !== (user.cf_handle || '')) update.cf_handle = cfHandle;
+            // Add more fields here as needed
+            if (Object.keys(update).length === 0) {
+                isSubmitting = false;
+                showEdit = false;
+                return;
+            }
+            await api.updateStats(update);
             showEdit = false;
+            // Optionally, refetch user info here
         } finally {
             isSubmitting = false;
         }
@@ -48,18 +77,18 @@
     <main class="flex flex-col items-center justify-center min-h-[70vh] px-4">
         <div class="w-full max-w-xl bg-white/80 dark:bg-zinc-900/90 shadow-xl rounded-2xl p-8 flex flex-col items-center">
             <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center mb-4 shadow-md">
-                <span class="text-4xl text-white font-bold">{$user?.display_name?.[0] ?? '?'}</span>
+                <span class="text-4xl text-white font-bold">{user?.display_name?.[0] ?? '?'}</span>
             </div>
-            <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">{$user?.display_name}</h2>
-            <div class="text-base text-zinc-500 dark:text-zinc-400 mb-6">@{$user?.username}</div>
+            <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">{user?.display_name}</h2>
+            <div class="text-base text-zinc-500 dark:text-zinc-400 mb-6">@{user?.username}</div>
             <div class="w-full space-y-3 mb-6">
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">USACO Division</span>
-                    <span>{$user?.usaco_division}</span>
+                    <span>{user?.usaco_division}</span>
                 </div>
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">Codeforces Handle</span>
-                    <span>{$user?.cf_handle}</span>
+                    <span>{user?.cf_handle}</span>
                 </div>
             </div>
             <button

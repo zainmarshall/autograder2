@@ -47,22 +47,51 @@ export interface Submission {
     timestamp: Date;
 }
 
-export interface Standing 
+
+export interface Standing {
+    id: number;
+    name: string;
+    solved: number;
+    penalty: number;
+    rank: number;
+    problems: number[];
+}
+
+export interface User{
+    id: number;
+    email: string;
+    personal_email: string;
+    display_name: string;
+    username: string;
+    is_staff: boolean;
+    is_active: boolean;
+    usaco_division: string;
+    usaco_rating: number;
+    cf_handle: string;
+    cf_rating: number;
+    grade: string;
+    first_time: boolean;
+    is_tjioi: boolean;
+    author_drops: number;
+    inhouse: string;
+    index: string;
+    particles_enabled: boolean;
+}
 
 export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
     getUser: async () => fetch('/api/user/', { credentials: 'include' }),
-    updateStats: async (data: { usaco_division: string; cf_handle: string }) =>
-        fetch('/update_stats/', {
+    updateStats: async (data: Partial<User>) => {
+        const res = await fetch('/api/user/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            headers: { 'Content-Type': 'application/json' },
             credentials: 'include',
-            body: new URLSearchParams({
-                usaco_div: data.usaco_division.toLowerCase(),
-                cf_handle: data.cf_handle,
-            }),
-        }),
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Failed to update profile');
+        return await res.json();
+    },
     profile: async () => fetch('/profile/', { credentials: 'include' }),
     tjioiLogin: () => window.location.href = '/tjioi/login/',
 
@@ -157,5 +186,45 @@ export const api = {
             insight: String(r.insight),
             timestamp: new Date(r.timestamp),
         }));
+    },
+
+    async fetchStandings(cid: string): Promise<Standing[]> {
+        const res = await fetch(`http://localhost:3000/api/contests/${cid}/standings/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch standings');
+        const data = await res.json();
+        return data.standings.map((r: any): Standing => ({
+            id: Number(r.id),
+            name: String(r.name),
+            solved: Number(r.solved),
+            penalty: Number(r.penalty),
+            rank: Number(r.rank),
+            problems: r.problems.map((p: any) => Number(p)),
+        }));
+    },
+
+    async fetchUser(): Promise<User> {
+        const res = await fetch(`http://localhost:3000/api/user/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch user');
+        const data = await res.json();
+        return {
+            id: Number(data.id),
+            email: String(data.email),
+            personal_email: String(data.personal_email),
+            display_name: String(data.display_name),
+            username: String(data.username),
+            is_staff: Boolean(data.is_staff),
+            is_active: Boolean(data.is_active),
+            usaco_division: String(data.usaco_division),
+            usaco_rating: Number(data.usaco_rating),
+            cf_handle: String(data.cf_handle),
+            cf_rating: Number(data.cf_rating),
+            grade: String(data.grade),
+            first_time: Boolean(data.first_time),
+            is_tjioi: Boolean(data.is_tjioi),
+            author_drops: Number(data.author_drops),
+            inhouse: String(data.inhouse),
+            index: String(data.index),
+            particles_enabled: Boolean(data.particles_enabled),
+        };
     },
 }

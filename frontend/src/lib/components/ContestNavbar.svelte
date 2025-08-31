@@ -21,7 +21,7 @@
       <NavLink href="/contests" active={false}>Return Home</NavLink>
       <NavLink href={withContestParam('/problems')} active={false}>Problems</NavLink>
       <NavLink href={withContestParam('/submit')} active={false}>Submit</NavLink>
-      <NavLink href={withContestParam(`/contests/${contestId}/standings`)} active={false}>Standings</NavLink>
+      <NavLink href={withContestParam(`/standings`)} active={false}>Standings</NavLink>
     </div>
     <div class="flex items-center space-x-2">
     </div>
