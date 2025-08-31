@@ -23,6 +23,17 @@ export interface Problem {
     interactive: boolean;
     testcases_zip: string | null;
 }
+
+export interface Contest {
+    id: number;
+    name: string;
+    rated: boolean;
+    season: number;
+    tjioi: boolean;
+    start: Date;
+    end: Date;
+    editorial: string;
+}
 export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
@@ -75,4 +86,20 @@ export const api = {
             testcases_zip: String(r.testcases_zip),
         }));
     },
+
+    async fetchContest(){
+        const res = await fetch(`http://localhost:3000/api/contests/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch contests');
+        const data = await res.json();
+        return data.contests.map((r: any): Contest => ({
+            id: Number(r.id),
+            name: String(r.name),
+            rated: Boolean(r.rated),
+            season: Number(r.season),
+            tjioi: Boolean(r.tjioi),
+            start: new Date(r.start),
+            end: new Date(r.end),
+            editorial: String(r.editorial),
+        }));
+    }
 };
