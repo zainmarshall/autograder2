@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { api } from '$lib/api';
 	import type { Ranking } from '$lib/api.ts';
+    import Table from '$lib/components/Table.svelte';
 
 	// rankings state
 	let rankings = $state<Ranking[]>([]);
@@ -43,36 +44,12 @@
 		</a>
 	</div>
 
-	<div class="overflow-x-auto">
-		<table class="w-full min-w-[600px] bg-zinc-950 rounded-lg overflow-hidden text-zinc-100">
-			<thead>
-				<tr>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">#</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Name</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">USACO</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Codeforces</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">In-Houses</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Index</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each rankings as ranking, i}
-					<tr class="transition hover:bg-zinc-800/80 border-b border-zinc-800 last:border-none {i % 2 === 1 ? 'bg-zinc-900/80' : ''}">
-						{#if ranking.rank == 1 || ranking.rank == 2 || ranking.rank == 3}
-							<td class="py-2 px-4 text-center font-bold text-blue-400">{rankToMedal(ranking.rank)}</td>
-                            {:else}
-						    <td class="py-2 px-4 text-center">{ranking.rank}</td>
-						{/if}
-
-                        
-						<td class="py-2 px-4 text-center"><a class="text-blue-400 hover:underline" href={'/profile/' + ranking.id}>{ranking.name}</a></td>
-						<td class="py-2 px-4 text-center">{ranking.usaco}</td>
-						<td class="py-2 px-4 text-center">{ranking.cf}</td>
-						<td class="py-2 px-4 text-center">{Number(ranking.inhouse).toFixed(3)}</td>
-						<td class="py-2 px-4 text-center">{Number(ranking.index).toFixed(3)}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+	<Table data={rankings} headers={[
+		{ label: '#', field: 'rank' },
+		{ label: 'Name', field: 'name' },
+		{ label: 'USACO', field: 'usaco' },
+		{ label: 'Codeforces', field: 'cf' },
+		{ label: 'In-Houses', field: 'inhouse' },
+		{ label: 'Index', field: 'index' }
+	]}/>
 </div>

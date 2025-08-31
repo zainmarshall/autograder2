@@ -2,7 +2,7 @@ from django.urls import path
 from .problem_list_api import ProblemListAPI
 from .problem_detail_api import ProblemDetailAPI
 from .rankings_api import RankingsAPI
-from .contest_views import ContestListAPI, ContestDetailAPI
+from .contest_api import ContestListAPI, ContestDetailAPI
 
 urlpatterns = [
     path("problems/", ProblemListAPI.as_view(), name="api_problem_list"),

@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from autograder.apps.index.models import GraderUser
 from django.conf import settings
-from .serializers import GraderUserRankingSerializer
+from .serializers import RankingSerializer
 
 class RankingsAPI(APIView):
     permission_classes = [AllowAny]
@@ -13,7 +13,7 @@ class RankingsAPI(APIView):
         if int(season) != settings.CURRENT_SEASON:
             return Response({"error": "Invalid season."}, status=400)
         users = GraderUser.objects.filter(is_tjioi=False, is_staff=False)
-        serializer = GraderUserRankingSerializer(users, many=True)
+        serializer = RankingSerializer(users, many=True)
         rankings = []
         for r in serializer.data:
             if r["usaco_rating"] > 800 or r["cf_rating"] > 0 or r["inhouse"] > 0:

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { api } from '$lib/api';
 	import type { Problem } from '$lib/api.ts';
+    import Table from '$lib/components/Table.svelte';
 
 	// problems state
 	let problems = $state<Problem[]>([]);
@@ -36,30 +37,10 @@
 		</a>
 	</div>
 
-	<div class="overflow-x-auto">
-		<table class="w-full min-w-[600px] bg-zinc-950 rounded-lg overflow-hidden text-zinc-100">
-			<thead>
-				<tr>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">#</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Name</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Contest</th>
-					<th class="py-3 px-4 bg-zinc-800 font-semibold text-center border-b border-zinc-700">Points</th>
-				</tr>
-			</thead>
-			<tbody>
-				{#each problems as problem, i}
-					<tr class="transition hover:bg-zinc-800/80 border-b border-zinc-800 last:border-none {i % 2 === 1 ? 'bg-zinc-900/80' : ''}">
-						<td class="py-2 px-4 text-center">{problem.id}</td>
-						<td class="py-2 px-4 text-center">
-							<a class="underline hover:text-blue-400" href={`/problems/${problem.id}`}>
-								{problem.name}
-							</a>
-						</td>
-						<td class="py-2 px-4 text-center">{problem.contest}</td>
-						<td class="py-2 px-4 text-center">{problem.points}</td>
-					</tr>
-				{/each}
-			</tbody>
-		</table>
-	</div>
+	<Table data={problems} headers={[
+		{ label: '#', field: 'id' },
+		{ label: 'Name', field: 'name' },
+		{ label: 'Contest', field: 'contest' },
+		{ label: 'Points', field: 'points' }
+	]}/>
 </div>

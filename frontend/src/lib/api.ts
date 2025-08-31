@@ -1,4 +1,3 @@
-
 export interface Ranking {
     id: number;
     name: string;
@@ -67,6 +66,7 @@ export const api = {
         }));
     },
 
+    // 
     async fetchProblemset() {
         const res = await fetch(`http://localhost:3000/api/problems/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch problemset');
@@ -101,5 +101,26 @@ export const api = {
             end: new Date(r.end),
             editorial: String(r.editorial),
         }));
+    },
+
+    // return a single problem
+    async fetchProblem(pid: number): Promise<Problem> {
+        const res = await fetch(`http://localhost:3000/api/problems/${pid}/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch problem');
+        const data = await res.json();
+        return {
+            id: Number(data.id),
+            name: String(data.name),
+            contest: Number(data.contest),
+            points: Number(data.points),
+            statement: String(data.statement),
+            inputtxt: String(data.inputtxt),
+            outputtxt: String(data.outputtxt),
+            samples: String(data.samples),
+            tl: Number(data.tl),
+            ml: Number(data.ml),
+            interactive: Boolean(data.interactive),
+            testcases_zip: String(data.testcases_zip),
+        };
     }
 };
