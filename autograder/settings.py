@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # api apps
+    "rest_framework",
+    "drf_yasg",
     "autograder.apps.index",
     "autograder.apps.oauth",
     "autograder.apps.contests",
@@ -50,9 +53,11 @@ INSTALLED_APPS = [
     "autograder.apps.tjioi",
     "social_django",
     "django_user_agents",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django_user_agents.middleware.UserAgentMiddleware",
     "autograder.middleware.mobile.MobileRedirectMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -194,13 +199,19 @@ if TJIOI_MODE:
 else:
     AUTHENTICATION_BACKENDS.insert(0, "autograder.apps.oauth.backend.IonOauth2")
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = "http://localhost:5173/profile"
+LOGOUT_REDIRECT_URL = "http://localhost:5173/"
 
 LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_ION_KEY = config("SOCIAL_AUTH_ION_KEY")
 SOCIAL_AUTH_ION_SECRET = config("SOCIAL_AUTH_ION_SECRET")
+SOCIAL_AUTH_ION_REDIRECT_URI = config("SOCIAL_AUTH_ION_REDIRECT_URI", "http://localhost:3000/complete/ion/")
+
+# Additional social auth settings
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = "http://localhost:5173/profile"
+SOCIAL_AUTH_LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",
@@ -237,6 +248,18 @@ CELERY_TASK_DEFAULT_QUEUE = 'default'
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = False
+
+# CORS settings for frontend communication
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+]
+
+CORS_ALLOW_CREDENTIALS = True
+
+# Session settings for cross-origin
+SESSION_COOKIE_SAMESITE = 'Lax'  # Allow cross-origin requests
+CSRF_COOKIE_SAMESITE = 'Lax'
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True

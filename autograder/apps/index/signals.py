@@ -25,6 +25,8 @@ def update_rating(sender, instance, created, **kwargs):
 
     new_usaco_rating = usaco_map.get(instance.usaco_division, 800)
     new_cf_rating = get_codeforces_rating(instance)
+    if new_cf_rating is None:
+        new_cf_rating = instance.cf_rating
     vals = [new_usaco_rating, new_cf_rating, instance.inhouse]
     vals.sort()
     new_index = (
