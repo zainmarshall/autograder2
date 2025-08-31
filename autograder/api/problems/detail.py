@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from autograder.apps.problems.models import Problem
 from django.conf import settings
-from .serializers import ProblemSerializer
+from .problem_serializer import ProblemSerializer
 
 class ProblemDetailAPI(APIView):
     permission_classes = [IsAuthenticated]

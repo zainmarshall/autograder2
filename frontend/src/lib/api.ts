@@ -47,6 +47,8 @@ export interface Submission {
     timestamp: Date;
 }
 
+export interface Standing 
+
 export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),

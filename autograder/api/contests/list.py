@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated, AllowAny
 from autograder.apps.contests.models import Contest
 from django.conf import settings
-from .serializers import ContestSerializer
+from .contest_serializer import ContestSerializer
 
 class ContestListAPI(APIView):
     permission_classes = [AllowAny]

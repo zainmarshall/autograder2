@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 from autograder.apps.index.models import GraderUser
 from django.conf import settings
-from .serializers import RankingSerializer
+from .ranking_serializer import RankingSerializer
 
 class RankingsAPI(APIView):
     permission_classes = [AllowAny]

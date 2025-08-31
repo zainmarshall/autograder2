@@ -3,7 +3,7 @@ from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.pagination import PageNumberPagination
 from autograder.apps.runtests.models import Submission
-from .serializers import SubmissionSerializer
+from .submission_serializer import SubmissionSerializer
 
 class SubmissionListAPI(APIView):
     permission_classes = [IsAuthenticated]
