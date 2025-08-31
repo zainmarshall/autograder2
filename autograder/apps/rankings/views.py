@@ -9,7 +9,11 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-# Create your views here.
+
+
+
+
+# old: HTML view for rankings
 @login_required
 def rankings_view(request, season):
     if settings.TJIOI_MODE:
@@ -42,37 +46,15 @@ def rankings_view(request, season):
 
     return render(request, "rankings/rankings.html", context)
 
-
-# API endpoint for rankings as JSON
-from django.views.decorators.http import require_GET
-
-@login_required
-@require_GET
-def rankings_api(request, season):
-    if settings.TJIOI_MODE:
-        return JsonResponse({"error": "TJIOI mode enabled."}, status=403)
-
-    if season != settings.CURRENT_SEASON:
-        return JsonResponse({"error": "Invalid season."}, status=400)
-
-    rankings = [
-        {
-            "id": user.id,
-            "name": user.display_name,
-            "index": user.index,
-            "usaco": user.usaco_rating,
-            "cf": user.cf_rating,
-            "inhouse": user.inhouse,
-        }
-        for user in GraderUser.objects.filter(is_tjioi=False, is_staff=False)
-    ]
-
-    rankings = [
-        r for r in rankings if r["usaco"] > 800 or r["cf"] > 0 or r["inhouse"] > 0
-    ]
-
-    rankings.sort(key=lambda x: x["index"], reverse=True)
-    for i in range(len(rankings)):
-        rankings[i]["rank"] = i + 1
-
-    return JsonResponse({"rankings": rankings})
+    def get(self, request, season):
+        if settings.TJIOI_MODE:
+            return Response({"error": "TJIOI mode enabled."}, status=403)
+        if int(season) != settings.CURRENT_SEASON:
+            return Response({"error": "Invalid season."}, status=400)
+        users = GraderUser.objects.filter(is_tjioi=False, is_staff=False)
+        serializer = GraderUserRankingSerializer(users, many=True)
+        rankings = [r for r in serializer.data if r["usaco_rating"] > 800 or r["cf_rating"] > 0 or r["inhouse"] > 0]
+        rankings.sort(key=lambda x: x["index"], reverse=True)
+        for i, r in enumerate(rankings):
+            r["rank"] = i + 1
+        return Response({"rankings": rankings})

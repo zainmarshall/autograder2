@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    # api apps
+    "rest_framework",
+    "drf_yasg",
     "autograder.apps.index",
     "autograder.apps.oauth",
     "autograder.apps.contests",

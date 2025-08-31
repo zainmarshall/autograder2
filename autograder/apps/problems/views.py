@@ -1,30 +1,4 @@
-from django.http import JsonResponse
-from ..oauth.decorators import login_required
-# JSON API endpoint for problems
-@login_required
-def problemset_api(request):
-    problems = Problem.objects.filter(contest__tjioi=settings.TJIOI_MODE)
-    if not request.user.is_staff:
-        problems = problems.filter(secret=False)
-    problems = problems.order_by("-id")
-    data = [
-        {
-            "id": p.id,
-            "name": p.name,
-            "contest": p.contest.id if p.contest else None,
-            "points": p.points,
-            "statement": p.statement,
-            "inputtxt": p.inputtxt,
-            "outputtxt": p.outputtxt,
-            "samples": p.samples,
-            "tl": p.tl,
-            "ml": p.ml,
-            "interactive": p.interactive,
-            "testcases_zip": p.testcases_zip.url if p.testcases_zip else None,
-        }
-        for p in problems
-    ]
-    return JsonResponse({"problems": data})
+
 from django.shortcuts import render, get_object_or_404, redirect
 from django.conf import settings
 from django.utils import timezone
