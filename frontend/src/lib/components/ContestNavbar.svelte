@@ -1,7 +1,7 @@
 <script lang="ts">
   import NavLink from './NavLink.svelte';
   import { page } from '$app/stores';
-  export let contestId: string | number = '';
+  const { contestId = '' }: { contestId?: string | number } = $props();
 
   // Helper to preserve all query params and set/replace contest
   function withContestParam(path: string) {
