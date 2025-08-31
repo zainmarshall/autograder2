@@ -1,12 +1,18 @@
 <script lang="ts">
     import { api } from '$lib/api';
 	import type { User } from '$lib/api.ts';
-    import Table from '$lib/components/Table.svelte';
+    import { userStore, isAuthenticated } from '$lib';
 
 	// user state
 	let user = $state<User | null>(null);
 	let error = $state<string | null>(null);
 	let loading = $state(true);
+
+	// form state
+	let usacoDivision = $state('');
+	let cfHandle = $state('');
+	let isSubmitting = $state(false);
+	let showEdit = $state(false);
 
 	// load user once on mount
 	$effect(() => {
@@ -33,17 +39,6 @@
 			}
 		})();
 	});
-
-    import { userStore, isAuthenticated } from '$lib';
-    import { onMount } from 'svelte';
-    let usacoDivision = $state('');
-    let cfHandle = $state('');
-    let isSubmitting = $state(false);
-    let showEdit = $state(false);
-
-    onMount(() => {
-        userStore.fetchUser();
-    });
 
     async function handleSubmit(event: Event) {
         event.preventDefault();
