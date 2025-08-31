@@ -21,8 +21,8 @@
         <span class="text-xl font-bold text-slate-100 tracking-tight">TJCT Grader</span>
       </a>
       <NavLink href="/profile" active={active === 'profile'}>Profile</NavLink>
-      <NavLink href="/submissions" active={active === 'submissions'}>Submissions</NavLink>
       <NavLink href="/contests" active={active === 'contests'}>Contests</NavLink>
+      <NavLink href="/submissions" active={active === 'submissions'}>Submissions</NavLink>
       <NavLink href="/problems" active={active === 'problems'}>Problemset</NavLink>
       <NavLink href="/submit" active={active === 'submit'}>Submit</NavLink>
       <NavLink href="/rankings" active={active === 'rankings'}>Rankings</NavLink>

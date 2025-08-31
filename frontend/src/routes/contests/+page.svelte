@@ -32,8 +32,16 @@
 
 	<Table data={contests} headers={[
 		{ label: '#', field: 'id' },
-		{ label: 'Name', field: 'name' },
-		{ label: 'Rated', field: 'rated' },
+		{
+			label: 'Name',
+			field: 'name',
+			link: (row) => ({ href: `/problems?contest=${row.id}`, text: row.name })
+		},
+		{
+			label: 'Rated',
+			field: 'rated',
+			render: (row) => row.rated ? '✓' : '✗'
+		},
 		{ label: 'Season', field: 'season' },
 		{ label: 'Date', field: 'start' },
 	]}/>

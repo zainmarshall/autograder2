@@ -4,6 +4,7 @@
 	import { userStore } from '$lib';
 	import { onMount } from 'svelte';
 	import Navbar from '$lib/components/Navbar.svelte';
+	import ContestNavbar from '$lib/components/ContestNavbar.svelte';
 	import { page } from '$app/stores';
 
 	let { children } = $props();
@@ -20,8 +21,10 @@
 </svelte:head>
 
 <div class="min-h-screen bg-black">
-	<!-- Render the navbar on not the enter page-->
-	{#if $page.url.pathname !== '/'}
+	<!-- Show only one navbar: ContestNavbar if ?contest= is present, else Navbar, but never both -->
+	{#if $page.url.pathname !== '/' && $page.url.searchParams.has('contest')}
+		<ContestNavbar contestId={$page.url.searchParams.get('contest') ?? ''} />
+	{:else if $page.url.pathname !== '/'}
 		<Navbar />
 	{/if}
 

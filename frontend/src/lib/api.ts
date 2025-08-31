@@ -33,6 +33,20 @@ export interface Contest {
     end: Date;
     editorial: string;
 }
+
+export interface Submission {
+    id: number;
+    language: string;
+    code: string;
+    usr: string;
+    verdict: string;
+    runtime: number;
+    contest: string;
+    problem: string;
+    insight: string;
+    timestamp: Date;
+}
+
 export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
@@ -122,5 +136,24 @@ export const api = {
             interactive: Boolean(data.interactive),
             testcases_zip: String(data.testcases_zip),
         };
-    }
-};
+    },
+
+    // return full submissions list
+    async fetchSubmissions(): Promise<Submission[]> {
+        const res = await fetch(`http://localhost:3000/api/submissions/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch submissions');
+        const data = await res.json();
+        return data.results.map((r: any): Submission => ({
+            id: Number(r.id),
+            language: String(r.language),
+            code: String(r.code),
+            usr: String(r.usr),
+            verdict: String(r.verdict),
+            runtime: Number(r.runtime),
+            contest: String(r.contest),
+            problem: String(r.problem),
+            insight: String(r.insight),
+            timestamp: new Date(r.timestamp),
+        }));
+    },
+}
