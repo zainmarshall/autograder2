@@ -9,7 +9,7 @@ export interface Ranking {
     rank: number;
 }
 
-export interface Problem{
+export interface Problem {
     id: number;
     name: string;
     contest: number | null;
