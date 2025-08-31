@@ -29,22 +29,39 @@
 	<div class="mb-2 text-3xl font-bold text-zinc-100">Submissions</div>
 	<div class="mb-6 text-base text-zinc-400"></div>
 
-	<Table
-		data={submissions}
-		headers={[
-			{ label: "#", field: "id" },
-			{ label: "User", field: "usr" },
-			{ label: "Language", field: "language" },
-			{ label: "Verdict", field: "verdict" },
-			{ label: "Runtime", field: "runtime" },
-			{ label: "Contest", field: "contest" },
-			{
-				label: "Problem",
-				field: "problem",
-				render: (row) => `<a href="/problems/${row.problem}">${row.problem}</a>`
-			},
-			{ label: "Insight", field: "insight" },
-			{ label: "Timestamp", field: "timestamp" },
-		]}
-	/>
+		<Table
+			data={submissions}
+			headers={[
+				{ label: "#", field: "id" },
+				{ label: "User", field: "usr" },
+				{ label: "Language", field: "language" },
+				{ label: "Verdict", field: "verdict" },
+				{ label: "Runtime", field: "runtime" },
+				{
+					label: "Problem",
+					field: "problem",
+					link: (row) => {
+						
+						const id = row.problem_id || row.problem_id_num || row.problem.match(/\d+/)?.[0] || row.problem;
+						return { href: `/problems/${id}`, text: row.problem };
+					}
+				},
+				{
+					label: "Timestamp",
+					field: "timestamp",
+					render: (row) => {
+						const d = new Date(row.timestamp);
+						const mm = String(d.getMonth() + 1).padStart(2, '0');
+						const dd = String(d.getDate()).padStart(2, '0');
+						const yyyy = d.getFullYear();
+						let h = d.getHours();
+						const m = String(d.getMinutes()).padStart(2, '0');
+						const ampm = h >= 12 ? 'PM' : 'AM';
+						h = h % 12;
+						h = h ? h : 12;
+						return `${mm}/${dd}/${yyyy} ${h}:${m} ${ampm}`;
+					}
+				},
+			]}
+		/>
 </div>

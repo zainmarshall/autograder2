@@ -43,6 +43,16 @@
 			render: (row) => row.rated ? '✓' : '✗'
 		},
 		{ label: 'Season', field: 'season' },
-		{ label: 'Date', field: 'start' },
+				{
+					label: 'Date',
+					field: 'start',
+					render: (row) => {
+						const d = new Date(row.start);
+						const mm = String(d.getMonth() + 1).padStart(2, '0');
+						const dd = String(d.getDate()).padStart(2, '0');
+						const yyyy = d.getFullYear();
+						return `${mm}/${dd}/${yyyy}`;
+					}
+				},
 	]}/>
 </div>

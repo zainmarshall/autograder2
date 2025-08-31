@@ -24,7 +24,6 @@
       <NavLink href={withContestParam(`/contests/${contestId}/standings`)} active={false}>Standings</NavLink>
     </div>
     <div class="flex items-center space-x-2">
-      <!-- Add any contest-specific actions here -->
     </div>
   </div>
 </nav>
