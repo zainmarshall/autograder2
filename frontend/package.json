@@ -29,11 +29,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
-		"@codemirror/basic-setup": "^0.20.0",
-		"@codemirror/lang-cpp": "^6.0.3",
-		"@codemirror/lang-java": "^6.0.2",
-		"@codemirror/lang-python": "^6.2.1",
-		"@codemirror/state": "^6.5.2",
-		"@codemirror/view": "^6.38.1"
+		"prism-code-editor": "^4.1.0",
+		"prismjs": "^1.30.0"
 	}
 }
