@@ -1,6 +1,8 @@
 <script lang="ts">
-	export let href: string = '#';
-	export let active: boolean = false;
+	const { href = '#', active = false } = $props<{
+		href?: string;
+		active?: boolean;
+	}>();
 </script>
 
 <a

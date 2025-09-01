@@ -1,6 +1,5 @@
 <script lang="ts">
-  export let error;
-  export let status;
+  const { error, status } = $props();
 </script>
 
 <main class="min-h-screen flex items-center justify-center bg-black">

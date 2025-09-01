@@ -24,7 +24,7 @@
 
 			<!-- Enter Button -->
 			<div class="mb-8">
-				<button on:click={() => api.loginIon()} class="w-full bg-indigo-600 hover:bg-indigo-800 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Enter</button>
+				<button onclick={() => api.loginIon()} class="w-full bg-indigo-600 hover:bg-indigo-800 text-white font-semibold py-3 px-4 rounded-lg transition-colors">Enter</button>
 			</div>
 
 

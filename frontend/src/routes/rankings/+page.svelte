@@ -46,6 +46,7 @@
 
 	<Table data={rankings} headers={[
 		{ label: '#', field: 'rank' },
+		{ label: 'Medal', field: 'rank', render: (row) => rankToMedal(row.rank) },
 		{ label: 'Name', field: 'name' },
 		{ label: 'USACO', field: 'usaco' },
 		{ label: 'Codeforces', field: 'cf' },

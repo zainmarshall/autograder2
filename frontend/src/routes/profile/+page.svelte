@@ -88,13 +88,13 @@
             </div>
             <button
                 class="mb-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-                on:click={() => showEdit = true}
+                onclick={() => showEdit = true}
                 disabled={showEdit}
             >
                 Edit
             </button>
             {#if showEdit}
-                <form on:submit={handleSubmit} class="w-full mt-4 space-y-4">
+                <form onsubmit={handleSubmit} class="w-full mt-4 space-y-4">
                     <div>
                         <label for="usaco_div" class="block text-zinc-700 dark:text-zinc-200 font-medium mb-2">
                             USACO Division:

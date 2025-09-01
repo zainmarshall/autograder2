@@ -31,7 +31,7 @@
     <div class="flex items-center space-x-2">
       {#if authed}
         <button
-          on:click={() => userStore.logout()}
+          onclick={() => userStore.logout()}
           class="px-3 py-2 rounded-md text-sm font-medium transition-colors duration-150 text-slate-100 hover:text-indigo-400 hover:bg-slate-800"
         >
           Log Out
