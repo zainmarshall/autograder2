@@ -28,7 +28,7 @@
         if (rank === 1) return '🍪🍪🍪🏅';
         if (rank === 2) return '🍪🍪🥈';
         if (rank === 3) return '🍪🥉';
-        return '';
+        return rank;
     };
 </script>
 
@@ -45,12 +45,11 @@
 	</div>
 
 	<Table data={rankings} headers={[
-		{ label: '#', field: 'rank' },
-		{ label: 'Medal', field: 'rank', render: (row) => rankToMedal(row.rank) },
-		{ label: 'Name', field: 'name' },
+		{ label: '#', field: 'rank', render: (row) => rankToMedal(row.rank) },
+		{ label: 'Name', field: 'name', link: (row) => ({ href: `/profile/${row.username}`, text: row.name }) },
+		{ label: 'Index', field: 'index' },
 		{ label: 'USACO', field: 'usaco' },
 		{ label: 'Codeforces', field: 'cf' },
-		{ label: 'In-Houses', field: 'inhouse' },
-		{ label: 'Index', field: 'index' }
+		{ label: 'In-Houses', field: 'inhouse' }
 	]}/>
 </div>

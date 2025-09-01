@@ -1,10 +1,10 @@
 export interface Ranking {
-    id: number;
     name: string;
-    index: number;
+    username: string;
     usaco: number;
     cf: number;
     inhouse: number;
+    index: number;
     rank: number;
 }
 
@@ -82,16 +82,29 @@ export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
     getUser: async () => fetch('/api/user/', { credentials: 'include' }),
-    updateStats: async (data: Partial<User>) => {
+   
+
+
+    updateUser: async (data: Partial<User>) => {
+        const getCSRFToken = () => {
+            const match = document.cookie.match(/csrftoken=([^;]+)/);
+            return match ? match[1] : '';
+        }
         const res = await fetch('/api/user/', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
             credentials: 'include',
             body: JSON.stringify(data),
         });
         if (!res.ok) throw new Error('Failed to update profile');
         return await res.json();
     },
+
+
+
     profile: async () => fetch('/profile/', { credentials: 'include' }),
     tjioiLogin: () => window.location.href = '/tjioi/login/',
 
@@ -101,12 +114,12 @@ export const api = {
         if (!res.ok) throw new Error('Failed to fetch rankings');
         const data = await res.json();
         return data.rankings.map((r: any): Ranking => ({
-            id: Number(r.id),
             name: String(r.name),
-            index: Number(r.index),
+            username: String(r.username),
             usaco: Number(r.usaco),
             cf: Number(r.cf),
             inhouse: Number(r.inhouse),
+            index: Number(r.index),
             rank: Number(r.rank),
         }));
     },
@@ -202,6 +215,7 @@ export const api = {
         }));
     },
 
+    //return current user
     async fetchUser(): Promise<User> {
         const res = await fetch(`http://localhost:3000/api/user/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch user');
@@ -227,4 +241,31 @@ export const api = {
             particles_enabled: Boolean(data.particles_enabled),
         };
     },
+
+    // fetch another user
+     async fetchUserUID(uid: string): Promise<User> {
+        const res = await fetch(`http://localhost:3000/api/user/${uid}`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch user');
+        const data = await res.json();
+        return {
+            id: Number(data.id),
+            email: String(data.email),
+            personal_email: String(data.personal_email),
+            display_name: String(data.display_name),
+            username: String(data.username),
+            is_staff: Boolean(data.is_staff),
+            is_active: Boolean(data.is_active),
+            usaco_division: String(data.usaco_division),
+            usaco_rating: Number(data.usaco_rating),
+            cf_handle: String(data.cf_handle),
+            cf_rating: Number(data.cf_rating),
+            grade: String(data.grade),
+            first_time: Boolean(data.first_time),
+            is_tjioi: Boolean(data.is_tjioi),
+            author_drops: Number(data.author_drops),
+            inhouse: String(data.inhouse),
+            index: String(data.index),
+            particles_enabled: Boolean(data.particles_enabled),
+        };
+    }
 }

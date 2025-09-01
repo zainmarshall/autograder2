@@ -1,6 +1,6 @@
 <script lang="ts">
     import { api } from '$lib/api';
-	import type { User } from '$lib/api.ts';
+    import type { User } from '$lib/api.ts';
     import { userStore, isAuthenticated } from '$lib';
 
 	// user state
@@ -9,55 +9,110 @@
 	let loading = $state(true);
 
 	// form state
-	let usacoDivision = $state('');
+    let usacoDivision = $state('');
 	let cfHandle = $state('');
 	let isSubmitting = $state(false);
 	let showEdit = $state(false);
 
-	// load user once on mount
-	$effect(() => {
-		(async () => {
-			try {
-				const data = await api.fetchUser();
-				console.log('Fetched:', data);
-				user = data;
+    
 
-                const divisionMap: Record<string, string> = {
-                    'Bronze': 'bronze',
-                    'Silver': 'silver',
-                    'Gold': 'gold',
-                    'Platinum': 'plat',
-                    'Not Participated': ''
-                };
-                usacoDivision = divisionMap[data.usaco_division] || '';
+    // load user once on mount
+    // Map backend division to select value
+    function backendDivisionToSelectValue(division: string): string {
+        const map: Record<string, string> = {
+            'Bronze': 'bronze',
+            'Silver': 'silver',
+            'Gold': 'gold',
+            'Platinum': 'plat',
+            'Not Participated': '',
+            '': '',
+        };
+        return map[division] ?? '';
+    }
+
+    $effect(() => {
+        (async () => {
+            try {
+                const data = await api.fetchUser();
+                user = data;
+                // Set form fields when user is loaded
+                usacoDivision = backendDivisionToSelectValue(data.usaco_division);
                 cfHandle = data.cf_handle || '';
-			} catch (err) {
-				console.error('Error fetching user:', err);
-				error = String(err);
-			} finally {
-				loading = false;
-			}
-		})();
-	});
+            } catch (err) {
+                console.error('Error fetching user:', err);
+                error = String(err);
+            } finally {
+                loading = false;
+            }
+        })();
+    });
+
+    // Map backend value to display label
+    function usacoFormated(division: string) {
+        const displayMap: Record<string, string> = {
+            'Bronze': 'Bronze',
+            'Silver': 'Silver',
+            'Gold': 'Gold',
+            'Platinum': 'Platinum',
+            'Not Participated': 'Not Participated',
+            '': 'Not Participated',
+            null: 'Not Participated',
+            undefined: 'Not Participated',
+        };
+        return displayMap[division] ?? 'Not Participated';
+    }
 
     async function handleSubmit(event: Event) {
         event.preventDefault();
         if (!user) return;
         isSubmitting = true;
         try {
-            // Only send fields that have changed or are present
+            // Build update object only with changed fields
             const update: Record<string, any> = {};
-            if (usacoDivision !== (user.usaco_division || '')) update.usaco_division = usacoDivision;
-            if (cfHandle !== (user.cf_handle || '')) update.cf_handle = cfHandle;
-            // Add more fields here as needed
+
+            // USACO division and rating logic
+            if (usacoDivision !== (user.usaco_division || '')) {
+                // Map short value to backend expected value
+                const divisionMap: Record<string, string> = {
+                    'bronze': 'Bronze',
+                    'silver': 'Silver',
+                    'gold': 'Gold',
+                    'plat': 'Platinum',
+                    '': 'Not Participated',
+                };
+                const backendDivision = divisionMap[usacoDivision] ?? 'Not Participated';
+                update.usaco_division = backendDivision;
+                // Rating map for API values
+                const ratingMap: Record<string, number> = {
+                    'Bronze': 800,
+                    'Silver': 1200,
+                    'Gold': 1600,
+                    'Platinum': 1900,
+                    'Not Participated': 800,
+                };
+                update.usaco_rating = ratingMap[backendDivision] ?? 800;
+            }
+
+            // Codeforces handle
+            if (cfHandle !== (user.cf_handle || '')) {
+                update.cf_handle = cfHandle;
+            }
+
+            // No changes, just close edit
             if (Object.keys(update).length === 0) {
-                isSubmitting = false;
                 showEdit = false;
                 return;
             }
-            await api.updateStats(update);
+
+            // Update user and refresh state
+            await api.updateUser(update);
+            const data = await api.fetchUser();
+            user = data;
+            usacoDivision = backendDivisionToSelectValue(data.usaco_division);
+            cfHandle = data.cf_handle || '';
             showEdit = false;
-            // Optionally, refetch user info here
+        } catch (err) {
+            error = String(err);
         } finally {
             isSubmitting = false;
         }
@@ -79,7 +134,7 @@
             <div class="w-full space-y-3 mb-6">
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">USACO Division</span>
-                    <span>{user?.usaco_division}</span>
+                    <span>{usacoFormated(user?.usaco_division || '')}</span>
                 </div>
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">Codeforces Handle</span>
@@ -88,13 +143,13 @@
             </div>
             <button
                 class="mb-2 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors"
-                onclick={() => showEdit = true}
+                on:click={() => showEdit = true}
                 disabled={showEdit}
             >
                 Edit
             </button>
             {#if showEdit}
-                <form onsubmit={handleSubmit} class="w-full mt-4 space-y-4">
+                <form on:submit={handleSubmit} class="w-full mt-4 space-y-4">
                     <div>
                         <label for="usaco_div" class="block text-zinc-700 dark:text-zinc-200 font-medium mb-2">
                             USACO Division:

@@ -19,6 +19,7 @@ class RankingsAPI(APIView):
             if r["usaco_rating"] > 800 or r["cf_rating"] > 0 or r["inhouse"] > 0:
                 rankings.append({
                     "name": r["display_name"],
+                    "username": r["username"],
                     "usaco": r["usaco_rating"],
                     "cf": r["cf_rating"],
                     "inhouse": float(r["inhouse"]),

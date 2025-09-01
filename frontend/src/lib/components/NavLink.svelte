@@ -1,7 +1,8 @@
 <script lang="ts">
-	const { href = '#', active = false } = $props<{
+	const { href = '#', active = false, children } = $props<{
 		href?: string;
 		active?: boolean;
+		children?: import('svelte').Snippet;
 	}>();
 </script>
 
@@ -11,5 +12,5 @@
 		text-slate-100 hover:text-indigo-400 hover:bg-slate-800
 		{active ? 'text-indigo-400 border-b-2 border-indigo-500' : ''}"
 >
-	<slot />
+	{@render children?.()}
 </a>
