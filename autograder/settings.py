@@ -87,6 +87,11 @@ TEMPLATES = [
         "APP_DIRS": True,
         "OPTIONS": {
             "debug": True,
+            # Explicitly register Django's core template tag libraries to avoid missing tags like 'endif'.
+            "builtins": [
+                "django.template.defaulttags",
+                "django.template.defaultfilters",
+            ],
             "context_processors": [
                 "django.template.context_processors.debug",
                 "django.template.context_processors.request",

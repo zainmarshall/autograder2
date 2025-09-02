@@ -9,3 +9,7 @@ RUN apt update && \
     apt install -y bash git postgresql-server-dev-all gcc python3-dev postgresql-client libc6-dev
 
 WORKDIR /home/tjctgrader/autograder2
+
+# Install Python dependencies for backend
+COPY ../requirements.txt ./requirements.txt
+RUN pip install --no-cache-dir -r requirements.txt
