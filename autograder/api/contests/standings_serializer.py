@@ -3,6 +3,7 @@ from rest_framework import serializers
 class StandingsRowSerializer(serializers.Serializer):
     id = serializers.IntegerField()
     name = serializers.CharField()
+    username = serializers.CharField()
     solved = serializers.IntegerField()
     penalty = serializers.IntegerField()
     rank = serializers.IntegerField()

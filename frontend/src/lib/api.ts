@@ -201,17 +201,21 @@ export const api = {
         }));
     },
 
-    async fetchStandings(cid: string): Promise<Standing[]> {
+    async fetchStandings(cid: string): Promise<Submission[]> {
         const res = await fetch(`http://localhost:3000/api/contests/${cid}/standings/`, { credentials: 'include' });
-        if (!res.ok) throw new Error('Failed to fetch standings');
+        if (!res.ok) throw new Error('Failed to fetch submissions');
         const data = await res.json();
-        return data.standings.map((r: any): Standing => ({
+        return data.results.map((r: any): Submission => ({
             id: Number(r.id),
-            name: String(r.name),
-            solved: Number(r.solved),
-            penalty: Number(r.penalty),
-            rank: Number(r.rank),
-            problems: r.problems.map((p: any) => Number(p)),
+            language: String(r.language),
+            code: String(r.code),
+            usr: String(r.usr),
+            verdict: String(r.verdict),
+            runtime: Number(r.runtime),
+            contest: String(r.contest),
+            problem: String(r.problem),
+            insight: String(r.insight),
+            timestamp: new Date(r.timestamp),
         }));
     },
 

@@ -1,3 +1,41 @@
+
+---
+
+## Extracted UI Standards
+
+### Web Background
+- `bg-black` (main background)
+- `bg-slate-900` (panel background)
+- `bg-white/80` and `dark:bg-zinc-900/90` (card backgrounds, light/dark mode)
+
+### Navbar Background
+- `bg-black` (navbar background, matches main background)
+
+### Button Color
+- `bg-indigo-600` (primary button)
+- `text-white` (button text)
+
+### Button Hover
+- `hover:bg-indigo-700` (primary button hover)
+- `hover:bg-indigo-800` (alternate/disabled hover)
+
+### Link Color
+- `text-indigo-400` (main link)
+- `text-blue-700` (alternate link)
+
+### Link Hover
+- `hover:text-indigo-400` (main link hover)
+- `hover:text-blue-400` (alternate link hover)
+
+### Padding
+- `p-4`, `p-8`, `px-4`, `py-2`, `py-3`, `pt-8`, `mb-4`, `mb-6`, `mb-8` (common paddings)
+- Use `p-8` for cards/panels, `px-4 py-2` for buttons, `mb-4`/`mb-6` for spacing between sections
+
+### Text
+- `text-white`, `text-zinc-100`, `text-zinc-900`, `text-3xl`, `text-2xl`, `font-bold`, `font-semibold`, `font-medium` (main text styles)
+- Use `text-white` for text on dark backgrounds, `text-zinc-900` for text on light backgrounds
+- Headings: `text-3xl font-bold`, `text-2xl font-semibold`
+- Body: `text-base`, `text-sm`, `text-zinc-400` for secondary text
 # Tailwind Usage and Structure in /routes
 
 ## 1. Layouts and Main Containers
@@ -34,3 +72,26 @@
 - Review and standardize repeated structures (cards, headings, buttons, forms, etc.)
 - Consider extracting common classes into reusable components or Tailwind @apply utilities.
 - See this file for a full list of all classes and their usage context.
+
+---
+
+## Tailwind 101: What Each Class Type Does
+
+- **text-***: Sets the text color or size. E.g., `text-white` (white text), `text-2xl` (extra large text).
+- **bg-***: Sets the background color. E.g., `bg-black`, `bg-zinc-800`.
+- **hover:***: Applies a style on hover. E.g., `hover:bg-indigo-700` changes background on hover.
+- **rounded, rounded-lg, rounded-2xl, rounded-full**: Rounds the corners of an element. `rounded-full` makes it a circle.
+- **font-bold, font-semibold, font-medium**: Sets font weight (boldness).
+- **p-*, px-*, py-*, pt-*, pb-*, pl-*, pr-***: Padding. E.g., `p-4` (all sides), `px-4` (left/right), `py-2` (top/bottom).
+- **m-*, mx-*, my-*, mt-*, mb-*, ml-*, mr-***: Margin. E.g., `mb-4` (margin-bottom), `mt-2` (margin-top).
+- **w-*, h-***: Width and height. E.g., `w-full` (100% width), `h-24` (height 6rem).
+- **flex, flex-col, flex-row, items-center, justify-center, gap-***: Flexbox utilities for layout and alignment.
+- **border, border-***: Adds a border, with optional color. E.g., `border-zinc-300`.
+- **shadow, shadow-lg, shadow-xl, shadow-md**: Adds box-shadow for depth.
+- **transition-colors**: Enables smooth color transitions (e.g., on hover).
+- **prose**: Applies typographic styles for content (good for markdown).
+- **select-none**: Prevents text selection.
+- **space-y-***: Adds vertical spacing between children.
+- **dark:***: Applies styles in dark mode. E.g., `dark:bg-zinc-900`.
+- **underline**: Underlines text.
+- **disabled:***: Applies style when element is disabled. E.g., `disabled:bg-indigo-800`.

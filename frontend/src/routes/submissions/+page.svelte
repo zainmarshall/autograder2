@@ -23,6 +23,13 @@
 			}
 		})();
 	});
+
+	const formatLang = (lang: string) => {
+        if (lang === "cpp") return 'C++';
+        if (lang === "java") return 'Java';
+        if (lang === "python") return 'Python';
+        return lang;
+    };
 </script>
 
 <div class="my- rounded-xl p-4 md:p-8 shadow-lg">
@@ -34,7 +41,7 @@
 			headers={[
 				{ label: "#", field: "id" },
 				{ label: "User", field: "usr" },
-				{ label: "Language", field: "language" },
+				{ label: "Language", field: "language", render: (row) => formatLang(row.language) },
 				{ label: "Verdict", field: "verdict" },
 				{ label: "Runtime", field: "runtime" },
 				{
