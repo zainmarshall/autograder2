@@ -40,7 +40,7 @@
 			data={submissions}
 			headers={[
 				{ label: "#", field: "id" },
-				{ label: "User", field: "usr" },
+				{ label: "User", field: "usr", link: (row) => ({ href: `/profile/${row.usr}`, text: row.usr }) },
 				{ label: "Language", field: "language", render: (row) => formatLang(row.language) },
 				{ label: "Verdict", field: "verdict" },
 				{ label: "Runtime", field: "runtime" },

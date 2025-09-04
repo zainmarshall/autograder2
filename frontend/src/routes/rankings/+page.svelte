@@ -30,6 +30,13 @@
         if (rank === 3) return '🍪🥉';
         return rank;
     };
+
+	const usacoFormat = (usaco: number) => {
+		if (usaco == 1900) return `Platinum (${usaco})`;
+		if (usaco == 1600) return `Gold (${usaco})`;
+		if (usaco == 1200) return `Silver (${usaco})`;
+		if (usaco == 800) return `Bronze / NA (${usaco})`;
+	};
 </script>
 
 <div class="my- rounded-xl p-4 md:p-8 shadow-lg">
@@ -48,7 +55,7 @@
 		{ label: '#', field: 'rank', render: (row) => rankToMedal(row.rank) },
 		{ label: 'Name', field: 'name', link: (row) => ({ href: `/profile/${row.username}`, text: row.name }) },
 		{ label: 'Index', field: 'index' },
-		{ label: 'USACO', field: 'usaco' },
+		{ label: 'USACO', field: 'usaco', render: (row) => usacoFormat(row.usaco) },
 		{ label: 'Codeforces', field: 'cf' },
 		{ label: 'In-Houses', field: 'inhouse' }
 	]}/>

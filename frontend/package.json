@@ -29,6 +29,7 @@
 		"vite": "^7.0.4"
 	},
 	"dependencies": {
+		"marked": "^16.2.1",
 		"prism-code-editor": "^4.1.0",
 		"prismjs": "^1.30.0"
 	}

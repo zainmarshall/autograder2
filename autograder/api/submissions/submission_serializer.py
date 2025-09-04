@@ -2,7 +2,9 @@ from rest_framework import serializers
 from autograder.apps.runtests.models import Submission
 
 class SubmissionSerializer(serializers.ModelSerializer):
-    usr = serializers.StringRelatedField()
+    usr = serializers.SerializerMethodField()
+    def get_usr(self, obj):
+        return obj.usr.username
     contest = serializers.StringRelatedField()
     problem = serializers.StringRelatedField()
 

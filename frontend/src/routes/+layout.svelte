@@ -1,3 +1,4 @@
+
 <script lang="ts">
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
@@ -7,7 +8,19 @@
 	import ContestNavbar from '$lib/components/ContestNavbar.svelte';
 	import { page } from '$app/stores';
 
-	let { children } = $props();
+
+	let particlesConfig = {
+		particles: {
+			color: { value: '#6366f1' }, // Tailwind primary
+			links: { enable: true, color: '#6366f1' },
+			move: { enable: true },
+			number: { value: 80 }
+		}
+	};
+
+	let {children} = $props();
+
+
 
 	onMount(() => {
 		userStore.fetchUser();
@@ -20,7 +33,9 @@
 	<title>TJ Computer Team Grader</title>
 </svelte:head>
 
-<div class="min-h-screen bg-black">
+
+<div class="min-h-screen bg-black relative">
+	
 	<!-- Show only one navbar: ContestNavbar if ?contest= is present, else Navbar, but never both -->
 	{#if $page.url.pathname !== '/' && $page.url.searchParams.has('contest')}
 		<ContestNavbar contestId={$page.url.searchParams.get('contest') ?? ''} />

@@ -1,3 +1,14 @@
+// Codeforces API user info response
+export interface CodeforcesUserInfo {
+    handle: string;
+    avatar: string;
+    titlePhoto: string;
+    firstName?: string;
+    lastName?: string;
+    rank?: string;
+    rating?: number;
+    organization?: string;
+}
 export interface Ranking {
     name: string;
     username: string;
@@ -51,6 +62,7 @@ export interface Submission {
 export interface Standing {
     id: number;
     name: string;
+    username: string;
     solved: number;
     penalty: number;
     rank: number;
@@ -82,6 +94,31 @@ export const api = {
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
     logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
     getUser: async () => fetch('/api/user/', { credentials: 'include' }),
+
+    async getCodeforcesProfile(handle: string): Promise<CodeforcesUserInfo | null> {
+        if (!handle) return null;
+        try {
+            const res = await fetch(`https://codeforces.com/api/user.info?handles=${handle}`);
+            const data = await res.json();
+            if (data.status === 'OK' && data.result && data.result.length > 0) {
+                const user = data.result[0];
+                return {
+                    handle: user.handle,
+                    avatar: user.avatar,
+                    titlePhoto: user.titlePhoto,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
+                    rank: user.rank,
+                    rating: user.rating,
+                    organization: user.organization,
+                };
+            }
+            return null;
+        } catch (err) {
+            console.error('Failed to fetch Codeforces profile:', err);
+            return null;
+        }
+    },
    
 
 
@@ -201,22 +238,23 @@ export const api = {
         }));
     },
 
-    async fetchStandings(cid: string): Promise<Submission[]> {
+    async fetchStandings(cid: string): Promise<{title: string, pnum: number, load: Standing[]}> {
         const res = await fetch(`http://localhost:3000/api/contests/${cid}/standings/`, { credentials: 'include' });
-        if (!res.ok) throw new Error('Failed to fetch submissions');
+        if (!res.ok) throw new Error('Failed to fetch standings');
         const data = await res.json();
-        return data.results.map((r: any): Submission => ({
-            id: Number(r.id),
-            language: String(r.language),
-            code: String(r.code),
-            usr: String(r.usr),
-            verdict: String(r.verdict),
-            runtime: Number(r.runtime),
-            contest: String(r.contest),
-            problem: String(r.problem),
-            insight: String(r.insight),
-            timestamp: new Date(r.timestamp),
-        }));
+        return {
+            title: String(data.title),
+            pnum: Number(data.pnum),
+            load: data.load.map((r: any): Standing => ({
+                id: Number(r.id),
+                name: String(r.name),
+                username: String(r.username),
+                solved: Number(r.solved),
+                penalty: Number(r.penalty),
+                rank: Number(r.rank),
+                problems: r.problems.map((p: any) => Number(p)),
+            }))
+        };
     },
 
     //return current user

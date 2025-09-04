@@ -5,14 +5,16 @@
 
 	// user state
 	let user = $state<User | null>(null);
-	let error = $state<string | null>(null);
-	let loading = $state(true);
+    let error = $state<string | null>(null);
+    let loading = $state(true);
+    let cfAvatar = $state<string | null>(null);
 
 	// form state
     let usacoDivision = $state('');
 	let cfHandle = $state('');
-	let isSubmitting = $state(false);
-	let showEdit = $state(false);
+    let isSubmitting = $state(false);
+    let showEdit = $state(false);
+    let personalEmail = $state('');
 
     
 
@@ -35,9 +37,16 @@
             try {
                 const data = await api.fetchUser();
                 user = data;
-                // Set form fields when user is loaded
                 usacoDivision = backendDivisionToSelectValue(data.usaco_division);
                 cfHandle = data.cf_handle || '';
+                personalEmail = data.personal_email || '';
+
+                if (data.cf_handle) {
+                    const cfProfile = await api.getCodeforcesProfile(data.cf_handle);
+                    cfAvatar = cfProfile?.titlePhoto || null;
+                } else {
+                    cfAvatar = null;
+                }
             } catch (err) {
                 console.error('Error fetching user:', err);
                 error = String(err);
@@ -98,6 +107,11 @@
                 update.cf_handle = cfHandle;
             }
 
+            // Personal email
+            if (personalEmail !== (user.personal_email || '')) {
+                update.personal_email = personalEmail;
+            }
+
             // No changes, just close edit
             if (Object.keys(update).length === 0) {
                 showEdit = false;
@@ -110,6 +124,7 @@
             user = data;
             usacoDivision = backendDivisionToSelectValue(data.usaco_division);
             cfHandle = data.cf_handle || '';
+            personalEmail = data.personal_email || '';
             showEdit = false;
         } catch (err) {
             error = String(err);
@@ -126,8 +141,21 @@
 {:else}
     <main class="flex flex-col items-center justify-center min-h-[70vh] px-4">
         <div class="w-full max-w-xl bg-white/80 dark:bg-zinc-900/90 shadow-xl rounded-2xl p-8 flex flex-col items-center">
-            <div class="w-24 h-24 rounded-full bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center mb-4 shadow-md">
-                <span class="text-4xl text-white font-bold">{user?.display_name?.[0] ?? '?'}</span>
+            <div class="w-42 h-42 rounded-full bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center mb-4 shadow-md overflow-hidden">
+                {#if cfAvatar}
+                    <img
+                        src={cfAvatar}
+                        alt="Codeforces Avatar"
+                        class="w-full h-full object-cover rounded-full border-2 border-white"
+                        onerror={(e) => {
+                            console.log('Image load error:', e);
+                            const target = e.target as HTMLImageElement | null;
+                            if (target) target.style.display = 'none';
+                        }}
+                    />
+                {:else}
+                    <span class="text-4xl text-white font-bold">{user?.display_name?.[0] ?? '?'}</span>
+                {/if}
             </div>
             <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">{user?.display_name}</h2>
             <div class="text-base text-zinc-500 dark:text-zinc-400 mb-6">@{user?.username}</div>
@@ -138,7 +166,30 @@
                 </div>
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">Codeforces Handle</span>
-                    <span>{user?.cf_handle}</span>
+                    <span>
+                        {#if user?.cf_handle}
+                            <a
+                                href={`https://codeforces.com/profile/${user.cf_handle}`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                class="underline underline-offset-2 hover:text-indigo-400 transition-colors"
+                            >
+                                {user.cf_handle}
+                            </a>
+                        {:else}
+                            <span class="text-zinc-400">None</span>
+                        {/if}
+                    </span>
+                </div>
+                <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
+                    <span class="font-medium">Personal Email</span>
+                    <span>
+                        {#if user?.personal_email}
+                            {user.personal_email}
+                        {:else}
+                            <span class="text-zinc-400">None</span>
+                        {/if}
+                    </span>
                 </div>
             </div>
             <button
@@ -175,6 +226,18 @@
                             type="text"
                             bind:value={cfHandle}
                             placeholder="Leave blank if you don't have one"
+                            class="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded px-3 py-2 border border-zinc-300 dark:border-zinc-700 focus:border-indigo-500 focus:outline-none"
+                        />
+                    </div>
+                    <div>
+                        <label for="personal_email" class="block text-zinc-700 dark:text-zinc-200 font-medium mb-2">
+                            Personal Email:
+                        </label>
+                        <input
+                            id="personal_email"
+                            type="email"
+                            bind:value={personalEmail}
+                            placeholder="Enter your personal email"
                             class="w-full bg-zinc-100 dark:bg-zinc-800 text-zinc-900 dark:text-zinc-100 rounded px-3 py-2 border border-zinc-300 dark:border-zinc-700 focus:border-indigo-500 focus:outline-none"
                         />
                     </div>

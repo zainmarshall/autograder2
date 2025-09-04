@@ -40,7 +40,7 @@
     <select id="lang" bind:value={language} class="mb-4 px-3 py-2 rounded border border-zinc-300 dark:border-zinc-700 text-white bg-zinc-800">
       <option value="cpp">C++</option>
       <option value="java">Java</option>
-      <option value="python">Python</option>
+      <option value="python">Python</option>  
     </select>
     {#if language === 'java'}
       <div class="mb-4 p-2 bg-yellow-100 border-l-4 border-yellow-500 text-yellow-900">
