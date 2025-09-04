@@ -26,6 +26,7 @@
       <NavLink href="/problems" active={active === 'problems'}>Problemset</NavLink>
       <NavLink href="/submit" active={active === 'submit'}>Submit</NavLink>
       <NavLink href="/rankings" active={active === 'rankings'}>Rankings</NavLink>
+      <NavLink href="/info" active={active === 'info'}>Info</NavLink>
     </div>
 
     <div class="flex items-center space-x-2">
