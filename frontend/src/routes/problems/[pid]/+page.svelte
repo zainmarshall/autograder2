@@ -80,4 +80,13 @@ Card 5: Samples
             <div class="prose max-w-none text-base text-white">{problem?.samples}</div>
         </section>
     </div>
+
+    <button class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors" onclick={() => { 
+        const contestId = $page.url.searchParams.get('contest');
+        let url = `/submit?problem=${problem?.id}`;
+        if (contestId) url += `&contest=${contestId}`;
+        window.location.href = url;
+    }}>
+		Submit
+	</button>
 </main>

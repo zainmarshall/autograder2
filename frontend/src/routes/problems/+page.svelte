@@ -53,4 +53,6 @@
 		{ label: 'Contest', field: 'contest' },
 		{ label: 'Points', field: 'points' }
 	]}/>
+
+
 </div>

@@ -70,7 +70,11 @@
       } else {
         problems = allProblems;
       }
-      if (problems.length > 0) selectedProblem = problems[0].id;
+      const problemId = $page.url.searchParams.get('problem');
+      if (problemId) {
+        const prob = problems.find(p => p.id === Number(problemId));
+        if (prob) selectedProblem = prob.id;
+      } else if (problems.length > 0) selectedProblem = problems[0].id;
 
       editorInstance = basicEditor(editorEl, {
         language,
