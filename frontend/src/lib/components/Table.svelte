@@ -61,7 +61,7 @@
 								<!-- Neutral chevron -->
 								<svg
 									xmlns="http://www.w3.org/2000/svg"
-									class="w-4 h-4 opacity-50 group-hover:opacity-80 transition-opacity"
+									class="w-4 h-4 opacity-30 group-hover:opacity-80 transition-opacity"
 									fill="none"
 									viewBox="0 0 24 24"
 									stroke="currentColor"

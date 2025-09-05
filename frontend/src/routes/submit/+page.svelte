@@ -11,7 +11,7 @@
 
   let editorEl: HTMLDivElement;
   let editorInstance: any;
-  let value = '';
+  let value = $state('');
   let language = $state('cpp');
 
   let problems = $state<Problem[]>([]);
@@ -19,9 +19,10 @@
 
   async function handleSubmit(e: Event) {
     e.preventDefault();
-    console.log('Selected Problem:', selectedProblem);
-    console.log('Selected Language:', language);
-    console.log('Editor Value:', value);
+    // console.log('Selected Problem:', selectedProblem);
+    // console.log('Selected Language:', language);
+    value = editorInstance;
+    // console.log('Editor Value:', value);
     if (!selectedProblem || !language || !value) {
       alert('Please select a problem, language, and enter code.');
       return;
@@ -29,9 +30,11 @@
     try {
       value = editorInstance
       console.log('Submitting with Value:', value);
-      // Get CSRF token from cookie
+
+      //get the auth cookie token thingy so the post request gooes through
       const match = document.cookie.match(/csrftoken=([^;]+)/);
       const csrfToken = match ? match[1] : '';
+      //pos request
       const res = await fetch('http://localhost:3000/status/process_submit/', {
         method: 'POST',
         headers: {
@@ -45,15 +48,17 @@
           code: value,
         }),
       });
+      //sucessful post -> submissions
       if (res.redirected) {
-        window.location.href = res.url;
+        window.location.href = '/submissions';
         return;
       }
+      //unsucessful post -> alert
       if (!res.ok) {
         const text = await res.text();
         alert('Submission failed: ' + text);
       } else {
-        alert('Submitted!');
+        window.location.href = '/submissions';
       }
     } catch (err) {
       alert('Error submitting: ' + err);

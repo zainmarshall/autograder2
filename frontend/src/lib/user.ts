@@ -43,8 +43,12 @@ export const userStore = {
 				method: 'POST',
 				credentials: 'include'
 			});
-			user.set(null);
-			window.location.href = '/';
+			if (response.ok) {
+				user.set(null);
+				window.location.href = '/';
+			} else {
+				console.error('Logout failed:', response.status);
+			}
 		} catch (error) {
 			console.error('Failed to logout:', error);
 		}
