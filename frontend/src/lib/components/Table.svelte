@@ -40,7 +40,7 @@
 			<tr>
 				{#each headers as header}
 					<th
-						class="py-3 px-4 bg-indigo-800 font-semibold text-center border-b border-indigo-700 cursor-pointer select-none"
+						class="py-3 px-4 bg-indigo-800 font-semibold text-center border-b border-indigo-700 cursor-pointer select-none group"
 						onclick={() => toggleSort(header.field)}
 					>
 						<div class="flex items-center justify-center gap-1">
@@ -48,22 +48,27 @@
 							{#if sortField === header.field}
 								{#if sortAsc}
 									<!-- Up chevron -->
-									<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:opacity-80 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/>
 									</svg>
 								{:else}
 									<!-- Down chevron -->
-									<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+									<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 group-hover:opacity-80 transition-opacity" fill="none" viewBox="0 0 24 24" stroke="currentColor">
 										<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
 									</svg>
 								{/if}
 							{:else}
 								<!-- Neutral chevron -->
-								<svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 opacity-50" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+								<svg
+									xmlns="http://www.w3.org/2000/svg"
+									class="w-4 h-4 opacity-50 group-hover:opacity-80 transition-opacity"
+									fill="none"
+									viewBox="0 0 24 24"
+									stroke="currentColor"
+								>
 									<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/>
 								</svg>
 							{/if}
-							
 						</div>
 					</th>
 				{/each}

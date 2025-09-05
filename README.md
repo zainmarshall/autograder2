@@ -1,6 +1,6 @@
 ## TJ Computer Team Autograder
 
-# UPDATES By Zain Marshall
+# Pull Request By Zain Marshall
 
 ## Backend
 
@@ -8,6 +8,9 @@ Added JSON endpoints on top of the preexisting endpoints which only output the d
 
 Added documentation for it. If you go to whatever url the backend is running on and then /swagger/ so for example localhost:3000/swagger. 
 
+## Frontend
+
+Replaced the server-side rendered Django templates with Sveltekit. Svelte is a modern reactive JS framework that allows for easily writing reapeatable components. 
 
 
 TJ Computer Team Members: You can find all information about in-houses and the club here: https://activities.tjhsst.edu/ict/.
