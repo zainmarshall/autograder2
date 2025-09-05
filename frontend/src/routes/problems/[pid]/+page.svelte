@@ -36,7 +36,7 @@ Card 5: Samples
 
 <main class="flex flex-col items-center min-h-[70vh] px-2 py-8">
 
-    <!-- Compact Title/Header, no card, more horizontal -->
+    <!-- header-->
     <div class="w-full max-w-3xl flex flex-col sm:flex-row items-start justify-between mb-6 px-2">
         <div class="flex-1 min-w-0">
             <h2 class="text-2xl sm:text-3xl font-bold text-zinc-900 dark:text-zinc-100 leading-tight">{problem?.name}</h2>
@@ -54,7 +54,7 @@ Card 5: Samples
         </div>
     </div>
 
-    <!-- Problem Content, Codeforces-style -->
+    <!-- contents -->
     <div class="w-full max-w-3xl text-left bg-transparent">
         <!-- Statement -->
         <section class="mb-8">

@@ -31,6 +31,18 @@
         };
         return map[division] ?? '';
     }
+      function getBorderColor(division: string): string {
+        const colors: Record<string, string> = {
+            'Bronze': '#CD7F32',
+            'Silver': '#C0C0C0',
+            'Gold': '#FFD700',
+            'Platinum': '#E8F1FF',
+            'Not Participated': '#6B7280',
+            '': '#6B7280',
+        };
+        return colors[division] || '#6B7280';
+    }
+
 
     $effect(() => {
         (async () => {
@@ -146,7 +158,8 @@
                     <img
                         src={cfAvatar}
                         alt="Codeforces Avatar"
-                        class="w-full h-full object-cover rounded-full border-2 border-white"
+                        class="w-full h-full object-cover rounded-full border-4"
+                        style="border-color: {getBorderColor(user?.usaco_division || '')};"
                         onerror={(e) => {
                             console.log('Image load error:', e);
                             const target = e.target as HTMLImageElement | null;

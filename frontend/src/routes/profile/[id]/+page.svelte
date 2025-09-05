@@ -76,24 +76,13 @@
             'Bronze': '#CD7F32',
             'Silver': '#C0C0C0',
             'Gold': '#FFD700',
-            'Platinum': '#E5E4E2',
+            'Platinum': '#E8F1FF',
             'Not Participated': '#6B7280',
             '': '#6B7280',
         };
         return colors[division] || '#6B7280';
     }
 
-    function getPatternId(division: string): string {
-        const ids: Record<string, string> = {
-            'Bronze': 'bronze-pattern',
-            'Silver': 'silver-pattern',
-            'Gold': 'gold-pattern',
-            'Platinum': 'platinum-pattern',
-            'Not Participated': 'default-pattern',
-            '': 'default-pattern',
-        };
-        return ids[division] || 'default-pattern';
-    }
 </script>
 
 {#if !$isAuthenticated}
@@ -102,27 +91,6 @@
     </div>
 {:else}
     <main class="relative flex flex-col items-center justify-center min-h-[70vh] px-4">
-        <svg class="absolute inset-0 w-full h-full -z-10" viewBox="0 0 100 100" preserveAspectRatio="none">
-            <defs>
-                <pattern id="bronze-pattern" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <line x1="0" y1="0" x2="10" y2="10" stroke="#CD7F32" stroke-width="1"/>
-                </pattern>
-                <pattern id="silver-pattern" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <line x1="0" y1="5" x2="10" y2="5" stroke="#C0C0C0" stroke-width="1"/>
-                </pattern>
-                <pattern id="gold-pattern" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <rect x="0" y="0" width="5" height="5" fill="#FFD700"/>
-                    <rect x="5" y="5" width="5" height="5" fill="#FFD700"/>
-                </pattern>
-                <pattern id="platinum-pattern" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <polygon points="5,0 10,5 5,10 0,5" fill="#E5E4E2"/>
-                </pattern>
-                <pattern id="default-pattern" patternUnits="userSpaceOnUse" width="10" height="10">
-                    <circle cx="5" cy="5" r="1" fill="#6B7280"/>
-                </pattern>
-            </defs>
-            <rect x="0" y="0" width="100" height="100" rx="16" ry="16" fill="none" stroke="url(#{getPatternId(user?.usaco_division || '')})" stroke-width="4"/>
-        </svg>
         <div class="w-full max-w-xl bg-white/80 dark:bg-zinc-900/90 shadow-xl rounded-2xl p-8 flex flex-col items-center">
             <div class="w-42 h-42 rounded-full bg-gradient-to-br from-indigo-400 to-blue-600 flex items-center justify-center mb-4 shadow-md overflow-hidden">
                 {#if cfAvatar}
