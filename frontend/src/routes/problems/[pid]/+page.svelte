@@ -3,6 +3,9 @@
     import { onMount } from 'svelte';
     import { page } from '$app/stores';
     import type { Problem } from '$lib/api.ts';
+    import MathJax from '$lib/components/MathJax.svelte';
+    import MathJaxLong from '$lib/components/MathJaxLong.svelte';
+
 
     let problem = $state<Problem | null>(null);
     let error = $state<string | null>(null);
@@ -12,6 +15,9 @@
         try {
             const pid = $page.params.pid;
             problem = await api.fetchProblem(Number(pid));
+            // Debug: log the statement
+            console.log('Problem statement:', problem?.statement);
+            // After problem loads, re-typeset MathJax
         } catch (err) {
             error = String(err);
         } finally {
@@ -59,25 +65,33 @@ Card 5: Samples
         <!-- Statement -->
         <section class="mb-8">
             <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Statement</h3>
-            <div class="prose max-w-none text-base text-white">{problem?.statement}</div>
+            <div class="prose max-w-none text-base text-white">
+                <MathJaxLong text={problem?.statement ?? ''} />
+            </div>
         </section>
 
         <!-- Input -->
         <section class="mb-8">
             <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Input</h3>
-            <div class="prose max-w-none text-base text-white">{problem?.inputtxt}</div>
+            <div class="prose max-w-none text-base text-white">
+                <MathJaxLong text={problem?.inputtxt ?? ''} />
+            </div>
         </section>
 
         <!-- Output -->
         <section class="mb-8">
             <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Output</h3>
-            <div class="prose max-w-none text-base text-white">{problem?.outputtxt}</div>
+            <div class="prose max-w-none text-base text-white">
+                <MathJaxLong text={problem?.outputtxt ?? ''} />
+            </div>
         </section>
 
         <!-- Samples -->
         <section class="mb-8">
             <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Samples</h3>
-            <div class="prose max-w-none text-base text-white">{problem?.samples}</div>
+            <div class="prose max-w-none text-base text-white">
+                <MathJaxLong text={problem?.samples ?? ''} />
+            </div>
         </section>
     </div>
 
