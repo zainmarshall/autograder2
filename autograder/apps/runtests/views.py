@@ -98,11 +98,10 @@ def submission_view(request, id):
     if submission.usr == request.user or request.user.is_staff:
         context = {
             "admin": request.user.is_staff,
-            "submission": submission,
-            "insight": submission.insight,
+            "submission": submission
         }
-        if submission.insight and submission.insight.startswith("Viewing as admin"):
-            context["insight"] = "You cannot view feedback (not a sample test)"
+        if request.user.is_staff:
+            context["insight"] = submission.insight
 
         return render(request, "runtests/submission.html", context)
 
