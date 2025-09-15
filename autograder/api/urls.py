@@ -1,4 +1,6 @@
+
 from django.urls import path
+from django.http import JsonResponse
 from .problems.list import ProblemListAPI
 from .problems.detail import ProblemDetailAPI
 from .rankings.list import RankingsAPI
@@ -7,7 +9,26 @@ from .contests.standings import ContestStandingsAPI
 from .submissions.list import SubmissionListAPI
 from .user.profile import UserProfileAPI, UserPublicProfileAPI
 
+
+# Root API documentation view
+def RootAPIDocumentation(request):
+    return JsonResponse({
+        "message": "Welcome to the API root.",
+        "endpoints": [
+            "/problems/",
+            "/problems/<int:pid>/",
+            "/rankings/<int:season>/",
+            "/contests/",
+            "/contests/<int:cid>/",
+            "/contests/<int:cid>/standings/",
+            "/submissions/",
+            "/user/",
+            "/user/<str:uid>/"
+        ]
+    })
+
 urlpatterns = [
+    path("", RootAPIDocumentation, name="api-root"),
     path("problems/", ProblemListAPI.as_view(), name="api_problem_list"),
     path("problems/<int:pid>/", ProblemDetailAPI.as_view(), name="api_problem_detail"),
     path("rankings/<int:season>/", RankingsAPI.as_view(), name="api_rankings"),

@@ -16,15 +16,20 @@ class RankingsAPI(APIView):
         serializer = RankingSerializer(users, many=True)
         rankings = []
         for r in serializer.data:
-            if r["usaco_rating"] > 800 or r["cf_rating"] > 0 or r["inhouse"] > 0:
-                rankings.append({
-                    "name": r["display_name"],
-                    "username": r["username"],
-                    "usaco": r["usaco_rating"],
-                    "cf": r["cf_rating"],
-                    "inhouse": float(r["inhouse"]),
-                    "index": float(r["index"]),
-                })
+            usaco_rating = int(r.get("usaco_rating", 0) or 0)
+            cf_rating = int(r.get("cf_rating", 0) or 0)
+            inhouse = float(r.get("inhouse", 0) or 0)
+            index = float(r.get("index", 0) or 0)
+            
+            rankings.append({
+                "name": r["display_name"],
+                "username": r["username"],
+                "usaco": usaco_rating,
+                "cf": cf_rating,
+                "inhouse": inhouse,
+                "index": index,
+            })
+        
         rankings.sort(key=lambda x: x["index"], reverse=True)
         for i, r in enumerate(rankings):
             r["rank"] = i + 1
