@@ -198,6 +198,22 @@ export const api = {
         }));
     },
 
+    async fetchContestCID(cid: number): Promise<Contest> {
+        const res = await fetch(`http://localhost:3000/api/contests/${cid}/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch contest');
+        const data = await res.json();
+        return {
+            id: Number(data.id),
+            name: String(data.name),
+            rated: Boolean(data.rated),
+            season: Number(data.season),
+            tjioi: Boolean(data.tjioi),
+            start: new Date(data.start),
+            end: new Date(data.end),
+            editorial: String(data.editorial),
+        };
+    },
+
     // return a single problem
     async fetchProblem(pid: number): Promise<Problem> {
         const res = await fetch(`http://localhost:3000/api/problems/${pid}/`, { credentials: 'include' });

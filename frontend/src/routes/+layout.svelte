@@ -7,6 +7,9 @@
 	import Navbar from '$lib/components/Navbar.svelte';
 	import ContestNavbar from '$lib/components/ContestNavbar.svelte';
 	import { page } from '$app/stores';
+	import type { Contest } from '$lib/api';
+	import * as api from '$lib/api';
+	
 
 
 	let particlesConfig = {
@@ -17,10 +20,7 @@
 			number: { value: 80 }
 		}
 	};
-
-	let {children} = $props();
-
-
+	
 
 	onMount(() => {
 		userStore.fetchUser();
@@ -44,5 +44,5 @@
 	{/if}
 
 	<!-- Render the page itself-->
-	<main>{@render children?.()}</main>
+	<main><slot /></main>
 </div>
