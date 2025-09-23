@@ -22,8 +22,8 @@ uv run manage.py migrate
 if [ ! -f "$SCRIPT_DIR/$FIRST_RUN_LOG" ]; then
     echo "Creating filler data..."
     mkdir -p /home/tjctgrader/autograder/media/problem_testcases
-    cp /home/tjctgrader/autograder/dev/example_testcases.zip /home/tjctgrader/autograder/media/problem_testcases
-    cp "$SCRIPT_DIR/filler_data.py" $PROJECT_ROOT
+    cp /home/tjctgrader/autograder/config/example_sols/example_testcases.zip /home/tjctgrader/autograder/media/problem_testcases
+    cp "$SCRIPT_DIR/scripts/filler_data.py" $PROJECT_ROOT
     uv run filler_data.py
     rm -rf filler_data.py
     DJANGO_SUPERUSER_PASSWORD=123 uv run manage.py createsuperuser --noinput --username=admin --email=admin@admin.com

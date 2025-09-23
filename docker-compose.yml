@@ -25,12 +25,12 @@ services:
       image: autograder
       build:
         context: .
-        dockerfile: dev/Dockerfile
+        dockerfile: config/Dockerfile
       entrypoint:
         [
           "/bin/bash",
           "-c",
-          "cd dev && \
+          "cd config && \
           /bin/bash entrypoint.sh"
         ]
       ports:
