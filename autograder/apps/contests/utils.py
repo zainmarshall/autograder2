@@ -26,8 +26,6 @@ def get_standings(cid):
         for u in users
     }
 
-    logger.error(stats)
-
     subs = (
         Submission.objects.filter(contest=contest, timestamp__range=(start, end))
         .order_by("timestamp")
@@ -39,10 +37,10 @@ def get_standings(cid):
         prob_idx = pid_index.get(s.problem.id)
 
         if user_data is None or prob_idx is None:
-            logger.error("hi im here")
             continue
 
         if s.verdict in ("Accepted", "AC"):
+            print(s.id)
             if user_data["problems"][prob_idx] == 0:
                 user_data["solved"] += problems[prob_idx].points
                 minutes = int((s.timestamp - start).total_seconds() / 60)
