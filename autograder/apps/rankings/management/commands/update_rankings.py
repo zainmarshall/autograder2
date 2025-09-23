@@ -81,6 +81,9 @@ class Command(BaseCommand):
             vals.sort()
 
             rankings[r]["index"] = Decimal("0.2") * Decimal(str(vals[0])) + Decimal("0.35") * Decimal(str(vals[1])) + Decimal("0.45") * Decimal(str(vals[2]))
+        
+        self.stdout.write(self.style.SUCCESS(rankings))
+        
         rankings = [
             elem
             for elem in rankings
@@ -95,7 +98,6 @@ class Command(BaseCommand):
             else:
                 rankings[i]["rank"] = i + 1
 
-        self.stdout.write(self.style.SUCCESS(rankings))
 
         for r in rankings:
             user = get_object_or_404(GraderUser, id=r["id"])
