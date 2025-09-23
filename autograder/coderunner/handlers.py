@@ -142,7 +142,6 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     except Exception:
         pass
 
-    logger.info("I got here")
 
     return {
         "verdict": verdict_overall,
