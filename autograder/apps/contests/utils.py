@@ -46,11 +46,9 @@ def get_standings(cid):
             if user_data["problems"][prob_idx] < 0:
                 user_data["solved"] += problems[prob_idx].points
                 minutes = int((s.timestamp - start).total_seconds() / 60)
-                # Add time and wrong-submission penalty
-                user_data["penalty"] += minutes - 10 * abs(
-                    min(0, user_data["problems"][prob_idx])
-                )
+
                 user_data["problems"][prob_idx] = abs(user_data["problems"][prob_idx])
+                user_data["penalty"] += minutes + 5 * user_data["problems"][prob_idx]
                 
 
     logger.error(stats)
