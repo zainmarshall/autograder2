@@ -9,6 +9,8 @@ logger = logging.getLogger(__name__)
 
 env_copy = os.environ.copy()
 
+env_copy["PATH"] = "/usr/bin:" + env_copy["PATH"] 
+
 def run_code_handler(tl, ml, lang, pid, sid, code):
     if lang not in ["python", "cpp", "java"]:
         return {"error": "Unacceptable code language"}
