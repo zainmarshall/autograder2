@@ -14,7 +14,7 @@ def get_standings(cid):
     pid_index = {p.id: i for i, p in enumerate(problems)}
     start, end = contest.start, contest.end
 
-    users = GraderUser.objects.all()
+    users = GraderUser.objects.filter(is_staff=False)
     stats = {
         u.id: {
             "id": u.id,
