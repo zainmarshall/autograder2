@@ -96,6 +96,8 @@ class Command(BaseCommand):
             else:
                 rankings[i]["rank"] = i + 1
 
+        self.stdout.write(self.style.SUCCESS(rankings))
+
         for r in rankings:
             user = get_object_or_404(GraderUser, id=r["id"])
             if abs(user.index - Decimal(str(r["index"]))) > Decimal("0.001"):
