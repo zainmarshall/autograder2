@@ -43,7 +43,7 @@ def get_standings(cid):
             user_data["problems"][prob_idx] -= 1
 
         if s.verdict in ("Accepted", "AC"):
-            if user_data["problems"][prob_idx] == 0:
+            if user_data["problems"][prob_idx] < 0:
                 user_data["solved"] += problems[prob_idx].points
                 minutes = int((s.timestamp - start).total_seconds() / 60)
                 # Add time and wrong-submission penalty
