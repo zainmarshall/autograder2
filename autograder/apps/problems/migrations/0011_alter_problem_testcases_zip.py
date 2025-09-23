@@ -4,15 +4,14 @@ from django.db import migrations, models
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('problems', '0010_remove_problem_solution'),
+        ("problems", "0010_remove_problem_solution"),
     ]
 
     operations = [
         migrations.AlterField(
-            model_name='problem',
-            name='testcases_zip',
-            field=models.FileField(blank=True, upload_to='problem_testcases/'),
+            model_name="problem",
+            name="testcases_zip",
+            field=models.FileField(blank=True, upload_to="problem_testcases/"),
         ),
     ]

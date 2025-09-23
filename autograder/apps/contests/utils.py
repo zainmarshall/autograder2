@@ -14,7 +14,7 @@ def get_standings(cid):
     pid_index = {p.id: i for i, p in enumerate(problems)}
     start, end = contest.start, contest.end
 
-    users = GraderUser.objects.all()
+    users = GraderUser.objects.filter(is_staff=False)
     stats = {
         u.id: {
             "id": u.id,
@@ -39,19 +39,19 @@ def get_standings(cid):
         if user_data is None or prob_idx is None:
             continue
 
+        if user_data["problems"][prob_idx] <= 0:
+            user_data["problems"][prob_idx] -= 1
+
         if s.verdict in ("Accepted", "AC"):
-            if user_data["problems"][prob_idx] == 0:
+            if user_data["problems"][prob_idx] < 0:
                 user_data["solved"] += problems[prob_idx].points
                 minutes = int((s.timestamp - start).total_seconds() / 60)
-                # Add time and wrong-submission penalty
-                user_data["penalty"] += minutes - 10 * abs(
-                    min(0, user_data["problems"][prob_idx])
-                )
-                user_data["problems"][prob_idx] = 1
-        else:
-            if user_data["problems"][prob_idx] == 0:
-                user_data["problems"][prob_idx] -= 1
 
+                user_data["problems"][prob_idx] = abs(user_data["problems"][prob_idx])
+                user_data["penalty"] += minutes + 5 * user_data["problems"][prob_idx]
+                
+
+    logger.error(stats)
     # Filter and sort
     standings = [
         u for u in stats.values() if u["solved"] > 0 and u["penalty"] >= 0 and u["id"]

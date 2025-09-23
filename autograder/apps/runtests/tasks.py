@@ -1,13 +1,10 @@
 import logging
-import requests
 from typing import Dict, Any
-from urllib.parse import urlencode
-
 from celery import shared_task
-from django.conf import settings
 from django.db import transaction
 
 from .models import Submission
+from ...coderunner.handlers import run_code_handler
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +25,14 @@ def _mark_submission_as_error(submission_id: int, error_message: str):
         submission = Submission.objects.select_for_update().get(id=submission_id)
         submission.verdict = "Internal Server Error"
         submission.insight = error_message
+        submission.runtime = -1
+        submission.memory = -1
         submission.save()
     except Submission.DoesNotExist:
         logger.error(f"Could not find submission {submission_id} to mark as an error.")
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60, queue='coderunner_queue')
+@shared_task(bind=True, max_retries=3, default_retry_delay=60, queue="coderunner_queue")
 def grade_submission_task(self, submission_id: int):
     try:
         submission = Submission.objects.select_related("problem").get(id=submission_id)
@@ -47,46 +46,18 @@ def grade_submission_task(self, submission_id: int):
         logger.error(f"Submission {submission_id} not found. Task will not be retried.")
         return
 
-    coderunner_url = settings.CODERUNNER_URL + "run"
-    payload = {
-        "subid": str(submission.id),
-        "lang": submission.language,
-        "problemid": str(submission.problem.id),
-        "tl_string": str(submission.problem.tl),
-        "ml_string": str(submission.problem.ml),
-        "code": submission.code,
-    }
-
-    response = None
-    try:
-        response = requests.post(
-            coderunner_url,
-            data=urlencode(payload),
-            headers={"Content-Type": "application/x-www-form-urlencoded"},
-        )
-        response.raise_for_status()
-
-        _update_submission_from_result(submission_id, response.json())
-
-    except requests.exceptions.RequestException as exc:
-        if response is not None and response.status_code == 400:
-            try:
-                error_message = response.json().get("error", response.text)
-            except Exception:
-                error_message = response.text
-            logger.warning(
-            f"Bad request for submission {submission_id}: {error_message}"
-            )
-            _mark_submission_as_error(submission_id, error_message)
-        else:
-            logger.warning(f"Network error for submission {submission_id}: {exc}. Retrying...")
-            _mark_submission_as_error(submission_id, "Could not connect to the grading service.")
-        raise self.retry(exc=exc)
-
-    except Exception as exc:
+    response = run_code_handler(
+        submission.problem.tl,
+        submission.problem.ml,
+        submission.language,
+        submission.problem.id,
+        submission.id,
+        submission.code,
+    )
+    if "error" in response:
         logger.exception(
-            f"An unexpected error occurred for submission {submission_id}."
+            f"An error occured while processing submission {submission.id}"
         )
-        _mark_submission_as_error(
-            submission_id, f"An unexpected error occurred: {str(exc)}"
-        )
+        _mark_submission_as_error(submission_id, response["error"])
+    else:
+        _update_submission_from_result(submission_id, response)

@@ -24,7 +24,7 @@ def contests_view(request):
 def contest_view(request, cid):
     contest = get_object_or_404(Contest, pk=cid)
 
-    problems = list(Problem.objects.filter(contest=contest).order_by('id'))
+    problems = list(Problem.objects.filter(contest=contest).order_by("id"))
     if problems is None:
         problems = []
 
@@ -95,6 +95,8 @@ def contest_standings_view(request, cid):
     standings = get_standings(cid)
     problems = Problem.objects.filter(contest_id=cid)
     contest = get_object_or_404(Contest, id=cid)
+
+    logger.error(standings)
 
     context = {
         "title": standings["title"],

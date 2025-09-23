@@ -4,14 +4,13 @@ from django.db import migrations
 
 
 class Migration(migrations.Migration):
-
     dependencies = [
-        ('runtests', '0009_alter_submission_language'),
+        ("runtests", "0009_alter_submission_language"),
     ]
 
     operations = [
         migrations.RemoveField(
-            model_name='submission',
-            name='memory',
+            model_name="submission",
+            name="memory",
         ),
     ]

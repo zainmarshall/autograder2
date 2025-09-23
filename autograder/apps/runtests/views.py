@@ -96,10 +96,7 @@ def submission_view(request, id):
     submission = get_object_or_404(Submission, id=id)
 
     if submission.usr == request.user or request.user.is_staff:
-        context = {
-            "admin": request.user.is_staff,
-            "submission": submission
-        }
+        context = {"admin": request.user.is_staff, "submission": submission}
         if request.user.is_staff:
             context["insight"] = submission.insight
 
