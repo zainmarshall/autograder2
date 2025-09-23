@@ -40,7 +40,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
         if lang == "cpp":
             output = subprocess.run(
                 [
-                    "g++",
+                    "/usr/bin/g++",
                     "-std=c++17",
                     "-O2",
                     "-o",
@@ -52,7 +52,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
             sol_path = subdir / "usercode"
             sol_filename = "usercode"
         elif lang == "java":
-            output = subprocess.run(["javac", str(sol_path)], capture_output=True)
+            output = subprocess.run(["/usr/bin/javac", str(sol_path)], capture_output=True)
             sol_path = subdir / "usercode"
             sol_filename = "usercode"
 
