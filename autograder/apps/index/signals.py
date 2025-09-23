@@ -30,7 +30,7 @@ def update_rating(sender, instance, created, **kwargs):
     vals = [new_usaco_rating, new_cf_rating, instance.inhouse]
     vals.sort()
     new_index = (
-        Decimal("0.2") * vals[0] + Decimal("0.35") * vals[1] + Decimal("0.45") * vals[2]
+        Decimal("0.2") * Decimal(str(vals[0])) + Decimal("0.35") * Decimal(str(vals[1])) + Decimal("0.45") * Decimal(str(vals[2]))
     )
 
     fields_to_update = []
