@@ -24,7 +24,7 @@ services:
       container_name: autograder
       image: autograder
       build:
-        context: autograder2/
+        context: .
         dockerfile: dev/Dockerfile
       entrypoint:
         [
@@ -38,8 +38,9 @@ services:
       networks:
           - main_network
       volumes:
-          - ./autograder2/:/home/tjctgrader/autograder
+          - ./:/home/tjctgrader/autograder
           - /home/tjctgrader/autograder/.ruff_cache
+          - /home/tjctgrader/autograder/nsjail
           - problems_data:/home/tjctgrader/problems
       depends_on:
         - postgres
@@ -58,7 +59,7 @@ services:
             - autograder
             - redis
         volumes:
-          - ./autograder2/:/home/tjctgrader/autograder
+          - ./:/home/tjctgrader/autograder
           - /home/tjctgrader/autograder/.ruff_cache
           - problems_data:/home/tjctgrader/problems
   celery_coderunner:
@@ -76,7 +77,7 @@ services:
             - autograder
             - redis
         volumes:
-          - ./autograder2/:/home/tjctgrader/autograder
+          - ./:/home/tjctgrader/autograder
           - /home/tjctgrader/autograder/.ruff_cache
           - problems_data:/home/tjctgrader/problems
         privileged: true
