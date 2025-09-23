@@ -29,7 +29,7 @@ def run_code(
     ]
 
     cfg = (
-        "/home/tjctgrader/autograder/coderunner/"
+        "/home/tjctgrader/autograder/autograder/coderunner/"
         + {
             ("cpp", False): "nsjail_configs/executable.cfg",
             ("cpp", True): "nsjail_configs/executablechecker.cfg",
