@@ -19,7 +19,7 @@ def run_code(
 ) -> Tuple[str, str, int]:
     
     if not settings.DEBUG:
-        cmd = ["sudo", "/usr/bin/nsjail"]
+        cmd = ["/usr/bin/sudo", "/usr/bin/nsjail"]
     else:
         cmd = ["/usr/bin/nsjail"]
 
