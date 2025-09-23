@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+env_copy = os.environ.copy()
 
 def run_code_handler(tl, ml, lang, pid, sid, code):
     if lang not in ["python", "cpp", "java"]:
@@ -47,12 +48,13 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
                     str(subdir / "usercode"),
                     str(sol_path),
                 ],
+                env=env_copy,
                 capture_output=True,
             )
             sol_path = subdir / "usercode"
             sol_filename = "usercode"
         elif lang == "java":
-            output = subprocess.run(["/usr/bin/javac", str(sol_path)], capture_output=True)
+            output = subprocess.run(["/usr/bin/javac", str(sol_path)], env=env_copy, capture_output=True)
             sol_path = subdir / "usercode"
             sol_filename = "usercode"
 
