@@ -9,5 +9,3 @@ else
     git submodule update --init --recursive
     sudo docker compose build  && sudo docker compose up
 fi
-
-

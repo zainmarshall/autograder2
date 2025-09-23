@@ -7,6 +7,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
+
 def run_code_handler(tl, ml, lang, pid, sid, code):
     if lang not in ["python", "cpp", "java"]:
         return {"error": "Unacceptable code language"}
@@ -38,7 +39,14 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     if lang in ["cpp", "java"]:
         if lang == "cpp":
             output = subprocess.run(
-                ["g++", "-std=c++17", "-O2", "-o", str(subdir / "usercode"), str(sol_path)],
+                [
+                    "g++",
+                    "-std=c++17",
+                    "-O2",
+                    "-o",
+                    str(subdir / "usercode"),
+                    str(sol_path),
+                ],
                 capture_output=True,
             )
             sol_path = subdir / "usercode"
@@ -75,7 +83,16 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
 
         try:
             output_text, insight, time_used = run_code(
-                subdir, file_path, lang, sol_path, sol_filename, tl, ml, False, None, None
+                subdir,
+                file_path,
+                lang,
+                sol_path,
+                sol_filename,
+                tl,
+                ml,
+                False,
+                None,
+                None,
             )
         except Exception as e:
             verdict_overall = "Grader Error"
@@ -96,8 +113,16 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
         # run checker
         try:
             check_out, _, _ = run_code(
-                subdir, None, "python", checker_path, "default_checker.py",
-                20000, 1024, True, test_name, pid
+                subdir,
+                None,
+                "python",
+                checker_path,
+                "default_checker.py",
+                20000,
+                1024,
+                True,
+                test_name,
+                pid,
             )
         except Exception as e:
             verdict_overall = f"Checker Error: {e}"

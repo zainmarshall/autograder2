@@ -45,7 +45,7 @@ def create_contests():
             tjioi=(False if i < 5 else True),
             start=start_time,
             end=end_time,
-            editorial="editorial goes here"
+            editorial="editorial goes here",
         )
         contest.save()
         contests.append(contest)

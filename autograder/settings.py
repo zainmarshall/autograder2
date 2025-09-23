@@ -27,7 +27,7 @@ SECRET_KEY = config("SECRET_KEY")
 
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = config("DEBUG") == 'True'
+DEBUG = config("DEBUG") == "True"
 
 ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1"]
 
@@ -223,14 +223,11 @@ CELERY_TASK_SERIALIZER = "pickle"
 CELERY_TASK_TIME_LIMIT = 30 * 60
 
 CELERY_QUEUES = {
-    'default': {},
-    'coderunner_queue': {
-        'exchange': 'coderunner',
-        'routing_key': 'coderunner'
-    },
+    "default": {},
+    "coderunner_queue": {"exchange": "coderunner", "routing_key": "coderunner"},
 }
 
-CELERY_TASK_DEFAULT_QUEUE = 'default'
+CELERY_TASK_DEFAULT_QUEUE = "default"
 
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
@@ -240,4 +237,4 @@ if not DEBUG:
     SESSION_COOKIE_SECURE = True
     CSRF_COOKIE_SECURE = True
     SECURE_SSL_REDIRECT = True
-    SECURE_PROXY_SSL_HEADER = ('HTTP_X_FORWARDED_PROTO', 'https')
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")

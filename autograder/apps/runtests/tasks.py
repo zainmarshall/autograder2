@@ -32,7 +32,7 @@ def _mark_submission_as_error(submission_id: int, error_message: str):
         logger.error(f"Could not find submission {submission_id} to mark as an error.")
 
 
-@shared_task(bind=True, max_retries=3, default_retry_delay=60, queue='coderunner_queue')
+@shared_task(bind=True, max_retries=3, default_retry_delay=60, queue="coderunner_queue")
 def grade_submission_task(self, submission_id: int):
     try:
         submission = Submission.objects.select_related("problem").get(id=submission_id)
@@ -46,9 +46,18 @@ def grade_submission_task(self, submission_id: int):
         logger.error(f"Submission {submission_id} not found. Task will not be retried.")
         return
 
-    response = run_code_handler(submission.problem.tl, submission.problem.ml, submission.language, submission.problem.id, submission.id, submission.code)
+    response = run_code_handler(
+        submission.problem.tl,
+        submission.problem.ml,
+        submission.language,
+        submission.problem.id,
+        submission.id,
+        submission.code,
+    )
     if "error" in response:
-        logger.exception(f"An error occured while processing submission {submission.id}")
+        logger.exception(
+            f"An error occured while processing submission {submission.id}"
+        )
         _mark_submission_as_error(submission_id, response["error"])
     else:
         _update_submission_from_result(submission_id, response)

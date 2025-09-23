@@ -8,10 +8,7 @@ app = Celery("proj")
 
 app.config_from_object("django.conf:settings", namespace="CELERY")
 
-app.conf.update(
-    task_concurrency=4,
-    worker_prefetch_multiplier=1
-)
+app.conf.update(task_concurrency=4, worker_prefetch_multiplier=1)
 
 app.autodiscover_tasks()
 

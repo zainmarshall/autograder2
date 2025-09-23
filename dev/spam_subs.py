@@ -11,11 +11,8 @@ PASSWORD = "123"
 with open("example_sol.java", "r") as f:
     code_contents = f.read()
 
-post_data = {
-    "problemid": "1",
-    "lang": "java",
-    "code": code_contents
-}
+post_data = {"problemid": "1", "lang": "java", "code": code_contents}
+
 
 def authenticate_and_send_requests(username, password, target_url, data, num_requests):
     with requests.Session() as s:
@@ -29,14 +26,14 @@ def authenticate_and_send_requests(username, password, target_url, data, num_req
             print(f"Failed to fetch login page: {e}")
             return
 
-        soup = BeautifulSoup(get_response.text, 'html.parser')
-        login_csrf_token = soup.find('input', {'name': 'csrfmiddlewaretoken'})['value']
+        soup = BeautifulSoup(get_response.text, "html.parser")
+        login_csrf_token = soup.find("input", {"name": "csrfmiddlewaretoken"})["value"]
 
         login_payload = {
             "username": username,
             "password": password,
             "csrfmiddlewaretoken": login_csrf_token,
-            "next": ""
+            "next": "",
         }
 
         try:
@@ -51,13 +48,15 @@ def authenticate_and_send_requests(username, password, target_url, data, num_req
             return
 
         try:
-            csrf_token_for_posts = s.cookies['csrftoken']
-            data['csrfmiddlewaretoken'] = csrf_token_for_posts
+            csrf_token_for_posts = s.cookies["csrftoken"]
+            data["csrfmiddlewaretoken"] = csrf_token_for_posts
         except KeyError:
             print("Failed to find 'csrftoken' in session cookies after login.")
             return
 
-        print(f"\nStarting to send {num_requests} authenticated requests to {target_url}")
+        print(
+            f"\nStarting to send {num_requests} authenticated requests to {target_url}"
+        )
         for i in range(num_requests):
             try:
                 response = s.post(target_url, data=data)
@@ -69,5 +68,8 @@ def authenticate_and_send_requests(username, password, target_url, data, num_req
 
     print("\nFinished sending all requests.")
 
+
 if __name__ == "__main__":
-    authenticate_and_send_requests(USERNAME, PASSWORD, TARGET_URL, post_data, REQUESTS_TO_SEND)
+    authenticate_and_send_requests(
+        USERNAME, PASSWORD, TARGET_URL, post_data, REQUESTS_TO_SEND
+    )

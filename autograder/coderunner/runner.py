@@ -3,6 +3,7 @@ import time
 from pathlib import Path
 from typing import Optional, Tuple
 
+
 def run_code(
     subdir: Path,
     input_path: Optional[Path],
@@ -15,24 +16,29 @@ def run_code(
     checker_testid: Optional[str],
     checker_problemid: Optional[str],
 ) -> Tuple[str, str, int]:
-    
     cmd = ["nsjail"]
 
     cmd += [
         "--quiet",
-        "--time_limit", str(tl // 1000),
-        "--cgroup_mem_max", str(ml * 1024 * 1024),
-        "--cgroup_pids_max", "10",
+        "--time_limit",
+        str(tl // 1000),
+        "--cgroup_mem_max",
+        str(ml * 1024 * 1024),
+        "--cgroup_pids_max",
+        "10",
     ]
 
-    cfg = "/home/tjctgrader/autograder/autograder/coderunner/" + {
-        ("cpp", False): "nsjail_configs/executable.cfg",
-        ("cpp", True): "nsjail_configs/executablechecker.cfg",
-        ("python", False): "nsjail_configs/python.cfg",
-        ("python", True): "nsjail_configs/pythonchecker.cfg",
-        ("java", False): "nsjail_configs/java.cfg",
-        ("java", True): "nsjail_configs/java.cfg",
-    }[(lang, checker)]
+    cfg = (
+        "/home/tjctgrader/autograder/autograder/coderunner/"
+        + {
+            ("cpp", False): "nsjail_configs/executable.cfg",
+            ("cpp", True): "nsjail_configs/executablechecker.cfg",
+            ("python", False): "nsjail_configs/python.cfg",
+            ("python", True): "nsjail_configs/pythonchecker.cfg",
+            ("java", False): "nsjail_configs/java.cfg",
+            ("java", True): "nsjail_configs/java.cfg",
+        }[(lang, checker)]
+    )
 
     cmd += ["--config", cfg]
 

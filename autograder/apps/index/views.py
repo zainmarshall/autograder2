@@ -53,9 +53,7 @@ def profile_view(request):
 
     cfh = request.user.cf_handle
 
-    context = {
-        "cf_handle": cfh if cfh and len(cfh) > 0 else ""
-    }
+    context = {"cf_handle": cfh if cfh and len(cfh) > 0 else ""}
     return render(request, "index/profile.html", context=context)
 
 

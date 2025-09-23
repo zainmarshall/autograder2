@@ -86,6 +86,8 @@ def add_tests_to_coderunner(pid: int):
     except Problem.DoesNotExist:
         logger.error(f"Problem {pid} not found for test upload.")
     except Exception as e:
-        logger.exception(f"An unexpected error occurred during test upload for {pid}: {e}")
-        
+        logger.exception(
+            f"An unexpected error occurred during test upload for {pid}: {e}"
+        )
+
     logger.info(f"Added tests for problem {pid}")
