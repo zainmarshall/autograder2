@@ -93,8 +93,7 @@ class Command(BaseCommand):
 
         for r in rankings:
             user = get_object_or_404(GraderUser, id=r["id"])
-            if abs(user.index - Decimal(str(r["index"]))) > Decimal("0.001"):
-                RatingChange.objects.create(user=user, rating=r["index"])
+            RatingChange.objects.create(user=user, rating=r["index"])
 
             user.inhouses = r["inhouses"]
             user.inhouse = r["inhouse"]
