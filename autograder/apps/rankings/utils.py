@@ -16,6 +16,7 @@ def get_codeforces_rating(user):
     response = requests.get(url)
 
     if response.status_code != 200:
+        logger.warning(response)
         logger.warning("Failed to connect to Codeforces API.")
         return None
 
