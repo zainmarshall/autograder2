@@ -16,7 +16,7 @@ def run_code(
     checker_testid: Optional[str],
     checker_problemid: Optional[str],
 ) -> Tuple[str, str, int]:
-    cmd = ["nsjail"]
+    cmd = ["/usr/bin/nsjail"]
 
     cmd += [
         "--quiet",
