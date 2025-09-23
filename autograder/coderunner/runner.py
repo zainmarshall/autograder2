@@ -17,7 +17,6 @@ def run_code(
     checker_testid: Optional[str],
     checker_problemid: Optional[str],
 ) -> Tuple[str, str, int]:
-    
     if not settings.DEBUG:
         cmd = ["/usr/bin/sudo", "/usr/bin/nsjail"]
     else:

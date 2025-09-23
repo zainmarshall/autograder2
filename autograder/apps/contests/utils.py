@@ -49,7 +49,6 @@ def get_standings(cid):
 
                 user_data["problems"][prob_idx] = abs(user_data["problems"][prob_idx])
                 user_data["penalty"] += minutes + 5 * user_data["problems"][prob_idx]
-                
 
     # Filter and sort
     standings = [
