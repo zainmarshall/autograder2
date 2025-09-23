@@ -49,7 +49,7 @@ def get_standings(cid):
                 )
                 user_data["problems"][prob_idx] = 1
         else:
-            if user_data["problems"][prob_idx] == 0:
+            if user_data["problems"][prob_idx] != 1:
                 user_data["problems"][prob_idx] -= 1
 
     logger.error(stats)
