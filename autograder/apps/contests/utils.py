@@ -51,7 +51,6 @@ def get_standings(cid):
                 user_data["penalty"] += minutes + 5 * user_data["problems"][prob_idx]
                 
 
-    logger.error(stats)
     # Filter and sort
     standings = [
         u for u in stats.values() if u["solved"] > 0 and u["penalty"] >= 0 and u["id"]
