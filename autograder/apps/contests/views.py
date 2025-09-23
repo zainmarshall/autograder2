@@ -74,20 +74,18 @@ def contest_view(request, cid):
             ordered[pind]["solves"] += 1
             ordered[pind]["users"].append(ind)
 
-    if ordered:
-        context = {
-            "title": contest.name,
-            "problems": ordered,
-            "user": request.user.id,
-            "cid": contest.id,
-            "timeStatus": time_message,
-            "timeType": time_type,
-            "editorial": getattr(contest, "editorial", None),
-            "contest_over": timezone.now() > contest.end,
-        }
-        return render(request, "contest/contest.html", context)
-    else:
-        return redirect("contests:contests")
+    context = {
+        "not_empty": "yes" if ordered else "no",
+        "title": contest.name,
+        "problems": ordered,
+        "user": request.user.id,
+        "cid": contest.id,
+        "timeStatus": time_message,
+        "timeType": time_type,
+        "editorial": getattr(contest, "editorial", None),
+        "contest_over": timezone.now() > contest.end,
+    }
+    return render(request, "contest/contest.html", context)
 
 
 @login_required

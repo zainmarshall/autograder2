@@ -25,8 +25,8 @@
 </div>
 {% endfor %}
 {% endif %}
-
 <div class="main-block">
+    {% if not_empty == "yes" %}
     <table>
     <tr>
         <th>#</th>
@@ -51,6 +51,11 @@
     </tr>
     {% endfor %}
     </table>
+    {% else %}
+    <div class="info">
+        No problems yet!
+    </div>
+    {% endif %}
 </div>
 <div class="main-block small-padding">
     <div class="info">
