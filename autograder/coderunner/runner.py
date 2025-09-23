@@ -2,6 +2,7 @@ import subprocess
 import time
 from pathlib import Path
 from typing import Optional, Tuple
+from django.conf import settings
 
 
 def run_code(
@@ -16,7 +17,11 @@ def run_code(
     checker_testid: Optional[str],
     checker_problemid: Optional[str],
 ) -> Tuple[str, str, int]:
-    cmd = ["/usr/bin/nsjail"]
+    
+    if not settings.DEBUG:
+        cmd = ["sudo", "/usr/bin/nsjail"]
+    else:
+        cmd = ["/usr/bin/nsjail"]
 
     cmd += [
         "--quiet",
