@@ -35,11 +35,11 @@ def get_standings(cid):
     )
 
     for s in subs:
-        logger.error(s.id)
         user_data = stats.get(s.usr_id)
         prob_idx = pid_index.get(s.problem.id)
 
         if user_data is None or prob_idx is None:
+            logger.error("hi im here")
             continue
 
         if s.verdict in ("Accepted", "AC"):
