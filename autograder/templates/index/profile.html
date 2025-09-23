@@ -18,7 +18,7 @@
                 <div class="info-block">
                     <div class="title"><p>Profile</p></div>
                     {% if user.is_staff %}
-                        <a href="{% url 'admin:index' %}">Django Admin</a>
+                        <a href="{% url 'admin:index' %}">Django admin</a>
                     {% endif %}
                     <div class="userinfo">Name: {{ user.display_name }}</div>
                     <div class="userinfo">Username: {{ user.username }}</div>
