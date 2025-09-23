@@ -12,6 +12,7 @@ def get_standings(cid):
 
     problems = list(Problem.objects.filter(contest=contest).order_by("id"))
     pid_index = {p.id: i for i, p in enumerate(problems)}
+    logger.error(pid_index)
     start, end = contest.start, contest.end
 
     users = GraderUser.objects.filter(is_staff=False)
@@ -35,13 +36,14 @@ def get_standings(cid):
     for s in subs:
         user_data = stats.get(s.usr_id)
         prob_idx = pid_index.get(s.problem.id)
+        logger.error(prob_idx)
 
         if user_data is None or prob_idx is None:
             continue
 
         if s.verdict in ("Accepted", "AC"):
-            print(s.id)
             if user_data["problems"][prob_idx] == 0:
+                logger.error(s.id)
                 user_data["solved"] += problems[prob_idx].points
                 minutes = int((s.timestamp - start).total_seconds() / 60)
                 # Add time and wrong-submission penalty
