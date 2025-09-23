@@ -26,6 +26,8 @@ def get_standings(cid):
         for u in users
     }
 
+    logger.error(stats)
+
     subs = (
         Submission.objects.filter(contest=contest, timestamp__range=(start, end))
         .order_by("timestamp")
@@ -33,6 +35,7 @@ def get_standings(cid):
     )
 
     for s in subs:
+        logger.error(s.id)
         user_data = stats.get(s.usr_id)
         prob_idx = pid_index.get(s.problem.id)
 
