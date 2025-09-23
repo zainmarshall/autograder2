@@ -82,8 +82,6 @@ class Command(BaseCommand):
 
             rankings[r]["index"] = Decimal("0.2") * Decimal(str(vals[0])) + Decimal("0.35") * Decimal(str(vals[1])) + Decimal("0.45") * Decimal(str(vals[2]))
         
-        self.stdout.write(self.style.SUCCESS(rankings))
-
         rankings.sort(key=lambda x: x["index"], reverse=True)
 
         for i in range(len(rankings)):
