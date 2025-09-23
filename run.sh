@@ -7,7 +7,7 @@ if [ "$1" == "reset" ]; then
     rm -rf dev/.first_log
 else
     git submodule update --init --recursive
-    sudo docker compose build  && sudo docker compose up --remove-orphans
+    sudo docker compose build  && sudo docker compose up
 fi
 
 
