@@ -96,6 +96,8 @@ def contest_standings_view(request, cid):
     problems = Problem.objects.filter(contest_id=cid)
     contest = get_object_or_404(Contest, id=cid)
 
+    logger.error(standings)
+
     context = {
         "title": standings["title"],
         "cid": cid,
