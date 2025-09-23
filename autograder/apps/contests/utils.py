@@ -39,6 +39,8 @@ def get_standings(cid):
         if user_data is None or prob_idx is None:
             continue
 
+        user_data["problems"][prob_idx] -= 1
+
         if s.verdict in ("Accepted", "AC"):
             if user_data["problems"][prob_idx] == 0:
                 user_data["solved"] += problems[prob_idx].points
@@ -47,10 +49,8 @@ def get_standings(cid):
                 user_data["penalty"] += minutes - 10 * abs(
                     min(0, user_data["problems"][prob_idx])
                 )
-                user_data["problems"][prob_idx] = 1
-        else:
-            if user_data["problems"][prob_idx] != 1:
-                user_data["problems"][prob_idx] -= 1
+                user_data["problems"][prob_idx] *= -1
+                
 
     logger.error(stats)
     # Filter and sort
