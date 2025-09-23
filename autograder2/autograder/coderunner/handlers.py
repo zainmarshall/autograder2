@@ -1,0 +1,120 @@
+import subprocess
+import shutil
+import os
+from pathlib import Path
+from .runner import run_code
+import logging
+
+logger = logging.getLogger(__name__)
+
+def run_code_handler(tl, ml, lang, pid, sid, code):
+    if lang not in ["python", "cpp", "java"]:
+        return {"error": "Unacceptable code language"}
+
+    if not pid:
+        return {"error": "You didn't select an actual problem"}
+
+    problem_base_path = Path("/home/tjctgrader/problems") / Path(str(pid))
+    if not problem_base_path.exists():
+        os.listdir(str(problem_base_path))
+        return {"error": "Problem does not exist on coderunner filesystem"}
+
+    checker_path = problem_base_path / "default_checker.py"
+    test_dir = problem_base_path / "test"
+
+    subdir = Path("/home/tjctgrader/submissions") / str(sid)
+    subdir.mkdir(parents=True, exist_ok=True)
+
+    extension = {"python": "py", "java": "java", "cpp": "cpp"}[lang]
+    sol_filename = f"usercode.{extension}"
+    sol_path = subdir / sol_filename
+
+    try:
+        sol_path.write_text(code)
+    except Exception as e:
+        logger.error(f"Failed to write to file: {e}")
+        raise
+
+    if lang in ["cpp", "java"]:
+        if lang == "cpp":
+            output = subprocess.run(
+                ["g++", "-std=c++17", "-O2", "-o", str(subdir / "usercode"), str(sol_path)],
+                capture_output=True,
+            )
+            sol_path = subdir / "usercode"
+            sol_filename = "usercode"
+        elif lang == "java":
+            output = subprocess.run(["javac", str(sol_path)], capture_output=True)
+            sol_path = subdir / "usercode"
+            sol_filename = "usercode"
+
+        if output.returncode != 0:
+            return {
+                "verdict": "Compilation Error",
+                "output": output.stderr.decode("utf-8", errors="ignore"),
+                "runtime": 0,
+            }
+
+    verdict_overall = "Accepted"
+    insight_overall = ""
+    overall_time = 0
+
+    try:
+        entries = sorted(test_dir.iterdir(), key=lambda p: p.name)
+    except Exception:
+        return {"error": "Test cases not found"}
+
+    if lang == "java":
+        tl *= 2
+    elif lang == "python":
+        tl *= 3
+
+    for entry in entries:
+        file_path = entry
+        test_name = file_path.name
+
+        try:
+            output_text, insight, time_used = run_code(
+                subdir, file_path, lang, sol_path, sol_filename, tl, ml, False, None, None
+            )
+        except Exception as e:
+            verdict_overall = "Grader Error"
+            insight_overall = f"Grader Error: {e}"
+            break
+
+        overall_time = max(overall_time, time_used)
+
+        if output_text == "Runtime Error":
+            verdict_overall = "Runtime Error"
+            insight_overall = insight
+            break
+        if output_text == "Time Limit Exceeded":
+            verdict_overall = f"Time Limit Exceeded on test {test_name}"
+            insight_overall = insight
+            break
+
+        # run checker
+        try:
+            check_out, _, _ = run_code(
+                subdir, None, "python", checker_path, "default_checker.py",
+                20000, 1024, True, test_name, pid
+            )
+        except Exception as e:
+            verdict_overall = f"Checker Error: {e}"
+            break
+
+        if check_out.strip().lower() not in ("ac", "accepted"):
+            verdict_overall = f"Wrong Answer on test {test_name}"
+            break
+
+    # cleanup
+    try:
+        shutil.rmtree(subdir)
+    except Exception:
+        pass
+
+    return {
+        "verdict": verdict_overall,
+        "output": insight_overall,
+        "runtime": overall_time,
+    }

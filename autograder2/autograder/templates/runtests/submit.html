@@ -1,0 +1,90 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% block stylesheet %}
+<link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />
+{% endblock stylesheet %}
+
+{% block title %}Submit{% endblock title %}
+
+{% block content %}
+{% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
+{% include "partials/header.html" %}
+<div class="main-block">
+    <div class="title">Submit</div>
+    <div class="problem-text">
+        Java users, make sure you are
+        <a href="https://docs.google.com/document/d/17r0fh2rezqDhNoCoUtwVtExn8hRml0BjeAqxQZk9MCs/edit?usp=sharing" target="_blank">
+        naming the class "usercode"
+        </a>
+    </div>
+</div>
+
+<div class="main-block">
+    <form action="{% url "runtests:submit_post" %}" method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+
+        <div class="problem-text">
+            <select id="problemid" name="problemid">
+                {% if problems %}
+                    {% for p in problems %}
+                        <option value="{{ p.id }}"
+                            {% if problem and p.id == problem.id %}selected{% endif %}>
+                            {{ p.id }} - {{ p.name }}
+                        </option>
+                    {% endfor %}
+                {% elif problem %}
+                    <option value="{{ problem.id }}" selected>{{ problem.id }} - {{ problem.name }}</option>
+                {% else %}
+                    <option disabled selected>No problems available</option>
+                {% endif %}
+            </select>
+        </div>
+        <div class="problem-text">
+            <div class="vertAlign">
+                <select id="lang" name="lang">
+                    
+                    <option value="cpp" {% if last_sub_lang == 'cpp' %}selected{% endif %}>C++</option>
+                    <option value="java" {% if last_sub_lang == 'java' %}selected{% endif %}>Java</option>
+                    <option value="python" {% if last_sub_lang == 'python' %}selected{% endif %}>Python</option>
+                </select>
+
+                <textarea
+                    id="codeinput"
+                    name="code"
+                    rows="20"
+                    cols="150"
+                    spellcheck="false"
+                    maxlength="60000"
+                    placeholder=""></textarea>
+
+                <label class="custom-file-upload">
+                    <input type="file" name="files" class="custom-file"/>
+                </label>
+
+                <button class="button" type="submit">Submit</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<script type="text/javascript">
+    document.getElementById("codeinput").addEventListener("keydown", function (e) {
+        const max = 60000;
+        const allowed = ['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown'];
+        if (this.value.length >= max && !allowed.includes(e.key)) {
+            e.preventDefault();
+            return;
+        }
+        if (e.key === "Tab") {
+            e.preventDefault();
+            const start = this.selectionStart;
+            const end = this.selectionEnd;
+            this.value = this.value.substring(0, start) + "\t" + this.value.substring(end);
+            this.selectionStart = this.selectionEnd = start + 1;
+        }
+    });
+</script>
+
+{% endblock content %}
