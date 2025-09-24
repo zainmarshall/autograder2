@@ -31,7 +31,7 @@ function bfs(start) {
 
   let intid = setInterval(function () {
     let titleText = document.getElementById("title");
-    
+
     /*
     if (cntT < 40) {
       titleText.innerHTML = "<strong><em>TJCT Grader</em></strong>";

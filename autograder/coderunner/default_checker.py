@@ -8,7 +8,7 @@ if len(f) != len(f2):
     x = "".join(f2)[:10]
     x = x.strip()
     if len(x) == 0:
-        print(f"User didn't output anything")
+        print("User didn't output anything")
     else:
         print(f"User output was {x}")
     print("Verdict: WA")
@@ -18,7 +18,7 @@ t = 0
 for i, j in zip(f, f2):
     if i != j:
         f3 = open("test.txt", "r").readlines()
-        print(f"Failed -- Wrong Answer:\n")
+        print("Failed -- Wrong Answer:\n")
         for line in f3[:10]:
             line = line.strip()
             print(line[:100], end="")

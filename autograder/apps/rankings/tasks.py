@@ -7,7 +7,8 @@ from ...celery import app
 
 logger = logging.getLogger(__name__)
 
-@app.task(rate_limit='2/s')
+
+@app.task(rate_limit="2/s")
 def update_codeforces_rating(user_id):
     user = GraderUser.objects.get(id=user_id)
     if not user.cf_handle:
@@ -33,14 +34,19 @@ def update_codeforces_rating(user_id):
     data = response.json()
     if data["status"] == "OK":
         max_rating = data["result"][0].get("maxRating", 0)
-        logger.info(f"Fetched cf rating of {max_rating} from handle {handle} for user {user.username}")
-        
+        logger.info(
+            f"Fetched cf rating of {max_rating} from handle {handle} for user {user.username}"
+        )
+
         if user.cf_rating != max_rating:
             user.cf_rating = max_rating
             user.save(update_fields=["cf_rating"])
             update_user_index.delay(user.id)
     else:
-        logger.error(f"Codeforces API error for handle {handle}: {data.get('comment', 'No comment')}")
+        logger.error(
+            f"Codeforces API error for handle {handle}: {data.get('comment', 'No comment')}"
+        )
+
 
 @app.task
 def update_user_index(user_id):
@@ -51,24 +57,27 @@ def update_user_index(user_id):
         return
 
     usaco_map = {
-        "Not Participated": 800, "Bronze": 800, "Silver": 1200, 
-        "Gold": 1600, "Platinum": 1900,
+        "Not Participated": 800,
+        "Bronze": 800,
+        "Silver": 1200,
+        "Gold": 1600,
+        "Platinum": 1900,
     }
-    
+
     new_usaco_rating = usaco_map.get(user.usaco_division, 800)
-    
-    vals = sorted([
-        Decimal(str(new_usaco_rating)), 
-        Decimal(str(user.cf_rating)), 
-        Decimal(str(user.inhouse))
-    ])
-    
-    new_index = (
-        Decimal("0.2") * vals[0] + 
-        Decimal("0.35") * vals[1] + 
-        Decimal("0.45") * vals[2]
+
+    vals = sorted(
+        [
+            Decimal(str(new_usaco_rating)),
+            Decimal(str(user.cf_rating)),
+            Decimal(str(user.inhouse)),
+        ]
     )
-    
+
+    new_index = (
+        Decimal("0.2") * vals[0] + Decimal("0.35") * vals[1] + Decimal("0.45") * vals[2]
+    )
+
     if user.index != new_index:
         user.index = new_index
         user.save(update_fields=["index"])

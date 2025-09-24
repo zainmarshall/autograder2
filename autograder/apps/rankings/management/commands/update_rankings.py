@@ -80,8 +80,12 @@ class Command(BaseCommand):
             vals = [rankings[r]["usaco"], rankings[r]["cf"], rankings[r]["inhouse"]]
             vals.sort()
 
-            rankings[r]["index"] = Decimal("0.2") * Decimal(str(vals[0])) + Decimal("0.35") * Decimal(str(vals[1])) + Decimal("0.45") * Decimal(str(vals[2]))
-        
+            rankings[r]["index"] = (
+                Decimal("0.2") * Decimal(str(vals[0]))
+                + Decimal("0.35") * Decimal(str(vals[1]))
+                + Decimal("0.45") * Decimal(str(vals[2]))
+            )
+
         rankings.sort(key=lambda x: x["index"], reverse=True)
 
         for i in range(len(rankings)):
@@ -89,7 +93,6 @@ class Command(BaseCommand):
                 rankings[i]["rank"] = rankings[i - 1]["rank"]
             else:
                 rankings[i]["rank"] = i + 1
-
 
         for r in rankings:
             user = get_object_or_404(GraderUser, id=r["id"])

@@ -1,15 +1,15 @@
-{% extends "base.html" %} 
+{% extends "base.html" %}
 
-{% load static %} 
+{% load static %}
 
 {% block stylesheet %}
 <link rel="stylesheet" type="text/css" href="{% static 'profile.css' %}" />
-{% endblock stylesheet %} 
+{% endblock stylesheet %}
 
-{% block title %}Contests{% endblock title %} 
+{% block title %}Contests{% endblock title %}
 
-{% block content %} 
-{% include "partials/header.html" %} 
+{% block content %}
+{% include "partials/header.html" %}
 {% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
 
 <div class="main-block">

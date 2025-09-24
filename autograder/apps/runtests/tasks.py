@@ -56,7 +56,7 @@ def grade_submission_task(self, submission_id: int):
     )
     if "error" in response:
         logger.exception(
-            f"An error occured while processing submission {submission.id}"
+            f"An error occurred while processing submission {submission.id}"
         )
         _mark_submission_as_error(submission_id, response["error"])
     else:

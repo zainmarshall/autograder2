@@ -81,7 +81,7 @@ services:
           - /home/tjctgrader/autograder/.ruff_cache
           - problems_data:/home/tjctgrader/problems
         privileged: true
-      
+
 
 volumes:
   pgdata:
