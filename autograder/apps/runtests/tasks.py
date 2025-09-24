@@ -12,7 +12,6 @@ logger = logging.getLogger(__name__)
 @transaction.atomic
 def _update_submission_from_result(submission_id: int, result_data: Dict[str, Any]):
     submission = Submission.objects.select_for_update().get(id=submission_id)
-    submission.verdict = result_data.get("verdict", "ER")
     submission.runtime = result_data.get("runtime", -1)
     submission.memory = result_data.get("memory", -1)
     submission.insight = result_data.get("output", "")

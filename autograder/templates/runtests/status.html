@@ -39,7 +39,7 @@
             <th>Verdict</th>
         </tr>
         {% for submission in submissions  %}
-        <tr>
+        <tr class="submission-item" data-submission-id="{{ submission.id }}">
             <td>
                 <a href="{% url "runtests:submission" submission.id %}">
                     View #{{submission.id}}
@@ -61,7 +61,7 @@
             <td>
                 {{submission.runtime}} ms
             </td>
-            <td>
+            <td class="submission-status">
                 {{submission.verdict}}
             </td>
         </tr>
@@ -81,4 +81,35 @@
     {% endif %}
 </div>
 </div>
+
+<script>
+    const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws';
+    const socketUrl = `${protocol}://${window.location.host}/ws/submissions/`;
+    const submissionSocket = new WebSocket(socketUrl);
+
+    const submissionIds = Array.from(document.querySelectorAll('.submission-item'))
+                               .map(el => el.dataset.submissionId);
+
+    submissionSocket.onopen = function(e) {
+        console.log('WebSocket connection opened.');
+        submissionSocket.send(JSON.stringify({
+            'type': 'join_submissions',
+            'submission_ids': submissionIds
+        }));
+    };
+
+    submissionSocket.onmessage = function(e) {
+        const data = JSON.parse(e.data);
+        const { submission_id, message } = data;
+
+        const submissionElement = document.querySelector(`.submission-item[data-submission-id="${submission_id}"] .submission-status`);
+        if (submissionElement) {
+            submissionElement.textContent = message;
+        }
+    };
+
+    submissionSocket.onclose = function(e) {
+        console.log('WebSocket connection closed.');
+    };
+</script>
 {% endblock content %}

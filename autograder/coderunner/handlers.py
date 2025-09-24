@@ -3,6 +3,9 @@ import shutil
 import os
 from pathlib import Path
 from .runner import run_code
+from ..apps.runtests.models import Submission
+from channels.layers import get_channel_layer
+from asgiref.sync import async_to_sync
 import logging
 
 logger = logging.getLogger(__name__)
@@ -12,7 +15,24 @@ env_copy = os.environ.copy()
 env_copy["PATH"] = "/usr/bin:" + env_copy["PATH"]
 
 
+def update_submission_status(submission, new_message):
+    submission.message = new_message
+    submission.save()
+
+    channel_layer = get_channel_layer()
+
+    async_to_sync(channel_layer.group_send)(
+        f"submission_{submission.id}",
+        {
+            "type": "submission_status",
+            "submission_id": submission.id,
+            "message": new_message,
+        },
+    )
+
+
 def run_code_handler(tl, ml, lang, pid, sid, code):
+    submission = Submission.objects.get(pk=sid)
     if lang not in ["python", "cpp", "java"]:
         return {"error": "Unacceptable code language"}
 
@@ -41,6 +61,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
         raise
 
     if lang in ["cpp", "java"]:
+        update_submission_status(submission, "Compiling")
         if lang == "cpp":
             output = subprocess.run(
                 [
@@ -87,6 +108,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     for entry in entries:
         file_path = entry
         test_name = file_path.name
+        update_submission_status(submission, f"Running on test {test_name}")
 
         try:
             output_text, insight, time_used = run_code(
@@ -144,6 +166,8 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
         shutil.rmtree(subdir)
     except Exception:
         pass
+
+    update_submission_status(submission, verdict_overall)
 
     return {
         "verdict": verdict_overall,

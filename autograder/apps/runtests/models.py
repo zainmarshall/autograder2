@@ -7,7 +7,7 @@ class Submission(models.Model):
     language = models.CharField(max_length=10)
     code = models.TextField()
     usr = models.ForeignKey("index.GraderUser", on_delete=models.CASCADE)
-    verdict = models.TextField(default="Running")
+    verdict = models.TextField(default="Waiting in Queue")
     runtime = models.IntegerField(default=-1)
     contest = models.ForeignKey("contests.Contest", on_delete=models.CASCADE)
     problem = models.ForeignKey("problems.Problem", on_delete=models.CASCADE)
