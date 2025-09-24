@@ -8,11 +8,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v5
         with:
           submodules: 'recursive'
 
       - name: Fix permissions for nsjail
         run: chmod a+r /home/runner/work/autograder2/autograder2/nsjail
+        
       - name: Run Codacy Analysis CLI
         uses: codacy/codacy-analysis-cli-action@master
