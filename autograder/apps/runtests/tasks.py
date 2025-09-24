@@ -4,7 +4,7 @@ from celery import shared_task
 from django.db import transaction
 
 from .models import Submission
-from ...coderunner.handlers import run_code_handler
+from ...coderunner.handlers import run_code_handler, broadcast_status_update
 
 logger = logging.getLogger(__name__)
 
@@ -12,6 +12,7 @@ logger = logging.getLogger(__name__)
 @transaction.atomic
 def _update_submission_from_result(submission_id: int, result_data: Dict[str, Any]):
     submission = Submission.objects.select_for_update().get(id=submission_id)
+    submission.verdict = result_data.get("verdict", "ER")
     submission.runtime = result_data.get("runtime", -1)
     submission.memory = result_data.get("memory", -1)
     submission.insight = result_data.get("output", "")
@@ -60,3 +61,4 @@ def grade_submission_task(self, submission_id: int):
         _mark_submission_as_error(submission_id, response["error"])
     else:
         _update_submission_from_result(submission_id, response)
+        broadcast_status_update(submission_id, response["verdict"])

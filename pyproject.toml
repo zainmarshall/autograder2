@@ -25,3 +25,8 @@ dependencies = [
     "ua-parser>=1.0.1",
     "user-agents>=2.2.0",
 ]
+
+[tool.ruff]
+exclude = [
+    "nsjail",
+]

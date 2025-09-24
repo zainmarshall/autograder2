@@ -15,17 +15,13 @@ env_copy = os.environ.copy()
 env_copy["PATH"] = "/usr/bin:" + env_copy["PATH"]
 
 
-def update_submission_status(submission, new_message):
-    submission.message = new_message
-    submission.save()
-
+def broadcast_status_update(submission_id, new_message):
     channel_layer = get_channel_layer()
-
     async_to_sync(channel_layer.group_send)(
-        f"submission_{submission.id}",
+        f"submission_{submission_id}",
         {
             "type": "submission_status",
-            "submission_id": submission.id,
+            "submission_id": submission_id,
             "message": new_message,
         },
     )
@@ -61,7 +57,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
         raise
 
     if lang in ["cpp", "java"]:
-        update_submission_status(submission, "Compiling")
+        broadcast_status_update(submission.id, "Compiling")
         if lang == "cpp":
             output = subprocess.run(
                 [
@@ -108,7 +104,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     for entry in entries:
         file_path = entry
         test_name = file_path.name
-        update_submission_status(submission, f"Running on test {test_name}")
+        broadcast_status_update(submission.id, f"Running on test {test_name}")
 
         try:
             output_text, insight, time_used = run_code(
@@ -167,7 +163,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     except Exception:
         pass
 
-    update_submission_status(submission, verdict_overall)
+    broadcast_status_update(submission.id, verdict_overall)
 
     return {
         "verdict": verdict_overall,
