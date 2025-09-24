@@ -21,13 +21,14 @@ jobs:
         uses: google-github-actions/setup-gcloud@v2
         with:
           project_id: ethereal-effort-397820
-      - name: Set up SSH key
+      - name: Set up SSH keys
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.GCP_SSH_PRIVATE_KEY }}" > ~/.ssh/google_compute_engine
+          echo "${{ secrets.GCP_SSH_PUBLIC_KEY }}" > ~/.ssh/google_compute_engine.pub
           chmod 600 ~/.ssh/google_compute_engine
-
-
+          chmod 644 ~/.ssh/google_compute_engine.pub
+          
       - name: Deploy to VM
         run: |
           gcloud compute ssh tjctgrader@autograder2 \
