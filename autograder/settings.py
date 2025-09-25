@@ -52,6 +52,9 @@ INSTALLED_APPS = [
     "autograder.apps.tjioi",
     "social_django",
     "django_user_agents",
+    #  drf
+    "rest_framework",
+
 ]
 
 MIDDLEWARE = [

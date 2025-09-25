@@ -20,6 +20,8 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
+
+
 urlpatterns = (
     [
         path("djangoadmin/", admin.site.urls),
@@ -37,6 +39,9 @@ urlpatterns = (
         ),
         path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
         path("", include("social_django.urls", namespace="social")),
+
+        # new drf api endpoints
+        path("api/", include("autograder.api.urls")),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

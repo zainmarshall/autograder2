@@ -27,5 +27,6 @@ RUN apt update && \
         pkg-config
 
 COPY nsjail nsjail
+RUN git clone https://github.com/google/nsjail.git nsjail
 RUN cd nsjail && make && cd ..
 RUN mv nsjail/nsjail /usr/bin
