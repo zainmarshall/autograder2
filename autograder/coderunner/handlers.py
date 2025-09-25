@@ -164,7 +164,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     except Exception:
         pass
 
-    broadcast_status_update(submission.id, verdict_overall, overall_time)
+    broadcast_status_update(submission.id, verdict_overall, runtime=overall_time)
 
     return {
         "verdict": verdict_overall,

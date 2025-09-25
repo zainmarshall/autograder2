@@ -1,6 +1,3 @@
-import time
-time.sleep(2)
-
 e = int(input())
 b, m, r = map(int, input().split())
 x, y, z = map(int, input().split())
