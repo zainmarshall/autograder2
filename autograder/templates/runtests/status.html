@@ -107,8 +107,8 @@
             submissionElement.textContent = message;
         }
         const submissionRuntimeElement = document.querySelector(`.submission-item[data-submission-id="${submission_id}"] .submission-runtime`);
-        if (submissionElement) {
-            submissionElement.textContent = runtime + "ms";
+        if (submissionRuntimeElement) {
+            submissionRuntimeElement.textContent = runtime + "ms";
         }
     };
 
