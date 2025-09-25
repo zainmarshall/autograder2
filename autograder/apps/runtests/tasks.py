@@ -4,7 +4,7 @@ from celery import shared_task
 from django.db import transaction
 
 from .models import Submission
-from ...coderunner.handlers import run_code_handler, broadcast_status_update
+from ...coderunner.handlers import run_code_handler
 
 logger = logging.getLogger(__name__)
 
@@ -61,4 +61,3 @@ def grade_submission_task(self, submission_id: int):
         _mark_submission_as_error(submission_id, response["error"])
     else:
         _update_submission_from_result(submission_id, response)
-        broadcast_status_update(submission_id, response["verdict"])
