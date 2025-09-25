@@ -1,5 +1,8 @@
 import json
 from channels.generic.websocket import AsyncWebsocketConsumer
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 class SubmissionStatusConsumer(AsyncWebsocketConsumer):
@@ -19,11 +22,14 @@ class SubmissionStatusConsumer(AsyncWebsocketConsumer):
             for submission_id in submission_ids:
                 group_name = f"submission_{submission_id}"
                 await self.channel_layer.group_add(group_name, self.channel_name)
-                print(f"Added client to group {group_name}")
+                logger.info(f"Added client to group {group_name}")
 
     async def submission_status(self, event):
         message = event["message"]
+        runtime = event["runtime"]
         submission_id = event["submission_id"]
         await self.send(
-            text_data=json.dumps({"submission_id": submission_id, "message": message})
+            text_data=json.dumps(
+                {"submission_id": submission_id, "message": message, "runtime": runtime}
+            )
         )

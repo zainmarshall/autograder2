@@ -15,7 +15,7 @@ env_copy = os.environ.copy()
 env_copy["PATH"] = "/usr/bin:" + env_copy["PATH"]
 
 
-def broadcast_status_update(submission_id, new_message):
+def broadcast_status_update(submission_id, new_message, runtime=-1):
     channel_layer = get_channel_layer()
     async_to_sync(channel_layer.group_send)(
         f"submission_{submission_id}",
@@ -23,6 +23,7 @@ def broadcast_status_update(submission_id, new_message):
             "type": "submission_status",
             "submission_id": submission_id,
             "message": new_message,
+            "runtime": runtime,
         },
     )
 
@@ -163,7 +164,7 @@ def run_code_handler(tl, ml, lang, pid, sid, code):
     except Exception:
         pass
 
-    broadcast_status_update(submission.id, verdict_overall)
+    broadcast_status_update(submission.id, verdict_overall, overall_time)
 
     return {
         "verdict": verdict_overall,

@@ -58,8 +58,8 @@
             <td>
                 {{submission.language}}
             </td>
-            <td>
-                {{submission.runtime}} ms
+            <td class="submission-runtime">
+                {{submission.runtime}}ms
             </td>
             <td class="submission-status">
                 {{submission.verdict}}
@@ -100,11 +100,15 @@
 
     submissionSocket.onmessage = function(e) {
         const data = JSON.parse(e.data);
-        const { submission_id, message } = data;
+        const { submission_id, message, runtime } = data;
 
         const submissionElement = document.querySelector(`.submission-item[data-submission-id="${submission_id}"] .submission-status`);
         if (submissionElement) {
             submissionElement.textContent = message;
+        }
+        const submissionRuntimeElement = document.querySelector(`.submission-item[data-submission-id="${submission_id}"] .submission-runtime`);
+        if (submissionElement) {
+            submissionElement.textContent = runtime + "ms";
         }
     };
 
