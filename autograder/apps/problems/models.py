@@ -20,5 +20,8 @@ class Problem(models.Model):
 
     testcases_zip = models.FileField(upload_to="problem_testcases/", blank=True)
 
+    has_simulation = models.BooleanField(default=False)
+    simulation_name = models.CharField(max_length=255, blank=True, null=True)
+
     def __str__(self):
         return self.name

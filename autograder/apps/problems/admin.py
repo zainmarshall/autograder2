@@ -29,3 +29,7 @@ class ProblemAdmin(admin.ModelAdmin):
         ),
         ("Testcases zip", {"fields": ("testcases_zip",)}),
     )
+
+    fieldsets += (
+        ("Simulation", {"fields": ("has_simulation", "simulation_name")}),
+    )

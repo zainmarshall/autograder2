@@ -32,6 +32,8 @@ export interface Problem {
     ml: number;
     interactive: boolean;
     testcases_zip: string | null;
+    has_simulation: boolean;
+    simulation_name: string | null;
 }
 
 export interface Contest {
@@ -183,6 +185,8 @@ export const api = {
             ml: Number(r.ml),
             interactive: Boolean(r.interactive),
             testcases_zip: String(r.testcases_zip),
+            has_simulation: Boolean(r.has_simulation),
+            simulation_name: String(r.simulation_name),
         }));
     },
 
@@ -236,6 +240,8 @@ export const api = {
             ml: Number(data.ml),
             interactive: Boolean(data.interactive),
             testcases_zip: String(data.testcases_zip),
+            has_simulation: Boolean(data.has_simulation),
+            simulation_name: String(data.simulation_name),
         };
     },
 

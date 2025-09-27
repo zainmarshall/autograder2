@@ -10,6 +10,7 @@
     let problem = $state<Problem | null>(null);
     let error = $state<string | null>(null);
     let loading = $state(true);
+    let simulationComponent = $state<any>(null);
 
     onMount(async () => {
         try {
@@ -17,7 +18,15 @@
             problem = await api.fetchProblem(Number(pid));
             // Debug: log the statement
             console.log('Problem statement:', problem?.statement);
-            // After problem loads, re-typeset MathJax
+            // Dynamically import simulation if needed
+            if (problem?.has_simulation && problem.simulation_name) {
+                try {
+                    const mod = await import(`$lib/simulations/${problem.simulation_name}.svelte`);
+                    simulationComponent = mod.default;
+                } catch (e) {
+                    console.error('Simulation import failed:', e);
+                }
+            }
         } catch (err) {
             error = String(err);
         } finally {
@@ -93,6 +102,14 @@ Card 5: Samples
                 <MathJaxLong text={problem?.samples ?? ''} />
             </div>
         </section>
+
+        <!--Simulation-->
+        {#if problem?.has_simulation && simulationComponent}
+            <section class="mb-8">
+                <h3 class="text-xl font-semibold text-zinc-900 dark:text-zinc-100 mb-2">Simulation</h3>
+                <svelte:component this={simulationComponent} />
+            </section>
+        {/if}
     </div>
 
     <button class="mt-4 bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-2 px-6 rounded-lg transition-colors" onclick={() => { 
