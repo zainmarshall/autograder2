@@ -1,8 +1,0 @@
-POLICY sample {
-	ALLOW {
-		SYSCALL[-1] (myarg, myotherarg) {
-			myarg == 1 && myotherarg == 2
-		}
-	}
-}
-USE sample DEFAULT KILL

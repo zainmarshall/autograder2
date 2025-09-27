@@ -1,9 +1,0 @@
-POLICY sample {
-	KILL {
-		ptrace,
-		write,
-		read,
-		execve
-	}
-}
-USE sample DEFAULT KILL

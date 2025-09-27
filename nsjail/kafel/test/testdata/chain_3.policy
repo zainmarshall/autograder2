@@ -1,7 +1,0 @@
-#include "empty.policy"
-
-POLICY chain_3 {
-    ALLOW {
-      exit
-    }
-}
