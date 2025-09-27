@@ -22,6 +22,7 @@ def get_standings(cid):
             "solved": 0,
             "penalty": 0,
             "problems": [0] * len(problems),
+            "username": u.username,
         }
         for u in users
     }

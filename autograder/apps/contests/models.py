@@ -9,7 +9,9 @@ class Contest(models.Model):
     tjioi = models.BooleanField(default=False)
     start = models.DateTimeField()
     end = models.DateTimeField()
+
     editorial = models.URLField(null=True, blank=True)
+    username = models.CharField(max_length=150, blank=True, null=True)
 
     def __str__(self):
         return self.name
