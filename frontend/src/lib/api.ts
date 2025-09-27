@@ -91,8 +91,28 @@ export interface User{
 }
 
 export const api = {
+      postHTTP: async (url: string, data: any) => {
+        const getCSRFToken = () => {
+            const match = document.cookie.match(/csrftoken=([^;]+)/);
+            return match ? match[1] : '';
+        }
+        const res = await fetch(url, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'X-CSRFToken': getCSRFToken(),
+            },
+            credentials: 'include',
+            body: JSON.stringify(data),
+        });
+        if (!res.ok) throw new Error('Failed to post data');
+        return await res.json();
+    },
+
     loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
-    logout: async () => fetch('/oauth/logout/', { method: 'POST', credentials: 'include' }),
+    logout: async () => {
+        return api.postHTTP('/oauth/logout/', {});
+    },
     getUser: async () => fetch('/api/user/', { credentials: 'include' }),
 
     async getCodeforcesProfile(handle: string): Promise<CodeforcesUserInfo | null> {
@@ -120,27 +140,11 @@ export const api = {
         }
     },
    
-
+  
 
     updateUser: async (data: Partial<User>) => {
-        const getCSRFToken = () => {
-            const match = document.cookie.match(/csrftoken=([^;]+)/);
-            return match ? match[1] : '';
-        }
-        const res = await fetch('/api/user/', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'X-CSRFToken': getCSRFToken(),
-            },
-            credentials: 'include',
-            body: JSON.stringify(data),
-        });
-        if (!res.ok) throw new Error('Failed to update profile');
-        return await res.json();
+        return api.postHTTP('/api/user/', data);
     },
-
-
 
     profile: async () => fetch('/profile/', { credentials: 'include' }),
     tjioiLogin: () => window.location.href = '/tjioi/login/',
