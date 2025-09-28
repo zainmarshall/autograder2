@@ -92,6 +92,7 @@ export interface User{
     particles_enabled: boolean;
 }
 
+const BACKEND_URL = "http://192.168.1.97:3000";
 export const api = {
       postHTTP: async (url: string, data: any) => {
         const getCSRFToken = () => {
@@ -111,7 +112,10 @@ export const api = {
         return await res.json();
     },
 
-    loginIon: () => window.location.href = 'http://localhost:3000/login/ion/',
+    loginIon: () => {
+        console.log('Redirecting to:', `${BACKEND_URL}/login/ion/`);
+        window.location.href = `${BACKEND_URL}/login/ion/`;
+    },
     logout: async () => {
         return api.postHTTP('/oauth/logout/', {});
     },
@@ -153,7 +157,7 @@ export const api = {
 
     async fetchRankings(): Promise<Ranking[]> {
         const season = 2025;
-        const res = await fetch(`http://localhost:3000/api/rankings/${season}/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/rankings/${season}/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch rankings');
         const data = await res.json();
         return data.rankings.map((r: any): Ranking => ({
@@ -169,7 +173,7 @@ export const api = {
 
     // 
     async fetchProblemset() {
-        const res = await fetch(`http://localhost:3000/api/problems/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/problems/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch problemset');
         const data = await res.json();
         return data.problems.map((r: any): Problem => ({
@@ -191,7 +195,7 @@ export const api = {
     },
 
     async fetchContest(){
-        const res = await fetch(`http://localhost:3000/api/contests/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/contests/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch contests');
         const data = await res.json();
         return data.contests.map((r: any): Contest => ({
@@ -207,7 +211,7 @@ export const api = {
     },
 
     async fetchContestCID(cid: number): Promise<Contest> {
-        const res = await fetch(`http://localhost:3000/api/contests/${cid}/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/contests/${cid}/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch contest');
         const data = await res.json();
         return {
@@ -224,7 +228,7 @@ export const api = {
 
     // return a single problem
     async fetchProblem(pid: number): Promise<Problem> {
-        const res = await fetch(`http://localhost:3000/api/problems/${pid}/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/problems/${pid}/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch problem');
         const data = await res.json();
         return {
@@ -247,7 +251,7 @@ export const api = {
 
     // return full submissions list
     async fetchSubmissions(): Promise<Submission[]> {
-        const res = await fetch(`http://localhost:3000/api/submissions/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/submissions/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch submissions');
         const data = await res.json();
         return data.results.map((r: any): Submission => ({
@@ -265,7 +269,7 @@ export const api = {
     },
 
     async fetchStandings(cid: string): Promise<{title: string, pnum: number, load: Standing[]}> {
-        const res = await fetch(`http://localhost:3000/api/contests/${cid}/standings/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/contests/${cid}/standings/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch standings');
         const data = await res.json();
         return {
@@ -285,7 +289,7 @@ export const api = {
 
     //return current user
     async fetchUser(): Promise<User> {
-        const res = await fetch(`http://localhost:3000/api/user/`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/user/`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch user');
         const data = await res.json();
         return {
@@ -312,7 +316,7 @@ export const api = {
 
     // fetch another user
      async fetchUserUID(uid: string): Promise<User> {
-        const res = await fetch(`http://localhost:3000/api/user/${uid}`, { credentials: 'include' });
+        const res = await fetch(`${BACKEND_URL}/api/user/${uid}`, { credentials: 'include' });
         if (!res.ok) throw new Error('Failed to fetch user');
         const data = await res.json();
         return {

@@ -1,8 +1,5 @@
 # CSRF trusted origins for local frontend
-CSRF_TRUSTED_ORIGINS = [
-    "http://localhost:5173",
-    "http://127.0.0.1:5173",
-]
+
 """
 Django settings for autograder project.
 
@@ -21,7 +18,13 @@ import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_URL = config("FRONTEND_URL")
 
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    FRONTEND_URL,
+]
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -34,7 +37,7 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG") == 'True'
 
-ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1", "autograder"]
+ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1", "autograder", "192.168.1.97"]
 
 
 # Application definition
@@ -208,18 +211,18 @@ if TJIOI_MODE:
 else:
     AUTHENTICATION_BACKENDS.insert(0, "autograder.apps.oauth.backend.IonOauth2")
 
-LOGIN_REDIRECT_URL = "http://localhost:5173/profile"
-LOGOUT_REDIRECT_URL = "http://localhost:5173/"
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/profile"
+LOGOUT_REDIRECT_URL = f"{FRONTEND_URL}/"
 
 LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_ION_KEY = config("SOCIAL_AUTH_ION_KEY")
 SOCIAL_AUTH_ION_SECRET = config("SOCIAL_AUTH_ION_SECRET")
-SOCIAL_AUTH_ION_REDIRECT_URI = config("SOCIAL_AUTH_ION_REDIRECT_URI", "http://localhost:3000/complete/ion/")
+SOCIAL_AUTH_ION_REDIRECT_URI = config("SOCIAL_AUTH_ION_REDIRECT_URI")
 
 # Additional social auth settings
 SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
-SOCIAL_AUTH_LOGIN_REDIRECT_URL = "http://localhost:5173/profile"
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/profile"
 SOCIAL_AUTH_LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_PIPELINE = (
@@ -262,6 +265,7 @@ SECURE_SSL_REDIRECT = False
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
     "http://127.0.0.1:5173",
+    FRONTEND_URL,
 ]
 
 CORS_ALLOW_CREDENTIALS = True
