@@ -5,7 +5,7 @@ This grader website can be accessed at https://tjctgrader.org/.
 Please contact us through tjctgrader@gmail.com if you have any questions or concerns.
 
 ---
-Current Developers: Samuel Chow, Samuel Zhang
+Current Developers: Samuel Chow, Samuel Zhang, Zain Marshall
 
 2024-2025 Developers: Gabriel Xu, Peter Kisselev, Andrew Chen
 
