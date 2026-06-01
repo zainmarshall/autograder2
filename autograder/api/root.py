@@ -13,7 +13,9 @@ class RootAPI(APIView):
                 "/contests/<int:cid>/",
                 "/contests/<int:cid>/standings/",
                 "/submissions/",
+                "/submissions/<int:sid>/",
                 "/user/",
-                "/user/<str:uid>/"
+                "/user/<str:uid>/",
+                "/potw/"
             ]
         })

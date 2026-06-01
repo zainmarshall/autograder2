@@ -8,8 +8,105 @@
 {% block title %}Info{% endblock title %}
 
 {% block content %}
-{% include "partials/header.html" %}
+{% if request.user.is_authenticated and request.user.ui_mode == "modern" %}{% include "partials/header_modern.html" %}{% else %}{% include "partials/header.html" %}{% endif %}
 {% if user.particles_enabled %}{% include "partials/particles.html" %}{% endif %}
+
+{% if request.user.is_authenticated and request.user.ui_mode == "modern" %}
+<main class="prose prose-invert max-w-3xl mx-auto px-4 md:px-8 py-8 text-white">
+  <h1 class="text-3xl font-bold mb-6">Rules and Information</h1>
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Rules</h2>
+    <p class="text-zinc-300 leading-relaxed">Do NOT submit malicious code with malicious intent to the grader. Do NOT attempt to exploit any aspect of this system, including but not limited to, accessing unauthorized admin privileges, accessing private user information, etc. If we find out any misuse, you will be disqualified from participating in TJCT competitions, events, and also reported to our sponsors.</p>
+    <p class="text-zinc-300 leading-relaxed mt-4">Furthermore, please follow all rules given when taking contests on this system. Perhaps there will be collaborative contests, but unless otherwise stated, contests are individual. All aspects of the TJHSST honor code apply.</p>
+    {% if tjioi %}
+    <ol class="list-decimal list-inside mt-4 space-y-2 text-zinc-300">
+      <li>You ARE allowed to use templates and pre-written datastructures.</li>
+      <li>You ARE allowed to use reference sources online such as language specific documentation. General algorithm guides such as GeeksForGeeks are allowed if the guide doesn't completely solve the problem.</li>
+      <li>You are NOT allowed to consult intelligent sources such as ChatGPT or other Generative AI, or any human sources during a contest.</li>
+      <li>You are NOT allowed to discuss problem details until the allotted time window for the contest is over.</li>
+    </ol>
+    {% endif %}
+    <p class="text-zinc-300 leading-relaxed mt-4">During any in-house competition, we will be actively monitoring submissions for plagiarism or use of generative AI and will manually review any code that appears suspicious. Submissions flagged for plagiarism may result in disqualification from future in-houses and travel competitions.</p>
+    <p class="text-zinc-300 mt-4">Thank you for your cooperation.</p>
+  </section>
+
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Information</h2>
+    <p class="text-zinc-300">A guide to this website can be found <a target="_blank" href="https://docs.google.com/document/d/17r0fh2rezqDhNoCoUtwVtExn8hRml0BjeAqxQZk9MCs/edit?usp=sharing" class="text-indigo-400 underline hover:text-indigo-300">here</a>.</p>
+    <p class="text-zinc-300 mt-3">If you have any questions/concerns about the website, such as vulnerability issues, account/data inquiries, please contact <a href="mailto:tjctgrader@gmail.com" class="text-indigo-400 underline">tjctgrader@gmail.com</a> and <a href="mailto:tjhsstictcaptains@gmail.com" class="text-indigo-400 underline">tjhsstictcaptains@gmail.com</a>. If your inquiry is not seen, feel free to alert one of your current officers.</p>
+  </section>
+
+  <h1 class="text-3xl font-bold mt-10 mb-6">2025&ndash;2026 TJCT Grader Guide</h1>
+
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Verdicts</h2>
+    <ul class="space-y-3 text-zinc-300">
+      <li><strong class="text-green-400">Accepted (AC)</strong> &mdash; Your submission passed all our tests.</li>
+      <li><strong class="text-red-400">Wrong Answer (WA)</strong> &mdash; Failed a test. You will not be able to see what the input you failed on was unless it was the first one. Try creating and debugging on edge cases to catch the error.</li>
+      <li><strong class="text-red-400">Compilation/Runtime Error</strong> &mdash; Your code encountered an error. Check the feedback for more detailed comments.</li>
+      <li><strong class="text-yellow-400">Time Limit Exceeded (TLE)</strong> &mdash; Your code was too slow. Reduce time complexity. Our servers run around 10<sup>9</sup> operations a second. Default time limits: 1s C++, 2s Java, 3s Python.</li>
+      <li><strong class="text-yellow-400">Memory Limit Exceeded (MLE)</strong> &mdash; Too much memory used. Default memory limit is 256 MB.</li>
+      <li><strong class="text-indigo-400">Running (RN)</strong> &mdash; Code is running. Reload the page to check. If it hasn't finished for a couple minutes, resubmit; if that fails, let us know.</li>
+    </ul>
+  </section>
+
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Feedback</h2>
+    <p class="text-zinc-300">By clicking on the ID of the submission, you can view additional feedback. Feedback is available for the first test.</p>
+  </section>
+
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Submissions</h2>
+    <p class="text-zinc-300">Your code should take input from standard in and output to standard out. Use <code class="bg-zinc-800 px-1 rounded text-indigo-300">cin/cout</code> (C++), <code class="bg-zinc-800 px-1 rounded text-indigo-300">input()</code> (Python), or <code class="bg-zinc-800 px-1 rounded text-indigo-300">Scanner</code> (Java). We recommend using <a href="https://ide.usaco.guide/" target="_blank" class="text-indigo-400 underline">https://ide.usaco.guide/</a>.</p>
+    <p class="text-zinc-300 mt-3">Java users, make sure your class is named <code class="bg-zinc-800 px-1 rounded text-indigo-300">usercode</code>. We encourage Python or C++.</p>
+    <p class="text-zinc-300 mt-3">Example code to sum the array (see <a href="https://usaco.guide/general/input-output" target="_blank" class="text-indigo-400 underline">usaco.guide/general/input-output</a>):</p>
+    <h3 class="font-bold mt-4 mb-2 text-indigo-300">Java</h3>
+    <pre class="bg-zinc-950 border border-slate-800 rounded p-4 overflow-x-auto text-sm"><code>package subcode;
+import java.util.*;
+import java.io.*;
+public class test {
+    public static void main (String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int[] a = new int[n];
+        for (int i = 0; i &lt; n; i++) {
+            a[i] = scanner.nextInt();
+        }
+        long sum = 0;
+        for (int i = 0; i &lt; n; i++) {
+            sum += a[i];
+        }
+        System.out.println(sum);
+    }
+}</code></pre>
+    <h3 class="font-bold mt-4 mb-2 text-indigo-300">C++</h3>
+    <pre class="bg-zinc-950 border border-slate-800 rounded p-4 overflow-x-auto text-sm"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n; cin &gt;&gt; n;
+    vector&lt;int&gt; a(n);
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; a[i];
+    }
+    long long ans = 0;
+    for (int i = 0; i &lt; n; i++) {
+        ans += a[i];
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}</code></pre>
+    <h3 class="font-bold mt-4 mb-2 text-indigo-300">Python</h3>
+    <pre class="bg-zinc-950 border border-slate-800 rounded p-4 overflow-x-auto text-sm"><code>n = int(input())
+a = list(map(int, input().split()))
+print(sum(a))</code></pre>
+  </section>
+
+  <section class="rounded-xl bg-zinc-900/70 border border-slate-800 shadow-lg p-6 mb-6">
+    <h2 class="text-xl font-bold mb-3">Standings</h2>
+    <p class="text-zinc-300">Standings are determined by total points, where each problem solved rewards a set amount of points; ties broken by penalty. Penalty for each problem = minutes to solve + 10 minutes per wrong submission. Overall penalty is the sum across solved problems. Numbers in problem columns denote the number of submissions taken to solve, negative if unsolved.</p>
+  </section>
+</main>
+{% else %}
 <div class="main-block">
     <div class="title"><strong>Rules and Information</strong></div>
 </div>
@@ -63,5 +160,126 @@
         one of your current officers.
     </div>
 </div>
+
+<div class="main-block">
+    <div class="title"><strong>2025&ndash;2026 TJCT Grader Guide</strong></div>
+</div>
+
+<div class="main-block">
+    <div class="info">
+        <strong>Verdicts</strong><br /><br />
+
+        <strong>Accepted (AC)</strong> &mdash; Congratulations! Your submission passed all our tests.<br /><br />
+
+        <strong>Wrong Answer (WA)</strong> &mdash; Try again! Your submission failed a test and thus didn&rsquo;t solve the problem correctly. You will not be able to see what the input you failed on was unless it was the first one. Try creating and debugging on edge cases to catch the error!<br /><br />
+
+        <strong>Compilation/Runtime Error</strong> &mdash; Your code encountered an error. Check the feedback which might provide more detailed comments. This means your code does not follow the rules of the programming language and did something illegal.<br /><br />
+
+        <strong>Time Limit Exceeded (TLE)</strong> &mdash; Your code was too slow. Try reducing time complexity or optimizing your code. Note that our servers can only run around 10<sup>9</sup> operations a second. The default time limits for problems are 1 second for C++, 2 seconds for Java, and 3 seconds for Python.<br /><br />
+
+        <strong>Memory Limit Exceeded (MLE)</strong> &mdash; Your code used too much memory. Store less information. The default memory limit is 256 megabytes.<br /><br />
+
+        <strong>Running (RN)</strong> &mdash; Your code is currently running. Reload the page to check if your code has finished running. If it hasn&rsquo;t finished for a couple minutes, our servers probably encountered an error. Try resubmitting. If that doesn&rsquo;t work, please let us know.
+    </div>
+</div>
+
+<div class="main-block">
+    <div class="info">
+        <strong>Feedback</strong><br /><br />
+        By clicking on the ID of the submission, you can view additional feedback. Feedback is available for the first test.
+    </div>
+</div>
+
+<div class="main-block">
+    <div class="info">
+        <strong>Submissions</strong><br /><br />
+        Your code should take input from standard in (the terminal) and output to standard out (the terminal). This can be done through <code>cin/cout</code> (C++), <code>input()</code> (Python), <code>Scanner</code> (Java). You can use online documentation to figure out the specifics. You should use your own IDE or text editor to code solutions before uploading the file or copying and pasting into the submission page. We recommend using <a href="https://ide.usaco.guide/" target="_blank">https://ide.usaco.guide/</a>.
+        <br /><br />
+        Java users, make sure you are naming the class <code>usercode</code>. We encourage you to use Python or C++, though.
+        <br /><br />
+        Example code to solve sum the array (for more help, consult <a href="https://usaco.guide/general/input-output" target="_blank">usaco.guide/general/input-output</a>):
+        <br /><br />
+
+        <strong>Java:</strong>
+        <pre class="code-block"><code>package subcode;
+import java.util.*;
+import java.io.*;
+public class test {
+    public static void main (String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        int n = scanner.nextInt();
+        int[] a = new int[n];
+        for (int i = 0; i &lt; n; i++) {
+            a[i] = scanner.nextInt();
+        }
+        long sum = 0;
+        for (int i = 0; i &lt; n; i++) {
+            sum += a[i];
+        }
+        System.out.println(sum);
+    }
+}</code></pre>
+
+        <strong>C++:</strong>
+        <pre class="code-block"><code>#include &lt;bits/stdc++.h&gt;
+using namespace std;
+
+int main() {
+    int n; cin &gt;&gt; n;
+    vector&lt;int&gt; a(n);
+    for (int i = 0; i &lt; n; i++) {
+        cin &gt;&gt; a[i];
+    }
+    long long ans = 0;
+    for (int i = 0; i &lt; n; i++) {
+        ans += a[i];
+    }
+    cout &lt;&lt; ans &lt;&lt; "\n";
+}</code></pre>
+
+        <strong>Python:</strong>
+        <pre class="code-block"><code>n = int(input())
+a = list(map(int, input().split()))
+print(sum(a))</code></pre>
+    </div>
+</div>
+
+<div class="main-block">
+    <div class="info">
+        <strong>Standings</strong><br /><br />
+        Standings are determined by your total points, where each problem solved rewards a set amount of points, and ties are broken by penalty. The penalty for each problem is determined by the number of minutes taken to solve it plus 10 minutes for each wrong submission. Your overall penalty is the sum of your penalty for each solved problem. The numbers in the columns for each problem denote the number of submissions taken to solve the problem, and is negative if the participant has not solved the problem.
+    </div>
+</div>
+
+<style>
+.code-block {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 6px;
+    padding: 1em;
+    overflow-x: auto;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.9em;
+    line-height: 1.4em;
+    margin: 0.5em 0 1em 0;
+    text-align: left;
+}
+.code-block code {
+    background: none;
+    color: inherit;
+    padding: 0;
+    white-space: pre;
+}
+.info code {
+    background-color: rgba(0, 0, 0, 0.4);
+    padding: 0.1em 0.35em;
+    border-radius: 3px;
+    font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+    font-size: 0.95em;
+    color: #6ad8ff;
+}
+</style>
+{% endif %}
 
 {% endblock content %}

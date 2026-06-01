@@ -24,6 +24,7 @@
       <NavLink href="/contests" active={active === 'contests'}>Contests</NavLink>
       <NavLink href="/submissions" active={active === 'submissions'}>Submissions</NavLink>
       <NavLink href="/problems" active={active === 'problems'}>Problemset</NavLink>
+      <NavLink href="/potw" active={active === 'potw'}>POTW</NavLink>
       <NavLink href="/submit" active={active === 'submit'}>Submit</NavLink>
       <NavLink href="/rankings" active={active === 'rankings'}>Rankings</NavLink>
       <NavLink href="/info" active={active === 'info'}>Info</NavLink>

@@ -48,6 +48,10 @@
         (async () => {
             try {
                 const data = await api.fetchUser();
+                if (data.first_time && !data.is_tjioi) {
+                    window.location.href = '/first_time';
+                    return;
+                }
                 user = data;
                 usacoDivision = backendDivisionToSelectValue(data.usaco_division);
                 cfHandle = data.cf_handle || '';
@@ -171,7 +175,11 @@
                 {/if}
             </div>
             <h2 class="text-3xl font-bold text-zinc-900 dark:text-zinc-100 mb-2">{user?.display_name}</h2>
-            <div class="text-base text-zinc-500 dark:text-zinc-400 mb-6">@{user?.username}</div>
+            <div class="text-base text-zinc-500 dark:text-zinc-400 mb-2">@{user?.username}</div>
+            {#if user?.is_staff}
+                <a href="http://localhost:8003/djangoadmin/" target="_blank" rel="noopener noreferrer"
+                   class="text-xs text-indigo-400 hover:text-indigo-300 underline mb-4">Django admin →</a>
+            {/if}
             <div class="w-full space-y-3 mb-6">
                 <div class="flex justify-between text-zinc-700 dark:text-zinc-200">
                     <span class="font-medium">USACO Division</span>

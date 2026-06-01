@@ -92,7 +92,7 @@ export interface User{
     particles_enabled: boolean;
 }
 
-const BACKEND_URL = "http://localhost:3000";
+const BACKEND_URL = "http://localhost:8003";
 
 export const api = {
       postHTTP: async (url: string, data: any) => {
@@ -313,6 +313,18 @@ export const api = {
             index: String(data.index),
             particles_enabled: Boolean(data.particles_enabled),
         };
+    },
+
+    async fetchSubmissionDetail(sid: number | string): Promise<any> {
+        const res = await fetch(`${BACKEND_URL}/api/submissions/${sid}/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch submission');
+        return await res.json();
+    },
+
+    async fetchPOTW(): Promise<{ beginner: any | null, intermediate: any | null, advanced: any | null }> {
+        const res = await fetch(`${BACKEND_URL}/api/potw/`, { credentials: 'include' });
+        if (!res.ok) throw new Error('Failed to fetch POTW');
+        return await res.json();
     },
 
     // fetch another user
