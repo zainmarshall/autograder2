@@ -37,6 +37,7 @@ urlpatterns = (
         ),
         path("tjioi/", include("autograder.apps.tjioi.urls", namespace="tjioi")),
         path("", include("social_django.urls", namespace="social")),
+        path("api/", include("autograder.api.urls", namespace="api")),
     ]
     + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
     + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

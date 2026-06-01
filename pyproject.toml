@@ -23,6 +23,9 @@ dependencies = [
     "social-auth-app-django>=5.4.3",
     "ua-parser>=1.0.2",
     "user-agents>=2.2.0",
+    "djangorestframework>=3.14.0",
+    "drf-yasg>=1.21.6",
+    "django-cors-headers>=4.0.0",
 ]
 
 [tool.ruff]

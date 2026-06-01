@@ -17,6 +17,10 @@ import os
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+# Frontend URL (for OAuth redirects + CORS). Defaults to localhost dev.
+FRONTEND_URL = config("FRONTEND_URL", default="http://localhost:5173")
+HOST = config("HOST", default="localhost")
+
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
@@ -29,7 +33,13 @@ SECRET_KEY = config("SECRET_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = config("DEBUG") == "True"
 
-ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1", "34.86.71.31", "www.tjctgrader.org"]
+ALLOWED_HOSTS = ["tjctgrader.org", "localhost", "127.0.0.1", "34.86.71.31", "www.tjctgrader.org", "autograder", HOST]
+
+CSRF_TRUSTED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    FRONTEND_URL,
+]
 
 
 # Application definition
@@ -43,6 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "rest_framework",
     "autograder.apps.index",
     "autograder.apps.oauth",
     "autograder.apps.contests",
@@ -50,11 +61,14 @@ INSTALLED_APPS = [
     "autograder.apps.runtests",
     "autograder.apps.rankings",
     "autograder.apps.tjioi",
+    "autograder.apps.editorials",
     "social_django",
     "django_user_agents",
+    "corsheaders",
 ]
 
 MIDDLEWARE = [
+    "corsheaders.middleware.CorsMiddleware",
     "django_user_agents.middleware.UserAgentMiddleware",
     "autograder.middleware.mobile.MobileRedirectMiddleware",
     "django.middleware.security.SecurityMiddleware",
@@ -190,13 +204,17 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",
 ]
 
-LOGIN_REDIRECT_URL = "/"
-LOGOUT_REDIRECT_URL = "/"
+LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/profile"
+LOGOUT_REDIRECT_URL = f"{FRONTEND_URL}/"
 
 LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_ION_KEY = config("SOCIAL_AUTH_ION_KEY")
 SOCIAL_AUTH_ION_SECRET = config("SOCIAL_AUTH_ION_SECRET")
+SOCIAL_AUTH_ION_REDIRECT_URI = config("SOCIAL_AUTH_ION_REDIRECT_URI", default=f"http://localhost:3000/complete/ion/")
+SOCIAL_AUTH_REDIRECT_IS_HTTPS = False
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = f"{FRONTEND_URL}/profile"
+SOCIAL_AUTH_LOGIN_URL = "/login/ion/"
 
 SOCIAL_AUTH_PIPELINE = (
     "social_core.pipeline.social_auth.social_details",
@@ -230,6 +248,18 @@ CELERY_TASK_DEFAULT_QUEUE = "default"
 SESSION_COOKIE_SECURE = False
 CSRF_COOKIE_SECURE = False
 SECURE_SSL_REDIRECT = False
+
+# CORS for SvelteKit frontend
+CORS_ALLOWED_ORIGINS = [
+    "http://localhost:5173",
+    "http://127.0.0.1:5173",
+    FRONTEND_URL,
+]
+CORS_ALLOW_CREDENTIALS = True
+
+# Cross-origin cookie SameSite (needs Lax for frontend on different port)
+SESSION_COOKIE_SAMESITE = "Lax"
+CSRF_COOKIE_SAMESITE = "Lax"
 
 if not DEBUG:
     SESSION_COOKIE_SECURE = True

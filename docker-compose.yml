@@ -88,6 +88,26 @@ services:
           - /home/tjctgrader/autograder/.ruff_cache
           - problems_data:/home/tjctgrader/problems
         privileged: true
+  frontend:
+        container_name: frontend
+        build:
+          context: ./frontend
+          dockerfile: Dockerfile
+        ports:
+          - "5173:5173"
+        networks:
+          - main_network
+        depends_on:
+          - autograder
+        environment:
+          - NODE_ENV=development
+        volumes:
+          - ./frontend/src:/app/src
+          - ./frontend/static:/app/static
+          - ./frontend/vite.config.ts:/app/vite.config.ts
+          - ./frontend/svelte.config.js:/app/svelte.config.js
+          - ./frontend/tsconfig.json:/app/tsconfig.json
+        command: npm run dev -- --host 0.0.0.0
 
 
 volumes:
